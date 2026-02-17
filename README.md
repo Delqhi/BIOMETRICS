@@ -10,9 +10,9 @@
 
 ### 📹 Erklärvideo
 
-[![Video Thumbnail](BIOMETRICS/video-thumbnail.png)](BIOMETRICS/video.mp4)
+[![Video Thumbnail](BIOMETRICS/video-thumbnail.png)](https://gitlab.com/zukunftsorientierte.energie/biometrics-videos/-/uploads/d23d181f4278365b97454a3c0602d132/video.mp4)
 
-**[Video abspielen ▶](BIOMETRICS/video.mp4)**
+**[Video abspielen ▶](https://gitlab.com/zukunftsorientierte.energie/biometrics-videos/-/uploads/d23d181f4278365b97454a3c0602d132/video.mp4)**
 
 </td>
 <td align="center">

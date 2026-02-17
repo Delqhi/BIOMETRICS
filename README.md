@@ -10,23 +10,18 @@
 
 ### 📹 Erklärvideo
 
-<video width="320" controls>
-  <source src="BIOMETRICS/video.mp4" type="video/mp4">
-  Dein Browser unterstützt das Video-Tag nicht.
-</video>
+[![Video Thumbnail](BIOMETRICS/video-thumbnail.png)](BIOMETRICS/video.mp4)
 
-[Video herunterladen](BIOMETRICS/video.mp4)
+**[Video abspielen ▶](BIOMETRICS/video.mp4)**
 
 </td>
 <td align="center">
 
 ### 📄 Präsentation
 
-[![PDF Preview](https://img.shields.io/badge/PDF-Präsentation-download?style=for-the-badge&color=red)](BIOMETRICS/praesentation.pdf)
+[![PDF Preview](BIOMETRICS/praesentation.pdf.png)](BIOMETRICS/praesentation.pdf)
 
-[BIOMETRICS_AI_Framework.pdf](BIOMETRICS/praesentation.pdf)
-
-[Präsentation herunterladen](BIOMETRICS/praesentation.pdf)
+**[Präsentation öffnen 📄](BIOMETRICS/praesentation.pdf)**
 
 </td>
 </tr>

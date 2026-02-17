@@ -1,6 +1,38 @@
-# <img src="BIOMETRICS/logo.png" alt="BIOMETRICS Logo" width="64" height="64" align="left" style="margin-right: 16px;"> BIOMETRICS
+# BIOMETRICS
 
 ![BIOMETRICS Infografik](BIOMETRICS/infografik.png)
+
+## 🎬 Video & Präsentation
+
+<table>
+<tr>
+<td align="center">
+
+### 📹 Erklärvideo
+
+<video width="320" controls>
+  <source src="BIOMETRICS/video.mp4" type="video/mp4">
+  Dein Browser unterstützt das Video-Tag nicht.
+</video>
+
+[Video herunterladen](BIOMETRICS/video.mp4)
+
+</td>
+<td align="center">
+
+### 📄 Präsentation
+
+[![PDF Preview](https://img.shields.io/badge/PDF-Präsentation-download?style=for-the-badge&color=red)](BIOMETRICS/praesentation.pdf)
+
+[BIOMETRICS_AI_Framework.pdf](BIOMETRICS/praesentation.pdf)
+
+[Präsentation herunterladen](BIOMETRICS/praesentation.pdf)
+
+</td>
+</tr>
+</table>
+
+---
 
 ## Global-Mandate-Alignment (AGENTS-GLOBAL)
 
@@ -13,16 +45,19 @@
 Universelles Prompt- und Betriebsframework für orchestrierte KI-Entwicklung auf Best-Practice-Niveau (Stand: Februar 2026).
 
 ## Repository-Name
-Kanonischer Name: `BIOMETRICS`  
-Workspace-Pfad in dieser Umgebung: `/workspaces/<workspace>` (technischer Container-Pfad)  
+
+Kanonischer Name: `BIOMETRICS`
+Workspace-Pfad in dieser Umgebung: `/workspaces/<workspace>` (technischer Container-Pfad)
 Status: BIOMETRICS als verbindlicher Repo-Name verwenden
 
 ## Verzeichnisstrategie
+
 - Kanonischer Governance-Hauptordner: `BIOMETRICS/`
 - NLM-Artefakte liegen unter: `BIOMETRICS/NLM-ASSETS/`
 - Agentenseitig erstellte Projektdokumente sind ausschließlich unter `BIOMETRICS/` zu führen
 
 ## Schnellstart
+
 1. `∞Best∞Practices∞Loop.md` lesen
 2. `BIOMETRICS/AGENTS.md` und `BIOMETRICS/AGENTS-PLAN.md` lesen
 3. `BIOMETRICS/CONTEXT.md` und `BIOMETRICS/ONBOARDING.md` lesen
@@ -30,6 +65,7 @@ Status: BIOMETRICS als verbindlicher Repo-Name verwenden
 5. Änderungen in `BIOMETRICS/MEETING.md` und `BIOMETRICS/CHANGELOG.md` dokumentieren
 
 ## Leitdokumente
+
 - `∞Best∞Practices∞Loop.md`
 - `BIOMETRICS/AGENTS.md`
 - `BIOMETRICS/AGENTS-PLAN.md`
@@ -38,6 +74,7 @@ Status: BIOMETRICS als verbindlicher Repo-Name verwenden
 - `BIOMETRICS/CHANGELOG.md`
 
 ## Architektur und Betrieb
+
 - `BIOMETRICS/ARCHITECTURE.md`
 - `BIOMETRICS/INFRASTRUCTURE.md`
 - `BIOMETRICS/SECURITY.md`
@@ -47,6 +84,7 @@ Status: BIOMETRICS als verbindlicher Repo-Name verwenden
 - `BIOMETRICS/TROUBLESHOOTING.md`
 
 ## Produkt- und Experience-Dokumente
+
 - `BIOMETRICS/WEBSITE.md`
 - `BIOMETRICS/WEBAPP.md`
 - `BIOMETRICS/WEBSHOP.md`
@@ -54,12 +92,14 @@ Status: BIOMETRICS als verbindlicher Repo-Name verwenden
 - `BIOMETRICS/ONBOARDING.md`
 
 ## Steuerung und API
+
 - `BIOMETRICS/COMMANDS.md`
 - `BIOMETRICS/ENDPOINTS.md`
 - `BIOMETRICS/MAPPING.md`
 - `BIOMETRICS/MAPPING-COMMANDS-ENDPOINTS.md`
 
 ## Integrationen und Plattformen
+
 - `BIOMETRICS/NOTEBOOKLM.md`
 - `BIOMETRICS/MCP.md`
 - `BIOMETRICS/OPENCLAW.md`
@@ -71,16 +111,19 @@ Status: BIOMETRICS als verbindlicher Repo-Name verwenden
 - `BIOMETRICS/GITHUB.md`
 
 ## Governance
+
 - `BIOMETRICS/CONTRIBUTING.md`
 - `BIOMETRICS/CODE_OF_CONDUCT.md`
 - `BIOMETRICS/LICENSE`
 - `BIOMETRICS/BLUEPRINT.md`
 
 ## Basisartefakte
+
 - `BIOMETRICS/package.json`
 - `BIOMETRICS/requirements.txt`
 
 ## NLM Artefakte (Pflicht)
+
 Freigegebene NLM-Artefakte werden abgelegt und referenziert in:
 - `BIOMETRICS/NLM-ASSETS/videos/`
 - `BIOMETRICS/NLM-ASSETS/infographics/`
@@ -91,6 +134,7 @@ Freigegebene NLM-Artefakte werden abgelegt und referenziert in:
 - `BIOMETRICS/NLM-ASSETS/podcasts/`
 
 ## Nicht verhandelbare Regeln
+
 1. Erst lesen, dann bearbeiten
 2. Keine Done-Meldung ohne Evidenz
 3. NLM immer vollumfänglich via NLM-CLI
@@ -116,7 +160,5 @@ Der Agent kann autonom:
 **Vollständige Dokumentation:** Siehe [`WORKFLOW.md`](BIOMETRICS/WORKFLOW.md)
 
 ---
-
-## 🖼️ Logo
 
 <img src="BIOMETRICS/logo.png" alt="BIOMETRICS Logo" width="128" height="128">

@@ -1,5 +1,7 @@
 # <img src="BIOMETRICS/logo.png" alt="BIOMETRICS Logo" width="64" height="64" align="left" style="margin-right: 16px;"> BIOMETRICS
 
+![BIOMETRICS Infografik](BIOMETRICS/infografik.png)
+
 ## Global-Mandate-Alignment (AGENTS-GLOBAL)
 
 - Verbindliche Leitquelle für Governance: `BIOMETRICS/AGENTS-GLOBAL.md`.
@@ -112,3 +114,9 @@ Der Agent kann autonom:
 - Neue OpenClaw Skills für sich selbst registrieren
 
 **Vollständige Dokumentation:** Siehe [`WORKFLOW.md`](BIOMETRICS/WORKFLOW.md)
+
+---
+
+## 🖼️ Logo
+
+<img src="BIOMETRICS/logo.png" alt="BIOMETRICS Logo" width="128" height="128">

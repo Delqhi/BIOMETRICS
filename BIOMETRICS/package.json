@@ -1,0 +1,17 @@
+{
+  "name": "biometrics-universal",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Universal orchestration and biometrics framework",
+  "packageManager": "pnpm@10",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "lint": "echo \"No project-specific linter configured yet\"",
+    "typecheck": "echo \"No project-specific typecheck configured yet\"",
+    "test": "echo \"No project-specific tests configured yet\"",
+    "build": "echo \"No project-specific build configured yet\"",
+    "dev": "echo \"No project-specific dev server configured yet\""
+  }
+}

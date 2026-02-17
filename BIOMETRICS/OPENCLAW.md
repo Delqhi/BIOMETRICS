@@ -66,3 +66,24 @@ OpenClaw dient als Integrationsschicht für externe Plattformzugriffe und orches
 5. Verifikationsplan vorhanden
 
 ---
+
+---
+
+## 12) OpenClaw Skills als Interfaces
+
+OpenClaw Skills sind die "Interfaces" oder "Wrappers" für zugrundeliegende Logik (Supabase/n8n/SDKs).
+
+**Skill Types:**
+1. **Webhook Wrapper** - Trigger n8n Workflows
+2. **Serverless Proxy** - Call Supabase Edge Functions
+3. **SDK Native** - Direct library usage
+
+**Ultimate Goal:**
+OpenClaw soll sich selbst replizieren durch autonomes Erstellen neuer Skills via Meta-Builder Protocol.
+
+**Master-Skills für Self-Replication:**
+- `deploy_n8n_workflow`
+- `deploy_supabase_function`
+- `register_openclaw_skill`
+
+**Siehe auch:** `WORKFLOW.md` für Skill creation architecture.

@@ -2508,3 +2508,22 @@ Wenn ein Agent dieses Dokument erstmals in einem Projekt liest, muss er:
 Version: v2.2
 Stand: Februar 2026
 Status: ACTIVE
+
+---
+
+## 139) Tool Evolution Loop (Meta-Builder Protocol)
+
+**Loop für autonome Skill-Erstellung:**
+
+1. **IDENTIFY** - Agent erkennt repetitive manuelle Task
+2. **ARCHITECT** - Agent designed Edge Function/n8n Workflow
+3. **BUILD & DEPLOY** - Agent implementiert und deployed via API
+4. **INTEGRATE** - Agent fügt neuen Skill hinzu
+5. **REPEAT** - Agent wird kontinuierlich mächtiger
+
+**Master-Skills erforderlich:**
+- `deploy_n8n_workflow`
+- `deploy_supabase_function`
+- `register_openclaw_skill`
+
+**Methodik:** Siehe `WORKFLOW.md` für vollständige Dokumentation.

@@ -95,3 +95,20 @@ Freigegebene NLM-Artefakte werden abgelegt und referenziert in:
 4. Keine Duplikatdateien
 5. Doku-Updates sind Pflicht
 6. README bleibt laufend aktuell und referenziert neue NLM-Artefakte
+
+---
+
+## 🤖 Architecture & Automation
+
+Dieses Projekt verwendet einen **Self-Building AI Agent** Ansatz:
+
+- **Brain:** AI/OpenClaw (Entscheidung & Interface)
+- **Muscle:** Supabase/n8n (Execution & Automation)
+- **Meta-Builder:** Agent baut sich selbst neue Tools
+
+Der Agent kann autonom:
+- Supabase Edge Functions schreiben & deployen
+- n8n Workflows erstellen & aktivieren
+- Neue OpenClaw Skills für sich selbst registrieren
+
+**Vollständige Dokumentation:** Siehe [`WORKFLOW.md`](BIOMETRICS/WORKFLOW.md)

@@ -89,3 +89,19 @@ Für jede Tabelle definieren:
 5. NLM-Asset-Tracking berücksichtigt
 
 ---
+
+---
+
+## 12) Edge Functions als Execution Layer für OpenClaw Skills
+
+Edge Functions sind die primäre Ausführungsschicht für OpenClaw Skills im Serverless Proxy Pattern.
+
+**Integration Pattern:**
+- OpenClaw Skill ruft Edge Function via HTTP auf
+- Edge Function führt Datenbank-Operationen aus
+- Rückgabe als typed JSON für AI-Consumption
+
+**Meta-Builder Protocol:**
+Der Agent kann autonom neue Edge Functions schreiben und deployen via `deploy_supabase_function` Master-Skill.
+
+**Siehe auch:** `WORKFLOW.md` für vollständige Architektur-Dokumentation.

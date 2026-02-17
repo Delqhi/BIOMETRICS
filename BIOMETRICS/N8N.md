@@ -69,3 +69,24 @@ Für jeden Workflow dokumentieren:
 4. Observability-Basis enthalten
 
 ---
+
+---
+
+## 12) n8n als Heavy Lifting Muscle für AI Skills
+
+n8n Workflows sind die "Automation Muscle" die von AI Skills getriggert werden im Webhook Wrapper Pattern.
+
+**Integration Pattern:**
+- OpenClaw Skill trigger n8n Webhook
+- n8n führt multi-step Workflow aus
+- Clean JSON Response für AI
+
+**Design Principles:**
+- Workflows müssen AI-triggbar sein (Webhook endpoint)
+- Fehler müssen AI-freundlich zurückgegeben werden
+- Idempotenz für wiederholbare Execution
+
+**Meta-Builder Protocol:**
+Der Agent kann autonom neue n8n Workflows erstellen und deployen via `deploy_n8n_workflow` Master-Skill.
+
+**Siehe auch:** `WORKFLOW.md` für vollständige Architektur-Dokumentation.

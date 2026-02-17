@@ -6711,3 +6711,19 @@ Pflicht:
 
 Kontrollpunkt:
 - Fehlender Alignment-Abschnitt gilt als Governance-Drift und muss sofort korrigiert werden.
+
+---
+
+## 26) Unified Skill Architecture
+
+**Flow:** User Request → Agent (OpenClaw) → Skill Interface → Execution (Supabase/n8n)
+
+**Architecture Patterns:**
+- Pattern A: Webhook Wrapper (n8n)
+- Pattern B: Serverless Proxy (Supabase Edge Functions)
+- Pattern C: SDK Native (Direct)
+
+**Meta-Builder Protocol:**
+Agent erkennt repetitive Task → designed Lösung → deployed via API → registriert neuen Skill
+
+**Zentrale Dokumentation:** Siehe `WORKFLOW.md` für vollständige Architektur.

@@ -61,6 +61,12 @@ Der User liefert Ziele/Ideen. Der Orchestrator übersetzt diese in belastbare Um
 - Commands/Endpoints für steuerbare KI-Funktionen
 - Governance: Prompt-Versionierung und Audit-Logik
 
+### 3.5 Media-Storage (GitLab First)
+- **VERBOTEN:** Große Media-Dateien (>1MB) in GitHub Repos
+- **PFLICHT:** Alle Videos, PDFs, große Bilder zu GitLab uploaden
+- **WORKFLOW:** NLM generiert → GitLab upload → Öffentliche URL in README/DB
+- **DOKU:** Siehe `BIOMETRICS/GITLAB.md` für detaillierte Anweisungen
+
 ## 4) Serena-MCP Pflicht
 Jeder Agent/Subagent arbeitet mit Serena MCP, wenn verfügbar.
 
@@ -98,6 +104,7 @@ Alle Dateien müssen existieren und einen statusbasierten Header besitzen: `STAT
 20. `BIOMETRICS/N8N.md` → Workflows, Trigger, Recovery, Versionierung
 21. `BIOMETRICS/MEETING.md` → laufendes Agenten-Protokoll, Entscheidungen, Konflikte
 22. `BIOMETRICS/COMMANDS.md` → alle steuerbaren Befehle inkl. Inputs/Outputs
+23. `BIOMETRICS/GITLAB.md` → Media-Storage-Policy, Upload-Workflows, URL-Management
 23. `BIOMETRICS/ENDPOINTS.md` → API-Katalog inkl. Auth, Beispiele, Fehlercodes
 24. `BIOMETRICS/VERCEL.md` → Deploy-Infos, Projekt-IDs, Environments
 25. `BIOMETRICS/vercel.json` → routing/runtime/config falls genutzt
@@ -2476,6 +2483,67 @@ Podcast-Mindestinhalte:
 3. Kapitelstruktur
 4. Kernbotschaften
 5. CTA oder nächste Schritte
+
+## 135) GitLab Media-Storage Pflicht (CRITICAL 2026)
+
+**PROBLEM:** NLM generiert Videos/PDFs/Bilder, aber GitHub kann diese nicht anzeigen (Dateigrößen-Limits).
+
+**LÖSUNG:** Alle Media-Dateien MÜSSEN zu GitLab hochgeladen und via öffentlicher URL referenziert werden.
+
+### 135.1) Agent-Workflow für Media-Dateien
+
+```
+SCHRITT 1: NLM generiert Media-Datei
+  └─► nlm generate video "title" --output file.mp4
+
+SCHRITT 2: SOFORT zu GitLab uploaden (NIEMALS zu GitHub!)
+  └─► curl POST to GitLab upload API
+  └─► Response enthält public URL
+
+SCHRITT 3: Öffentliche URL verwenden in:
+  ├─► README.md (Videos, PDFs, große Bilder)
+  ├─► Supabase DB Tabelle media_assets
+  ├─► Dokumentation
+  └─► Thumbnails zu GitHub commiten (<500KB)
+
+SCHRITT 4: URL dokumentieren
+  └─► BIOMETRICS/GITLAB.md aktualisieren
+  └─► BIOMETRICS/MEETING.md protokollieren
+```
+
+### 135.2) Dateigrößen-Limits (GitHub vs GitLab)
+
+| Dateityp | GitHub Limit | GitLab Pflicht |
+|----------|--------------|----------------|
+| Videos | >1MB | ✅ IMMER |
+| PDFs | >5MB | ✅ IMMER |
+| Bilder | >2MB | ✅ EMPFOHLEN |
+| Thumbnails | <500KB | ❌ GitHub OK |
+| Audio | >1MB | ✅ IMMER |
+
+### 135.3) Verbotene Aktionen
+
+- ❌ Video-Dateien in GitHub repo commiten
+- ❌ Raw GitHub URLs für Media verwenden
+- ❌ Große PDFs im repo speichern
+- ❌ NLM-Output direkt in README verlinken (ohne GitLab)
+
+### 135.4) Verbindliche URLs
+
+- **GitLab Upload API:** `https://gitlab.com/api/v4/projects/{id}/uploads`
+- **Public URL Format:** `https://gitlab.com/{namespace}/{project}/-/project/{id}/uploads/{path}`
+- **Dokumentation:** Siehe `BIOMETRICS/GITLAB.md` für vollständige Anleitung
+
+### 135.5) Verification vor "Fertig"
+
+- [ ] Media zu GitLab hochgeladen?
+- [ ] Öffentliche URL im Browser getestet?
+- [ ] URL in README eingefügt?
+- [ ] URL in Supabase media_assets Tabelle?
+- [ ] Datei NICHT zu GitHub committed?
+- [ ] Thumbnail zu GitHub committed (falls Video)?
+
+---
 
 ## 136) Pflicht zur Einbindung von NLM-Artefakten in Doku
 Für jedes freigegebene NLM-Artefakt gilt:

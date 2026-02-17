@@ -1,6 +1,4 @@
-# BIOMETRICS
-
-![BIOMETRICS Logo](BIOMETRICS/logo.png)
+# <img src="BIOMETRICS/logo.png" alt="BIOMETRICS Logo" width="64" height="64" align="left" style="margin-right: 16px;"> BIOMETRICS
 
 ## Global-Mandate-Alignment (AGENTS-GLOBAL)
 

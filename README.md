@@ -1,5 +1,7 @@
 # BIOMETRICS
 
+![BIOMETRICS Logo](BIOMETRICS/logo.png)
+
 ## Global-Mandate-Alignment (AGENTS-GLOBAL)
 
 - Verbindliche Leitquelle für Governance: `BIOMETRICS/AGENTS-GLOBAL.md`.

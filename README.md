@@ -2,6 +2,48 @@
 
 ![BIOMETRICS Infografik](BIOMETRICS/infografik.png)
 
+## 🚀 SCHNELLSTART
+
+### One-Command Installation
+
+Alles mit einem Befehl einrichten:
+
+```bash
+npx biometrics-onboard@latest
+```
+
+Oder manuell:
+
+```bash
+# 1. Repo klonen
+git clone https://github.com/Delqhi/BIOMETRICS.git
+cd BIOMETRICS
+
+# 2. Onboarding-CLI installieren und ausführen
+git clone https://github.com/Delqhi/biometrics-onboard.git
+cd biometrics-onboard
+pnpm install
+pnpm link --global
+cd ..
+biometrics-onboard
+```
+
+**Was automatisch eingerichtet wird:**
+- ✅ GitLab Media Storage (für Videos, PDFs, Bilder)
+- ✅ NLM CLI (NotebookLM)
+- ✅ OpenCode (AI Coding Assistant)
+- ✅ OpenClaw (AI Orchestration)
+- ✅ Google Antigravity (OAuth)
+- ✅ WhatsApp Integration (optional)
+- ✅ Telegram Integration (optional)
+- ✅ Gmail Integration (optional)
+- ✅ Twitter/X Integration (optional)
+- ✅ ClawdBot (Social Media Automation)
+
+**Dokumentation:** Siehe [`biometrics-onboard/README.md`](https://github.com/Delqhi/biometrics-onboard) für vollständige Anleitung.
+
+---
+
 ## 🎬 Video & Präsentation
 
 <table>

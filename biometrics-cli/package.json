@@ -1,0 +1,33 @@
+{
+  "name": "biometrics-onboard",
+  "version": "1.0.0",
+  "description": "Interactive onboarding CLI for BIOMETRICS project",
+  "main": "src/index.js",
+  "bin": {
+    "biometrics-onboard": "./src/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node src/test.js"
+  },
+  "keywords": [
+    "biometrics",
+    "onboarding",
+    "cli",
+    "opencode",
+    "openclaw",
+    "nlm"
+  ],
+  "author": "BIOMETRICS Team",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "inquirer": "^9.2.12",
+    "ora": "^7.0.1",
+    "execa": "^8.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

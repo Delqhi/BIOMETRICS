@@ -119,3 +119,211 @@ Owner:
 5. Mindmap- und Podcast-Regeln enthalten
 
 ---
+
+---
+
+## 13) NLM-CLI Installation & Setup
+
+### Installation (PNPM ONLY!)
+
+**⚠️ WICHTIG:** Verwende **pnpm** (NICHT npm!) gemäß Stack-Policy.
+
+```bash
+# NLM-CLI global installieren (PNPM!)
+pnpm install -g nlm
+
+# Installation verifizieren
+nlm --version
+```
+
+### Authentication Setup
+
+```bash
+# Google OAuth durchführen
+nlm auth login
+
+# Browser öffnet sich für Google Login
+# Mit Google Account anmelden
+# Berechtigungen erteilen
+
+# Auth Status prüfen
+nlm auth status
+```
+
+### Erste Schritte
+
+#### 1. Notebook erstellen
+```bash
+# Neues Notebook erstellen
+nlm notebook create "Mein Projekt Notebook"
+
+# Notebook ID notieren (für spätere Commands)
+```
+
+#### 2. Source hinzufügen
+```bash
+# Source zu Notebook hinzufügen
+nlm source add {NOTEBOOK_ID} --file "dokument.md" --wait
+
+# Source muss im aktuellen Verzeichnis existieren
+```
+
+#### 3. Query ausführen
+```bash
+# Einfache Query
+nlm query notebook {NOTEBOOK_ID} "Was ist der aktuelle Stand?"
+
+# Deep Research
+nlm research start "{THEMA}" --mode deep --notebook-id {NOTEBOOK_ID}
+```
+
+### Wichtige Commands
+
+#### Notebook Management
+```bash
+# Alle Notebooks auflisten
+nlm notebook list
+
+# Notebook Details anzeigen
+nlm notebook show {NOTEBOOK_ID}
+
+# Notebook löschen
+nlm notebook delete {NOTEBOOK_ID}
+```
+
+#### Source Management
+```bash
+# Sources auflisten
+nlm source list {NOTEBOOK_ID}
+
+# Source löschen (bei Duplikaten!)
+nlm source delete {SOURCE_ID} -y
+
+# Source hinzufügen
+nlm source add {NOTEBOOK_ID} --file "dokument.md" --wait
+```
+
+#### Query & Research
+```bash
+# Einfache Query
+nlm query notebook {NOTEBOOK_ID} "{FRAGE}"
+
+# Deep Research starten
+nlm research start "{THEMA}" --mode deep
+
+# Research Status prüfen
+nlm research status {RESEARCH_ID}
+```
+
+### Best Practices 2026
+
+#### 1. Duplicate Prevention
+**IMMER vor `source add` prüfen:**
+```bash
+# 1. Sources auflisten
+nlm source list {NOTEBOOK_ID}
+
+# 2. Falls Duplikat existiert → LÖSCHEN
+nlm source delete {OLD_SOURCE_ID} -y
+
+# 3. DANN neue Source hinzufügen
+nlm source add {NOTEBOOK_ID} --file "dokument.md" --wait
+```
+
+#### 2. Sync Pflicht
+**Nach jeder relevanten Dateiänderung:**
+```bash
+# Datei zu Notebook synchronisieren
+nlm source add {NOTEBOOK_ID} --file "geänderte-datei.md" --wait
+```
+
+#### 3. Crash-Tests
+**Vor kritischen Entscheidungen:**
+```bash
+# Notebook nach aktuellem Stand fragen
+nlm query notebook {NOTEBOOK_ID} "Was ist der aktuelle Stand zu {THEMA}?"
+```
+
+### Troubleshooting
+
+#### Problem: "nlm: command not found"
+**Lösung:**
+```bash
+# PNPM global binaries im PATH?
+export PATH="$(pnpm bin -g):$PATH"
+
+# In ~/.zshrc oder ~/.bashrc hinzufügen:
+export PATH="$HOME/Library/pnpm/global/bin:$PATH"
+```
+
+#### Problem: "Authentication failed"
+**Lösung:**
+```bash
+# Logout und erneuter Login
+nlm auth logout
+nlm auth login
+```
+
+#### Problem: "Notebook not found"
+**Lösung:**
+```bash
+# Notebook ID prüfen
+nlm notebook list
+
+# Korrekte ID verwenden (UUID Format)
+```
+
+#### Problem: "Duplicate source"
+**Lösung:**
+```bash
+# 1. Sources auflisten
+nlm source list {NOTEBOOK_ID}
+
+# 2. Duplikat identifizieren (gleicher Titel)
+
+# 3. Altes löschen
+nlm source delete {DUPLICATE_ID} -y
+
+# 4. Neues hinzufügen
+nlm source add {NOTEBOOK_ID} --file "dokument.md" --wait
+```
+
+### Stack-Policy Compliance
+
+**Gemäß `AGENTS-GLOBAL.md` und `∞Best∞Practices∞Loop.md`:**
+
+- ✅ **PNPM ONLY:** `pnpm install -g nlm` (NIEMALS npm!)
+- ✅ **NLM First:** Immer zuerst NLM Query, dann externe Recherche
+- ✅ **Duplicate Prevention:** Immer `source list` vor `source add`
+- ✅ **Sync Pflicht:** Nach Änderungen sofort synchronisieren
+- ✅ **Crash-Tests:** Vor Entscheidungen NLM konsultieren
+
+### Quick Reference
+
+```bash
+# Installation
+pnpm install -g nlm
+
+# Auth
+nlm auth login
+nlm auth status
+
+# Notebook
+nlm notebook create "Name"
+nlm notebook list
+
+# Source
+nlm source list {ID}
+nlm source add {ID} --file "doc.md" --wait
+nlm source delete {ID} -y
+
+# Query
+nlm query notebook {ID} "Frage"
+nlm research start "Thema" --mode deep
+```
+
+---
+
+**Updated:** 2026-02-17  
+**Installation:** pnpm install -g nlm  
+**Status:** PRODUCTION READY ✅

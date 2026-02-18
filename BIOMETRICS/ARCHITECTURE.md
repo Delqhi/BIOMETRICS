@@ -49,14 +49,9 @@ Universelle Architekturvorlage für modulare, skalierbare und auditierbare Syste
 5. Reproduzierbarer Betrieb
 6. **AI-Brain-first** (Qwen 3.5 als zentrale推理-Engine)
 
-## 2) Architekturprinzipien
-1. API-first
-2. Modular statt monolithisch
-3. Security by default
-4. Observability by design
-5. Reproduzierbarer Betrieb
+---
 
-## 3) Modulübersicht (Template)
+## 3) Modulübersicht
 
 | Modul | Verantwortung | Eingänge | Ausgänge | Abhängigkeiten |
 |---|---|---|---|---|

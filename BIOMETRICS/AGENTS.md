@@ -82,30 +82,37 @@ Bildanalyse und visuelle Erkennung für Produktbilder, Grafiken und Diagramme.
 - **Use Case:** Produktbild-Qualitätsprüfung, Layout-Analyse
 - **Input:** Bilder (PNG, JPG, WebP)
 - **Output:** Strukturierte Analyse mit Tags und Metriken
+- **API:** `POST /api/qwen/vision` (Vercel Edge Function)
 
 ### qwen_code_generation
 Full-Stack Code-Generierung mit Next.js, Go und Supabase.
 - **Use Case:** Komponenten, API-Routen, Datenbank-Schema
 - **Input:** Natürliche Sprache oder Spezifikation
 - **Output:** Fertiger, getesteter Code
+- **API:** `POST /api/qwen/chat` (Vercel Edge Function)
 
 ### qwen_document_ocr
 Texterkennung und Dokumentanalyse aus gescannten Dokumenten und PDFs.
 - **Use Case:** Rechnungsverarbeitung, Vertragsanalyse
 - **Input:** PDF, Bilder mit Text
 - **Output:** Extrahierter Text, Metadaten, Struktur
+- **API:** `POST /api/qwen/ocr` (Vercel Edge Function)
 
 ### qwen_video_understanding
 Video-Inhaltsanalyse für帧-Extraction und Szenenbeschreibung.
 - **Use Case:** Video-Vorschau, Content-Indexierung
 - **Input:** Videos (MP4, MOV, WebM)
 - **Output:** Szenenbeschreibung, Key-Frames, Metadaten
+- **API:** `POST /api/qwen/video` (Vercel Edge Function)
 
 ### qwen_conversation
 Natürliche Konversations-KI für Kundenservice und Chat-Interaktionen.
 - **Use Case:** Support-Chat, Produktberatung
 - **Input:** Benutzer-Nachrichten, Kontext
 - **Output:** Kontextbezogene Antworten
+- **API:** `POST /api/qwen/chat` (Vercel Edge Function)
+
+**Deployment:** Alle Skills laufen über Vercel Edge Functions mit NVIDIA NIM Backend.
 
 ## Abnahme-Check AGENTS
 1. Regeln klar und widerspruchsfrei

@@ -362,7 +362,62 @@ git push
 
 ---
 
-## ✅ VERIFICATION CHECKLIST
+## 🧪 TEST INSTRUCTIONS
+
+### Prerequisites
+```bash
+# Set required environment variables
+export GITLAB_TOKEN="glpat-xxxxxxxxxxxxxxxxxxxx"
+export GITLAB_PROJECT_ID="79575238"
+```
+
+### Test 1: Verify GitLab Project Exists
+```bash
+curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  "https://gitlab.com/api/v4/projects/$GITLAB_PROJECT_ID" | \
+  python3 -c "import sys, json; d=json.load(sys.stdin); print(f'Project: {d[\"name\"]}'); print(f'Visibility: {d[\"visibility\"]}'); print(f'URL: {d[\"web_url\"]}')"
+```
+
+### Test 2: Create Test File
+```bash
+# Create a small test file
+echo "Test $(date)" > test-upload.txt
+```
+
+### Test 3: Upload Test File
+```bash
+response=$(curl -s --request POST \
+  --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  --form "file=@test-upload.txt" \
+  "https://gitlab.com/api/v4/projects/$GITLAB_PROJECT_ID/uploads")
+
+echo "$response" | python3 -c "import sys, json; d=json.load(sys.stdin); print(f'Upload URL: {d.get(\"full_path\", \"FAILED\")}')"
+```
+
+### Test 4: Verify Public URL Access
+```bash
+# Extract and test the URL
+url=$(echo "$response" | python3 -c "import sys, json; print('https://gitlab.com' + json.load(sys.stdin).get('full_path', ''))")
+curl -sI "$url" | head -1
+```
+
+### Test 5: Cleanup Test File
+```bash
+# Remove test file from GitLab (via UI or API)
+echo "Manual cleanup required in GitLab UI"
+rm test-upload.txt
+```
+
+### Expected Results
+| Test | Expected | Actual |
+|------|----------|--------|
+| Project exists | 200 OK | _____ |
+| Upload success | 200 OK with URL | _____ |
+| Public URL works | 200 OK | _____ |
+
+---
+
+## 📋 VERIFICATION CHECKLIST
 
 Before considering a media file "done":
 

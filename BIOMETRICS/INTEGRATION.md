@@ -214,6 +214,95 @@ try {
 
 ---
 
+## 9) Vercel Edge Functions (Qwen 3.5)
+
+**Provider:** Vercel Serverless  
+**Runtime:** Node.js Edge  
+**Status:** ✅ KONFIGURIERT
+
+### 9.1 API Endpoints
+
+| Endpoint | Methode | Zweck | Auth |
+|---------|---------|-------|------|
+| `/api/qwen/chat` | POST | Chat Completion | Bearer Token |
+| `/api/qwen/vision` | POST | Bildanalyse | Bearer Token |
+| `/api/qwen/ocr` | POST | Texterkennung | Bearer Token |
+| `/api/qwen/video` | POST | Video-Analyse | Bearer Token |
+
+### 9.2 Environment Variables
+
+| Variable | Wert | Environment |
+|----------|------|-------------|
+| `NVIDIA_API_KEY` | `nvapi-...` | Alle |
+| `QWEN_MODEL_ID` | `qwen/qwen3.5-397b-a17b` | Alle |
+| `QWEN_BASE_URL` | `https://integrate.api.nvidia.com/v1` | Alle |
+| `QWEN_MAX_TOKENS` | 32768 | production |
+| `QWEN_MAX_TOKENS` | 8192 | development |
+| `ENABLE_STREAMING` | `true` | Alle |
+| `LOG_LEVEL` | `debug/info/warn` | per Env |
+
+### 9.3 Request/Response Contracts
+
+**Chat Endpoint:**
+```typescript
+// Request
+POST /api/qwen/chat
+{
+  messages: [{ role: "user", content: "string" }],
+  temperature?: number,
+  max_tokens?: number
+}
+
+// Response
+{
+  id: "string",
+  choices: [{ message: { role: "assistant", content: "string" } }]
+}
+```
+
+**Vision Endpoint:**
+```typescript
+// Request
+POST /api/qwen/vision
+{
+  image: "base64 or URL",
+  prompt: "string"
+}
+
+// Response
+{
+  choices: [{ message: { content: "string" } }]
+}
+```
+
+### 9.4 Rate Limits & Fallback
+
+**Vercel Limits:**
+- Concurrent: 1000
+- Duration: 30s max
+- Bandwidth: 10MB
+
+**NVIDIA NIM Limits:**
+- RPM: 40
+- Fallback: Queue + Retry (60s)
+
+### 9.5 Deployment
+
+```bash
+# Preview
+vercel
+
+# Production
+vercel --prod
+```
+
+### 9.6 Monitoring
+
+- Dashboard: `/dashboard/biomet-rics-01/functions`
+- Logs: Vercel Console → Functions → Logs
+
+---
+
 ## Abnahme-Check INTEGRATION (Erweitert)
 1. Integrationsmatrix vollständig
 2. NLM-CLI Prozess enthalten

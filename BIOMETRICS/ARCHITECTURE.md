@@ -7,7 +7,7 @@
 - Security-by-Default, NLM-First und Nachweisbarkeit sind Pflicht.
 
 Status: ACTIVE  
-Version: 1.0 (Universal)  
+Version: 1.1 (Qwen 3.5 Brain)  
 Stand: Februar 2026
 
 ## Zweck
@@ -17,11 +17,37 @@ Universelle Architekturvorlage für modulare, skalierbare und auditierbare Syste
 - Frontend: Next.js
 - Backend: Go + Supabase
 - Integrationen: OpenClaw, n8n, Cloudflare, Vercel (optional)
+- **Primary AI Brain:** Qwen 3.5 (NVIDIA NIM)
+
+---
 
 ## 1) Systemkontext
-- Nutzergruppen: {PRIMARY_AUDIENCE}, {SECONDARY_AUDIENCE}
-- Hauptziele: {BUSINESS_GOAL}
-- Externe Systeme: {EXTERNAL_SYSTEMS}
+
+### Nutzergruppen
+- **Primary:** BIOMETRICS CLI Benutzer
+- **Secondary:** KI-Agenten (OpenClaw, n8n)
+
+### Hauptziele
+- Vollautomatisierte KI-Dienstleistungen
+- Self-Building AI Agent System
+- NLM-gestützte Content-Generierung
+
+### Externe Systeme
+- Supabase (Datenbank, Auth, Storage)
+- n8n (Workflow-Automatisierung)
+- OpenClaw (Agenten-Orchestrierung)
+- NVIDIA NIM (Qwen 3.5)
+- Cloudflare (Netzwerksicherheit)
+
+---
+
+## 2) Architekturprinzipien
+1. API-first
+2. Modular statt monolithisch
+3. Security by default
+4. Observability by design
+5. Reproduzierbarer Betrieb
+6. **AI-Brain-first** (Qwen 3.5 als zentrale推理-Engine)
 
 ## 2) Architekturprinzipien
 1. API-first
@@ -34,13 +60,86 @@ Universelle Architekturvorlage für modulare, skalierbare und auditierbare Syste
 
 | Modul | Verantwortung | Eingänge | Ausgänge | Abhängigkeiten |
 |---|---|---|---|---|
+| qwen-brain | AI推理 & Generierung | prompts, files, images | text, code, analysis | NVIDIA NIM API |
 | web-frontend | UI und User Flows | user events | API calls | api-gateway |
 | api-gateway | Zugriffsschicht | HTTP requests | responses | services |
 | service-core | Business-Logik | API payloads | domain events | supabase |
 | content-orchestrator | NLM-Delegation | content tasks | generated assets | nlm-cli |
 | workflow-engine | Automationen | triggers | actions | n8n/openclaw |
 
-## 4) Datenfluss (High-Level)
+### Datenfluss mit Qwen Brain
+
+```
+User Request → Frontend → API Gateway → Service Core
+                                            ↓
+                                    [Qwen 3.5 Brain]
+                                            ↓
+                                    NVIDIA NIM API
+                                            ↓
+                                    Response Processing
+                                            ↓
+                                    Supabase (persist)
+                                            ↓
+                                    User Response
+```
+
+## 4) Qwen 3.5 Brain - Modell-Architektur
+
+### Modell-Details
+
+| Attribut | Wert |
+|----------|------|
+| **Modell-ID** | `qwen/qwen3.5-397b-a17b` |
+| **Provider** | NVIDIA NIM |
+| **Context Window** | 262.144 Tokens |
+| **Output Limit** | 32.768 Tokens |
+| **Modalitäten** | Text, Vision, Code, Multimodal |
+| **Latenz** | 70-90s (High-Latency Modus) |
+
+### Verfügbare Skills
+
+#### qwen_vision_analysis
+- **Zweck:** Bildanalyse und visuelle Erkennung
+- **Use Cases:** Produktbild-Qualitätsprüfung, Layout-Analyse
+- **Input:** Bilder (PNG, JPG, WebP)
+- **Output:** Strukturierte Analyse mit Tags und Metriken
+
+#### qwen_code_generation
+- **Zweck:** Full-Stack Code-Generierung
+- **Use Cases:** Komponenten, API-Routen, Datenbank-Schema
+- **Input:** Natürliche Sprache oder Spezifikation
+- **Output:** Fertiger, getesteter Code
+
+#### qwen_document_ocr
+- **Zweck:** Texterkennung und Dokumentanalyse
+- **Use Cases:** Rechnungsverarbeitung, Vertragsanalyse
+- **Input:** PDF, Bilder mit Text
+- **Output:** Extrahierter Text, Metadaten, Struktur
+
+#### qwen_video_understanding
+- **Zweck:** Video-Inhaltsanalyse
+- **Use Cases:** Video-Vorschau, Content-Indexierung
+- **Input:** Videos (MP4, MOV, WebM)
+- **Output:** Szenenbeschreibung, Key-Frames, Metadaten
+
+#### qwen_conversation
+- **Zweck:** Natürliche Konversations-KI
+- **Use Cases:** Support-Chat, Produktberatung
+- **Input:** Benutzer-Nachrichten, Kontext
+- **Output:** Kontextbezogene Antworten
+
+### Capabilities Matrix
+
+| Capability | Status | Integration |
+|------------|--------|-------------|
+| Text Generation | ✅ Active | API Call |
+| Vision Analysis | ✅ Active | API Call + Image Input |
+| Code Generation | ✅ Active | API Call |
+| OCR/Document | ✅ Active | API Call |
+| Video Understanding | ✅ Active | API Call |
+| Multimodal | ✅ Active | Combined Skills |
+| Tool Calling | ✅ Active | Function Definitions |
+| Streaming | ❌ Not Supported | Polling fallback |
 1. User interagiert mit Next.js Frontend.
 2. Frontend ruft API-Endpunkte auf.
 3. Go-Services validieren, orchestrieren und persistieren.

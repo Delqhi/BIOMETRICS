@@ -97,6 +97,56 @@ openclaw doctor --fix
 
 ---
 
+## 📚 DOCUMENTATION
+
+**Comprehensive documentation organized by category:**
+
+### 🚀 New Installation?
+→ [**docs/setup/COMPLETE-SETUP.md**](docs/setup/COMPLETE-SETUP.md) - Complete installation guide
+
+### ⚙️ Provider Configuration?
+→ [**docs/config/**](docs/config/) - All provider configs (NVIDIA, Google, OpenCode ZEN)
+
+### 🤖 Agent Documentation?
+→ [**docs/agents/**](docs/agents/) - Agent definitions, mandates, and skills
+  - [AGENTS-MANDATES.md](docs/agents/AGENTS-MANDATES.md) - 286KB executive mandates
+  - [OH-MY-OPENCODE-AGENTS.md](docs/agents/OH-MY-OPENCODE-AGENTS.md) - Plugin documentation
+  - [SKILLS.md](docs/agents/SKILLS.md) - Built-in skills
+
+### 📖 Best Practices?
+→ [**docs/best-practices/**](docs/best-practices/) - Mandates, workflows, compliance
+  - [MANDATES.md](docs/best-practices/MANDATES.md) - 33 core mandates
+  - [WORKFLOW.md](docs/best-practices/WORKFLOW.md) - Work protocols
+  - [TROUBLESHOOTING.md](docs/best-practices/TROUBLESHOOTING.md) - Common issues
+
+### 🏗️ Architecture?
+→ [**docs/architecture/**](docs/architecture/) - System architecture and components
+  - [OVERVIEW.md](docs/architecture/OVERVIEW.md) - System overview
+  - [COMPONENTS.md](docs/architecture/COMPONENTS.md) - Component details
+  - [API Reference](docs/architecture/api/) - API documentation
+
+### 📋 Universal Blueprint?
+→ [**docs/UNIVERSAL-BLUEPRINT.md**](docs/UNIVERSAL-BLUEPRINT.md) - Complete setup guide for ANY agent on ANY Mac
+
+### 🎯 Features?
+→ [**docs/features/**](docs/features/) - Product features and capabilities
+  - [WEBSITE.md](docs/features/WEBSITE.md) - Website documentation
+  - [WEBAPP.md](docs/features/WEBAPP.md) - Web application
+  - [WEBSHOP.md](docs/features/WEBSHOP.md) - E-commerce
+  - [Payment](docs/features/payment/) - Payment gateway integration
+  - [Marketing](docs/features/marketing/) - Marketing automation
+
+### 🔬 Advanced Topics?
+→ [**docs/advanced/**](docs/advanced/) - Blockchain, DeFi, AI, and more
+
+### 📊 Data Engineering?
+→ [**docs/data/**](docs/data/) - ETL, data lineage, quality
+
+### 🛠️ DevOps?
+→ [**docs/devops/**](docs/devops/) - CI/CD, GitHub, GitLab, n8n
+
+---
+
 ## 🚀 SCHNELLSTART
 
 ### One-Command Installation

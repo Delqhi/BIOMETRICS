@@ -56,4 +56,67 @@ Falls keine Engine-Komponente existiert, Status auf `NOT_APPLICABLE` setzen und 
 3. Laufzeit- und Qualitätsziele vorhanden
 4. Verifikation definiert
 
+## Qwen 3.5 Code Generation
+
+### qwen_code_generation
+Automatische Code-Generierung für die Engine-Komponente.
+
+| Feature | Beschreibung | Output |
+|---------|--------------|--------|
+| API-Routen | REST-Endpoints generieren | Go/Next.js Code |
+| Datenbank-Schema | Supabase Tables/Functions | SQL + TypeScript |
+| Edge-Functions | Serverless Logik | Deno/TypeScript |
+| Tests | Unit- und Integrationstests | Jest/Testing Library |
+
+### Code-Generation Pipeline
+```
+Natürliche Sprache Spezifikation
+           ↓
+    qwen_code_generation
+           ↓
+┌──────────┼──────────┐
+↓          ↓          ↓
+API Route  DB Schema  Edge Function
+           ↓
+    Automatische Tests
+           ↓
+    Deployment-Ready
+```
+
+### API-Integration
+```typescript
+// Code-Generierung
+const generated = await fetch('/api/qwen/chat', {
+  method: 'POST',
+  body: JSON.stringify({
+    messages: [{
+      role: 'user',
+      content: `Generiere eine Go-Handler-Funktion für:
+      - Endpoint: POST /api/engine/process
+      - Input: JSON mit user_id, action, payload
+      - Output: JSON mit status, result, error
+      - Auth: JWT-Token erforderlich`
+    }],
+    skill: 'qwen_code_generation',
+    options: {
+      language: 'go',
+      framework: 'gin',
+      generateTests: true
+    }
+  })
+});
+```
+
+### Engine-spezifische Use Cases
+1. **Batch-Verarbeitung**: Generiere Worker-Pool mit Retry-Logik
+2. **Event-Handler**: Erstelle Event-Consumer für Queue
+3. **Data-Transformer**: Konvertiere zwischen Formaten
+4. **Validation-Layer**: Regelsätze für Input-Prüfung
+
+### Qualitäts-Gates
+- Keine Syntax-Fehler (TypeScript strict)
+- Tests bestehen > 90% Coverage
+- Security-Scan ohne Findings
+- Performance: < 100ms Latenz
+
 ---

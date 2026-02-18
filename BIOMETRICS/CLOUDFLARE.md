@@ -44,6 +44,51 @@ Universeller Leitfaden für Cloudflare-basierte Netzwerk- und Zugriffssicherung.
 - Access-Regeln geprüft
 - Baseline-WAF-Regeln aktiv
 
+## Tunnel Services
+
+| Service | Tunnel-Name | Subdomain | Ziel-Port | Status |
+|---------|-------------|------------|-----------|--------|
+| OpenCode | opencode-tunnel | opencode.delqhi.com | 18789 | active |
+| OpenClaw | openclaw-tunnel | openclaw.delqhi.com | 18789 | active |
+| n8n | n8n-tunnel | n8n.delqhi.com | 5678 | active |
+| Supabase | supabase-tunnel | supabase.delqhi.com | 54321 | active |
+
+### OpenCode Tunnel
+```yaml
+tunnel: opencode-tunnel
+ingress:
+  - hostname: opencode.delqhi.com
+    service: http://localhost:18789
+  - service: http_status:404
+```
+
+### OpenClaw Tunnel
+```yaml
+tunnel: openclaw-tunnel
+ingress:
+  - hostname: openclaw.delqhi.com
+    service: http://localhost:18789
+  - service: http_status:404
+```
+
+### n8n Tunnel
+```yaml
+tunnel: n8n-tunnel
+ingress:
+  - hostname: n8n.delqhi.com
+    service: http://localhost:5678
+  - service: http_status:404
+```
+
+### Supabase Tunnel
+```yaml
+tunnel: supabase-tunnel
+ingress:
+  - hostname: supabase.delqhi.com
+    service: http://localhost:54321
+  - service: http_status:404
+```
+
 ## Abnahme-Check CLOUDFLARE
 1. Konfigurationsmatrix vollständig
 2. Sicherheitsregeln dokumentiert

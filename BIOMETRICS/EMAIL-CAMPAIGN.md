@@ -35,7 +35,7 @@ services:
       FROM_EMAIL: noreply@biometrics.com
       FROM_NAME: BIOMETRICS
     ports:
-      - "3003:3000"
+      - "53053:3000"  # Port Sovereignty: 3000 → 53053
 ```
 
 ## 3. Campaign Types

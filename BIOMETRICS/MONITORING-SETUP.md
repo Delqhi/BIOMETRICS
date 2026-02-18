@@ -160,7 +160,7 @@ services:
       - GF_SMTP_USER=${SMTP_USER}
       - GF_SMTP_PASSWORD=${SMTP_PASSWORD}
     ports:
-      - "3001:3000"
+      - "53051:3000"  # Port Sovereignty: 3000 → 53051
     volumes:
       - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
       - ./grafana/datasources:/etc/grafana/provisioning/datasources

@@ -4978,7 +4978,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "53080:8080"  # Port Sovereignty: 8080 → 53080
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/opencode

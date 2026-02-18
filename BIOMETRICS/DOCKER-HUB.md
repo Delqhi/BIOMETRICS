@@ -203,12 +203,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/biometrics
-      - REDIS_URL=redis://redis:6379
+ports:
+- "53050:3000" # Port Sovereignty Compliance (Rule -9): 3000→53050
+environment:
+- NODE_ENV=development
+- DATABASE_URL=postgresql://postgres:postgres@db:5432/biometrics
+- REDIS_URL=redis://redis:6379
     depends_on:
       db:
         condition: service_healthy
@@ -224,22 +224,22 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=biometrics
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+ports:
+- "51003:5432" # Port Sovereignty Compliance (Rule -9): 5432→51003
+volumes:
+- postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
+redis:
+image: redis:7-alpine
+ports:
+- "51004:6379" # Port Sovereignty Compliance (Rule -9): 6379→51004
+volumes:
+- redis_data:/data
     command: redis-server --appendonly yes
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -260,19 +260,19 @@ Create `docker-compose.prod.yml`:
 version: '3.8'
 
 services:
-  app:
-    image: biometrics-org/app:latest
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
+app:
+image: biometrics-org/app:latest
+restart: unless-stopped
+ports:
+- "53050:3000" # Port Sovereignty Compliance (Rule -9): 3000→53050
+environment:
+- NODE_ENV=production
       - DATABASE_URL=${DATABASE_URL}
       - REDIS_URL=${REDIS_URL}
       - API_SECRET=${API_SECRET}
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 30s
+healthcheck:
+test: ["CMD", "curl", "-f", "http://localhost:3000/health"] # Internal container port unchanged (3000)
+interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s

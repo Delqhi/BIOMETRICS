@@ -34,7 +34,7 @@ services:
       REDIS_URL: redis://redis:6379
       DB_URL: postgresql://user:pass@db:5432/chat
     ports:
-      - "3004:3000"
+      - "53054:3000"  # Port Sovereignty: 3000 → 53054
 
   redis:
     image: redis:7-alpine

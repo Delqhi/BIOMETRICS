@@ -102,7 +102,18 @@ type RateLimitConfig struct {
 	BurstSize         int `mapstructure:"BURST_SIZE"`
 }
 
-func Load() (*Config, error) {
+type LoadOptions struct {
+	SkipValidation bool
+	RequireDB      bool
+	RequireRedis   bool
+}
+
+func Load(opts ...LoadOptions) (*Config, error) {
+	var options LoadOptions
+	if len(opts) > 0 {
+		options = opts[0]
+	}
+
 	viper.SetConfigName("config")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(".")
@@ -151,24 +162,30 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf("failed to unmarshal config: %w", err)
 	}
 
-	if err := validateConfig(&cfg); err != nil {
-		return nil, fmt.Errorf("invalid configuration: %w", err)
+	if !options.SkipValidation {
+		if err := validateConfig(&cfg, options); err != nil {
+			return nil, fmt.Errorf("invalid configuration: %w", err)
+		}
 	}
 
 	return &cfg, nil
 }
 
-func validateConfig(cfg *Config) error {
+func validateConfig(cfg *Config, opts LoadOptions) error {
 	if cfg.Environment == "" {
 		return fmt.Errorf("ENVIRONMENT is required")
 	}
 
-	if cfg.Database.Host == "" {
-		return fmt.Errorf("database host is required")
+	if opts.RequireDB || opts.SkipValidation == false {
+		if cfg.Database.Host == "" {
+			return fmt.Errorf("database host is required")
+		}
 	}
 
-	if cfg.Redis.Host == "" {
-		return fmt.Errorf("redis host is required")
+	if opts.RequireRedis || opts.SkipValidation == false {
+		if cfg.Redis.Host == "" {
+			return fmt.Errorf("redis host is required")
+		}
 	}
 
 	if cfg.Auth.JWTSecret == "" && cfg.Environment != "development" {

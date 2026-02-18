@@ -661,12 +661,12 @@ test:
       env:
         POSTGRES_PASSWORD: test
         POSTGRES_DB: biometrics_test
-      ports:
-        - 5432:5432
+    ports:
+      - 51003:5432  # Port Sovereignty: 5432 → 51003
     redis:
       image: redis:7
-      ports:
-        - 6379:6379
+    ports:
+      - 51004:6379  # Port Sovereignty: 6379 → 51004
   steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4

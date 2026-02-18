@@ -3672,23 +3672,23 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     services:
-      postgres:
-        image: postgres:15-alpine
-        env:
-          POSTGRES_USER: test
-          POSTGRES_PASSWORD: test
-          POSTGRES_DB: test
-        ports:
-        - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      redis:
-        image: redis:7-alpine
-        ports:
-        - 6379:6379
+postgres:
+image: postgres:15-alpine
+env:
+POSTGRES_USER: test
+POSTGRES_PASSWORD: test
+POSTGRES_DB: test
+ports:
+- 51003:5432 # Port Sovereignty Compliance (Rule -9): 5432→51003
+options: >-
+--health-cmd pg_isready
+--health-interval 10s
+--health-timeout 5s
+--health-retries 5
+redis:
+image: redis:7-alpine
+ports:
+- 51004:6379 # Port Sovereignty Compliance (Rule -9): 6379→51004
     steps:
     - uses: actions/checkout@v4
     

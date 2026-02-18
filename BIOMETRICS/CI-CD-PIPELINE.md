@@ -67,11 +67,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run ESLint
-        run: npm run lint
-        continue-on-error: true
+- name: Run ESLint
+  run: npm run lint
+  # ✅ Removed continue-on-error: Lint failures should block CI (Error Handling Best Practices)
 
-      - name: Run Prettier check
+- name: Run Prettier check
         run: npm run format:check
 
   typecheck:
@@ -115,10 +115,10 @@ jobs:
 
       - name: Run tests
         run: npm run test:coverage
-        env:
-          CI: true
-          DATABASE_URL: postgresql://test:test@localhost:5432/biometrics_test
-          REDIS_URL: redis://localhost:6379
+env:
+CI: true
+DATABASE_URL: postgresql://test:test@localhost:51003/biometrics_test # Port Sovereignty (Rule -9): 5432→51003
+REDIS_URL: redis://localhost:51004 # Port Sovereignty (Rule -9): 6379→51004
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -148,18 +148,18 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Start application
-        run: npm run start &
-        env:
-          DATABASE_URL: postgresql://test:test@localhost:5432/biometrics_test
-          REDIS_URL: redis://localhost:6379
+run: npm run start &
+env:
+DATABASE_URL: postgresql://test:test@localhost:51003/biometrics_test # Port Sovereignty (Rule -9): 5432→51003
+REDIS_URL: redis://localhost:51004 # Port Sovereignty (Rule -9): 6379→51004
 
       - name: Wait for application
-        run: sleep 10 && curl -f http://localhost:3000/health || exit 1
+        run: sleep 10 && curl -f http://localhost:53050/health || exit 1 # Port Sovereignty (Rule -9): 3000→53050
 
       - name: Run Playwright tests
         run: npm run test:e2e
         env:
-          PLAYWRIGHT_BASE_URL: http://localhost:3000
+          PLAYWRIGHT_BASE_URL: http://localhost:53050 # Port Sovereignty (Rule -9): 3000→53050
 
       - name: Upload test results
         if: always()
@@ -315,11 +315,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run npm audit
-        run: npm audit --audit-level=high
-        continue-on-error: true
+- name: Run npm audit
+  run: npm audit --audit-level=high
+  # ✅ Removed continue-on-error: Security vulnerabilities should block CI (Error Handling Best Practices)
 
-      - name: Run Snyk vulnerability scanner
+- name: Run Snyk vulnerability scanner
         uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -353,9 +353,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run GitLeaks
-        uses: zricethezav/gitleaks-action@master
-        continue-on-error: true
+- name: Run GitLeaks
+  uses: zricethezav/gitleaks-action@master
+  # ✅ Removed continue-on-error: Secrets detection should block CI (Security Best Practices)
 ```
 
 ## Pipeline Configuration

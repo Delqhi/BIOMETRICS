@@ -2941,7 +2941,7 @@ services:
       context: .
       dockerfile: Dockerfile.api
     ports:
-      - "8080:8080"
+      - "53080:8080"  # Port Sovereignty: 8080 → 53080
     environment:
       - ENVIRONMENT=development
       - LOG_LEVEL=debug
@@ -2977,7 +2977,7 @@ services:
       - POSTGRES_PASSWORD=biometrics_dev
       - POSTGRES_DB=biometrics
     ports:
-      - "5432:5432"
+      - "51003:5432"  # Port Sovereignty: 5432 → 51003
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -2989,7 +2989,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "51004:6379"  # Port Sovereignty: 6379 → 51004
     volumes:
       - redis_data:/data
     healthcheck:

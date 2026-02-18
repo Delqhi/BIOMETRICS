@@ -6,41 +6,42 @@
 
 ### One-Command Installation
 
-Alles mit einem Befehl einrichten:
-
-```bash
-npx biometrics-onboard@latest
-```
-
-Oder manuell:
+**Alles automatisch einrichten - inkl. System-Dependencies:**
 
 ```bash
 # 1. Repo klonen
 git clone https://github.com/Delqhi/BIOMETRICS.git
-cd BIOMETRICS
+cd BIOMETRICS/biometrics-cli
 
-# 2. Onboarding-CLI installieren und ausführen
-git clone https://github.com/Delqhi/biometrics-onboard.git
-cd biometrics-onboard
+# 2. CLI installieren (automatisiert ALLES!)
 pnpm install
 pnpm link --global
-cd ..
-biometrics-onboard
+
+# 3. Onboarding starten (installiert fehlende Dependencies automatisch)
+biometrics
 ```
 
-**Was automatisch eingerichtet wird:**
-- ✅ GitLab Media Storage (für Videos, PDFs, Bilder)
-- ✅ NLM CLI (NotebookLM)
-- ✅ OpenCode (AI Coding Assistant)
-- ✅ OpenClaw (AI Orchestration)
-- ✅ Google Antigravity (OAuth)
-- ✅ WhatsApp Integration (optional)
-- ✅ Telegram Integration (optional)
-- ✅ Gmail Integration (optional)
-- ✅ Twitter/X Integration (optional)
-- ✅ ClawdBot (Social Media Automation)
+**Der CLI übernimmt VOLLSTÄNDIG:**
+- ✅ **System-Check:** Git, Node.js, pnpm, Homebrew, Python
+- ✅ **Auto-Install:** Fehlende Dependencies werden automatisch installiert
+- ✅ **PATH-Setup:** Fügt `~/.zshrc` und `~/.bashrc` automatisch hinzu
+- ✅ **GitLab:** Erstellt Media-Storage Projekt
+- ✅ **NLM CLI:** Installiert + authentifiziert
+- ✅ **OpenCode:** Installiert + konfiguriert (optional)
+- ✅ **OpenClaw:** Installiert + konfiguriert (optional)
+- ✅ **Google Antigravity:** Plugin + OAuth
+- ✅ **Social Media:** WhatsApp, Telegram, Gmail, Twitter (optional)
+- ✅ **ClawdBot:** Verbindet alle Channels
 
-**Dokumentation:** Siehe [`biometrics-onboard/README.md`](https://github.com/Delqhi/biometrics-onboard) für vollständige Anleitung.
+**Farbschema:** Neon-Grün (Best Practices 2026)
+
+**Befehle:**
+```bash
+biometrics           # Kurzversion
+biometrics-onboard   # Vollständige Version
+```
+
+**Dokumentation:** Siehe [`biometrics-cli/README.md`](./biometrics-cli/README.md)
 
 ---
 

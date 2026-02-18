@@ -23,6 +23,44 @@ Dieses Dokument bildet den umfassenden Sicherheitsrahmen für das BIOMETRICS-Pro
 4. Secure by Default
 5. Nachweisbarkeit und Auditierbarkeit
 
+---
+
+## 🧠 NLM CLI COMMANDS
+
+```bash
+# Create notebook
+nlm notebook create "Title"
+
+# List sources
+nlm source list <notebook-id>
+
+# Delete old source (BEFORE adding new!)
+nlm source delete <source-id> -y
+
+# Add new source
+nlm source add <notebook-id> --file "file.md" --wait
+```
+
+**⚠️ DUPLICATE PREVENTION:** ALWAYS run `nlm source list` before `nlm source add`!
+
+---
+
+## 🔄 DEQLHI-LOOP (INFINITE WORK MODE)
+
+- After each completed task → Add 5 new tasks immediately
+- Never "done" - only "next task"
+- Always document → Every change in files
+- Git commit + push after EVERY change
+- Parallel execution ALWAYS (run_in_background=true)
+
+### Loop Mechanism:
+1. Task N Complete
+2. Git Commit + Push
+3. Update Docs
+4. Add 5 New Tasks
+5. Next Task N+1
+6. Repeat infinitely
+
 ### 1.1 Least Privilege (Minimalste Rechte)
 
 Das Prinzip der minimalsten Rechte besagt, dass jeder Benutzer, jedes System und jeder Prozess nur die absolut notwendigen Berechtigungen erhalten sollte, um seine Aufgabe zu erfüllen. In der Praxis bedeutet dies, dass wir bei der Vergabe von Zugriffsrechten immer vom Minimum ausgehen und nur dann zusätzliche Rechte gewähren, wenn dies explizit erforderlich ist. Dieses Prinzip minimiert die Angriffsfläche erheblich, da selbst wenn ein Account kompromittiert wird, der Schaden begrenzt bleibt.

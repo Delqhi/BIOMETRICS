@@ -77,4 +77,53 @@ Jede Funktion muss einem klaren Nutzerziel dienen, über Command + Endpoint steu
 3. Feature-Matrix mit Command/Endpoint vorhanden
 4. Qualitäts- und Verifikationslogik dokumentiert
 
+## Qwen 3.5 Multimodal Features
+
+### qwen_vision_analysis
+Bildanalyse für Produktbilder, UI-Tests und Dokumentenverarbeitung.
+
+| Feature | Beschreibung | Use Case |
+|---------|--------------|----------|
+| Bildqualitätsprüfung | Automatische Bewertung | Produktbilder validieren |
+| Layout-Analyse | UI-Struktur erkennen | Design-System-Compliance |
+| Diagramm-Interpretation | Grafiken auswerten | Dashboard-Analysen |
+| OCR-Erweiterung | Texterkennung aus Bildern | Dokumentenverarbeitung |
+
+### qwen_document_ocr
+Texterkennung aus gescannten Dokumenten und PDFs.
+
+| Feature | Beschreibung | Use Case |
+|---------|--------------|----------|
+| Rechnungsverarbeitung | Automatisch Daten extrahieren | Buchhaltung |
+| Vertragsanalyse | Klauseln identifizieren | Legal-Compliance |
+| Formularerkennung | Felder automatisch mapping | Lead-Generierung |
+
+### API-Integration
+```typescript
+// Vision Analysis - POST /api/qwen/vision
+const visionResult = await fetch('/api/qwen/vision', {
+  method: 'POST',
+  body: JSON.stringify({
+    image: base64Image,
+    analysisType: 'product_quality',
+    skills: ['qwen_vision_analysis']
+  })
+});
+
+// Document OCR - POST /api/qwen/ocr
+const ocrResult = await fetch('/api/qwen/ocr', {
+  method: 'POST',
+  body: JSON.stringify({
+    document: pdfBase64,
+    extractFields: ['invoice_nr', 'date', 'amount', 'vendor']
+  })
+});
+```
+
+### Multimodal Pipeline
+1. Bild hochladen → qwen_vision_analysis
+2. Erkannte Elemente → Datenbank speichern
+3. Bei Dokumenten → qwen_document_ocr
+4. Extrahierte Daten → Business-Logik
+
 ---

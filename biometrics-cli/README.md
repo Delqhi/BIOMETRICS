@@ -1,219 +1,118 @@
-# biometrics-onboard
+# BIOMETRICS CLI
 
-**Unified onboarding CLI for complete BIOMETRICS setup.** One command installs and configures EVERYTHING:
+Professionelle Terminal-Anwendung für die vollständige Einrichtung des BIOMETRICS-Ökosystems.
 
-- ✅ **GitLab** (media storage project for videos, PDFs, images)
-- ✅ **NLM CLI** (NotebookLM command-line interface)
-- ✅ **OpenCode** (AI coding assistant)
-- ✅ **OpenClaw** (AI orchestration)
-- ✅ **Google Antigravity** (OAuth authentication)
-- ✅ **WhatsApp Integration** (Business API)
-- ✅ **Telegram Integration** (Bot API)
-- ✅ **Gmail Integration** (OAuth2)
-- ✅ **Twitter/X Integration** (OAuth2)
-- ✅ **ClawdBot** (Social media automation)
+## Features
+
+- **Moderne TUI**: Bubbletea-basierte Benutzeroberfläche (Goldstandard 2026)
+- **Automatische Installation**: Alle System-Dependencies werden automatisch installiert
+- **PATH-Management**: Konfiguriert Shell-Konfiguration automatisch
+- **GitLab-Integration**: Erstellt Media-Storage-Projekt via API
+- **OpenClaw-Setup**: Vollständige Integration aller Channels
+- **Neon-Grünes Design**: Professionelles Farbschema ohne Emojis
 
 ## Installation
 
-### Option 1: Global Installation (Recommended)
+### Voraussetzungen
+
+- Go 1.23 oder höher
+- macOS oder Linux
+
+### Build
 
 ```bash
-# Clone the repository
-git clone https://github.com/Delqhi/biometrics-onboard.git
-cd biometrics-onboard
+# Dependencies installieren
+go mod download
 
-# Install dependencies with pnpm
-pnpm install
+# Binary bauen
+go build -o biometrics-cli
 
-# Link globally
-pnpm link --global
+# Global installieren
+cp biometrics-cli /usr/local/bin/biometrics
 ```
 
-### Option 2: Direct Usage
+### Nutzung
 
 ```bash
-# Clone and run directly
-git clone https://github.com/Delqhi/biometrics-onboard.git
-cd biometrics-onboard
-pnpm install
-pnpm start
+# Setup-Assistent starten
+biometrics
+
+# Nach dem Setup
+biometrics
 ```
 
-## Usage
+## Architektur
 
-After installation, simply run:
+### Tech Stack
+
+- **Sprache**: Go 1.23
+- **TUI-Framework**: Bubbletea (Charm.sh)
+- **UI-Components**: Bubbles + Lipgloss
+- **HTTP-Client**: Native Go net/http
+
+### Design-Prinzipien
+
+1. **Keine Emojis**: Professionelle Icons oder Text
+2. **Neon-Grün**: Konsistentes Farbschema (#00FF00)
+3. **Minimalistisch**: Keine unnötigen Animationen
+4. **Performant**: Native Go-Geschwindigkeit
+
+## Onboarding-Schritte
+
+1. System-Voraussetzungen prüfen
+2. Git installieren (falls fehlt)
+3. Node.js installieren (falls fehlt)
+4. pnpm installieren (falls fehlt)
+5. Homebrew einrichten (macOS)
+6. Python 3 installieren (falls fehlt)
+7. PATH konfigurieren (~/.zshrc, ~/.bashrc)
+8. GitLab-Projekt erstellen
+9. NLM CLI installieren
+10. OpenCode installieren
+11. OpenClaw installieren
+12. Integrationen konfigurieren
+
+## API-Keys
+
+Folgende API-Keys werden benötigt:
+
+- **GitLab**: https://gitlab.com/-/profile/personal_access_tokens
+- **NVIDIA**: https://build.nvidia.com/explore/discover
+
+## OpenClaw-Integration
+
+OpenClaw wird automatisch installiert und konfiguriert für:
+
+- WhatsApp (QR-Code-Scan)
+- Telegram (Bot-Token)
+- Gmail (OAuth2)
+- Twitter/X (OAuth2)
+- ClawdBot (Social Media Automation)
+
+## Entwicklung
+
+### Build
 
 ```bash
-biometrics-onboard
+go build -v
 ```
 
-### 🎯 Unified Onboarding Flow
-
-The CLI guides you through a **single, unified setup process**:
-
-1. **GitLab Setup** - Create media storage project (with API key help link)
-2. **NVIDIA API Key** - Enter your key for Qwen 3.5 397B access
-3. **Social Media Integrations**:
-   - ✅ WhatsApp Business API (optional)
-   - ✅ Telegram Bot API (optional)
-   - ✅ Gmail OAuth (optional)
-   - ✅ Twitter/X API (optional)
-4. **OpenCode Installation** - Install via Homebrew (optional)
-5. **OpenClaw Installation** - Install via pnpm (optional)
-6. **NLM CLI** - Auto-install + browser authentication
-7. **Google Antigravity** - Auto-install + browser authentication
-8. **ClawdBot Integration** - Connect all social channels
-9. **Verification** - Test all installations and integrations
-
-### 🔗 API Key Help Links
-
-**Don't have API keys?** The CLI shows direct links to create them:
-
-- **GitLab:** https://gitlab.com/-/profile/personal_access_tokens
-- **NVIDIA:** https://build.nvidia.com/explore/discover
-- **WhatsApp:** https://developers.facebook.com/apps/creation/
-- **Telegram:** https://core.telegram.org/bots/features#botfather
-- **Gmail:** https://console.cloud.google.com/apis/credentials
-- **Twitter:** https://developer.twitter.com/en/portal/dashboard
-
-Just click the link, create your API key, and paste it into the CLI!
-
-## What Gets Configured
-
-### OpenCode (`~/.config/opencode/opencode.json`)
-```json
-{
-  "provider": {
-    "google": {
-      "npm": "@ai-sdk/google",
-      "models": {
-        "gemini-2.5-pro": {
-          "id": "gemini-2.5-pro",
-          "name": "Gemini 2.5 Pro"
-        }
-      }
-    },
-    "nvidia": {
-      "npm": "@ai-sdk/openai-compatible",
-      "options": {
-        "baseURL": "https://integrate.api.nvidia.com/v1"
-      },
-      "models": {
-        "qwen-3.5-397b": {
-          "id": "qwen/qwen3.5-397b-a17b",
-          "name": "Qwen 3.5 397B"
-        }
-      }
-    }
-  }
-}
-```
-
-### OpenClaw (`~/.openclaw/openclaw.json`)
-```json
-{
-  "env": {
-    "NVIDIA_API_KEY": "your-api-key"
-  },
-  "models": {
-    "providers": {
-      "nvidia": {
-        "baseUrl": "https://integrate.api.nvidia.com/v1",
-        "api": "openai-completions",
-        "models": []
-      }
-    }
-  },
-  "agents": {
-    "defaults": {
-      "model": {
-        "primary": "nvidia/qwen/qwen3.5-397b-a17b"
-      }
-    }
-  }
-}
-```
-
-## Requirements
-
-- **Node.js** >= 18.0.0
-- **pnpm** (for package management and OpenClaw installation)
-- **Homebrew** (for OpenCode installation on macOS)
-- **Internet connection** (for API authentication)
-
-## Manual Installation Commands
-
-If the CLI fails, you can install manually:
+### Test
 
 ```bash
-# NLM CLI
-pnpm add -g nlm-cli
-nlm auth login
-
-# OpenCode (macOS)
-brew install opencode
-
-# OpenClaw
-pnpm add -g @delqhi/openclaw
-
-# Google Antigravity Plugin
-opencode plugin add opencode-antigravity-auth
-opencode auth login
+go test -v ./...
 ```
 
-## Troubleshooting
-
-### "Command not found: biometrics-onboard"
-
-Make sure the global pnpm bin directory is in your PATH:
+### Lint
 
 ```bash
-# Add to ~/.zshrc or ~/.bashrc
-export PATH="$HOME/.local/share/pnpm:$PATH"
+golangci-lint run
 ```
 
-### "OpenCode installation failed"
+## Lizenz
 
-OpenCode requires Homebrew on macOS:
-
-```bash
-# Install Homebrew first
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Then retry
-biometrics-onboard
-```
-
-### "NLM CLI authentication failed"
-
-Make sure your browser opens and you complete the OAuth flow. If not:
-
-```bash
-# Manual authentication
-nlm auth login
-```
-
-## Development
-
-```bash
-# Clone repository
-git clone https://github.com/Delqhi/biometrics-onboard.git
-cd biometrics-onboard
-
-# Install dependencies
-pnpm install
-
-# Run in development mode
-pnpm start
-
-# Test the CLI
-pnpm test
-```
-
-## License
-
-MIT
+MIT License
 
 ## Support
 
-For issues or questions, please open an issue on GitHub or contact the BIOMETRICS team.
+Bei Fragen oder Problemen ein Issue auf GitHub öffnen.

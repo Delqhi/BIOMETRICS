@@ -26,11 +26,11 @@ const API_HELP_LINKS = {
 
 // Banner
 const banner = `
-${chalk.cyan('╔══════════════════════════════════════════════════════════╗')}
-${chalk.cyan('║')}          ${chalk.yellow.bold('BIOMETRICS ONBOARD')} ${chalk.cyan('║')}
-${chalk.cyan('║')}    ${chalk.gray('Complete Setup: GitLab + OpenCode + OpenClaw')}  ${chalk.cyan('║')}
-${chalk.cyan('║')}      ${chalk.gray('+ All Integrations (WhatsApp, Telegram, ...)')}   ${chalk.cyan('║')}
-${chalk.cyan('╚══════════════════════════════════════════════════════════╝')}
+${chalk.greenBright('╔══════════════════════════════════════════════════════════╗')}
+${chalk.greenBright('║')}          ${chalk.yellowBright.bold('BIOMETRICS ONBOARD')} ${chalk.greenBright('║')}
+${chalk.greenBright('║')}    ${chalk.gray('Complete Setup: GitLab + OpenCode + OpenClaw')}  ${chalk.greenBright('║')}
+${chalk.greenBright('║')}      ${chalk.gray('+ All Integrations (WhatsApp, Telegram, ...)')}   ${chalk.greenBright('║')}
+${chalk.greenBright('╚══════════════════════════════════════════════════════════╝')}
 `;
 
 console.log(banner);
@@ -228,13 +228,13 @@ async function main() {
     await checkAndInstallRequirements();
     
     // Show help links upfront
-    console.log(chalk.blue('\n📖 Need help getting API keys?'));
-    console.log('   GitLab:  ' + chalk.gray(API_HELP_LINKS.gitlab));
-    console.log('   NVIDIA:  ' + chalk.gray(API_HELP_LINKS.nvidia));
-    console.log('   WhatsApp:' + chalk.gray(API_HELP_LINKS.whatsapp));
-    console.log('   Telegram:' + chalk.gray(API_HELP_LINKS.telegram));
-    console.log('   Gmail:   ' + chalk.gray(API_HELP_LINKS.gmail));
-    console.log('   Twitter: ' + chalk.gray(API_HELP_LINKS.twitter) + '\n');
+    console.log(chalk.greenBright('\n📖 Need help getting API keys?'));
+    console.log('   ' + chalk.cyan('GitLab:') + '  ' + chalk.underline(API_HELP_LINKS.gitlab));
+    console.log('   ' + chalk.cyan('NVIDIA:') + '  ' + chalk.underline(API_HELP_LINKS.nvidia));
+    console.log('   ' + chalk.cyan('WhatsApp:') + chalk.underline(API_HELP_LINKS.whatsapp));
+    console.log('   ' + chalk.cyan('Telegram:') + chalk.underline(API_HELP_LINKS.telegram));
+    console.log('   ' + chalk.cyan('Gmail:') + '   ' + chalk.underline(API_HELP_LINKS.gmail));
+    console.log('   ' + chalk.cyan('Twitter:') + ' ' + chalk.underline(API_HELP_LINKS.twitter) + '\n');
 
     // Step 1: Collect user input
     const answers = await inquirer.prompt(questions);
@@ -280,19 +280,41 @@ async function main() {
       }
     }
 
-    // Step 3: Install NLM CLI (always)
+    // Step 3: Install NLM CLI and setup PATH (always)
     spinner.start('Installing NLM CLI...');
     const nlmInstall = await runCommand('pnpm', ['add', '-g', 'nlm-cli'], { cwd: HOME_DIR });
     if (nlmInstall.success) {
-      spinner.succeed(chalk.green('NLM CLI installed'));
+      spinner.succeed(chalk.greenBright('NLM CLI installed'));
+      
+      // Auto-configure PATH in shell config
+      spinner.start('Configuring PATH in shell...');
+      const shellConfig = join(HOME_DIR, '.zshrc');
+      const pathConfig = '\nexport PATH="$HOME/Library/pnpm:$PATH"\n';
+      
+      try {
+        await fs.appendFile(shellConfig, pathConfig);
+        spinner.succeed(chalk.greenBright('PATH added to ~/.zshrc'));
+        
+        // Also add to .bashrc if exists
+        const bashConfig = join(HOME_DIR, '.bashrc');
+        try {
+          await fs.access(bashConfig);
+          await fs.appendFile(bashConfig, pathConfig);
+          spinner.succeed(chalk.greenBright('PATH added to ~/.bashrc'));
+        } catch (error) {
+          // .bashrc doesn't exist, skip
+        }
+      } catch (error) {
+        spinner.fail(chalk.red('Failed to configure PATH'));
+      }
       
       // Authenticate NLM CLI (opens browser)
-      console.log(chalk.yellow('\nℹ Browser will open for NLM authentication...'));
+      console.log(chalk.yellowBright('\nℹ Browser will open for NLM authentication...'));
       await runCommand('nlm', ['auth', 'login'], { stdio: 'inherit' });
-      spinner.succeed(chalk.green('NLM CLI authenticated'));
+      spinner.succeed(chalk.greenBright('NLM CLI authenticated'));
     } else {
       spinner.fail(chalk.red('NLM CLI installation failed'));
-      console.log(chalk.yellow('You can install manually: pnpm add -g nlm-cli'));
+      console.log(chalk.yellowBright('You can install manually: pnpm add -g nlm-cli'));
     }
 
     // Step 4: Install OpenCode (if requested)

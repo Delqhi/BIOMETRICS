@@ -138,11 +138,95 @@ const questions = [
   },
 ];
 
+// System requirements check and auto-install
+async function checkAndInstallRequirements() {
+  const spinner = ora();
+  
+  console.log(chalk.blue('\n🔍 Checking system requirements...\n'));
+  
+  const requirements = [
+    {
+      name: 'Git',
+      command: 'git',
+      installCmd: ['brew', 'install', 'git'],
+      checkCmd: ['git', '--version'],
+    },
+    {
+      name: 'Node.js',
+      command: 'node',
+      installCmd: ['brew', 'install', 'node'],
+      checkCmd: ['node', '--version'],
+    },
+    {
+      name: 'pnpm',
+      command: 'pnpm',
+      installCmd: ['brew', 'install', 'pnpm'],
+      checkCmd: ['pnpm', '--version'],
+    },
+    {
+      name: 'Homebrew',
+      command: 'brew',
+      installCmd: ['/bin/bash', '-c', '$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)'],
+      checkCmd: ['brew', '--version'],
+      macOSOnly: true,
+    },
+    {
+      name: 'Python 3',
+      command: 'python3',
+      installCmd: ['brew', 'install', 'python@3.11'],
+      checkCmd: ['python3', '--version'],
+    },
+  ];
+  
+  for (const req of requirements) {
+    // Skip macOS-only tools on other platforms
+    if (req.macOSOnly && os.platform() !== 'darwin') {
+      continue;
+    }
+    
+    const installed = await checkInstalled(req.command);
+    
+    if (!installed) {
+      spinner.start(`Installing ${req.name}...`);
+      console.log(chalk.gray(`   → Running: ${req.installCmd.join(' ')}`));
+      
+      try {
+        const result = await execa(req.installCmd[0], req.installCmd.slice(1), {
+          stdio: ['ignore', 'pipe', 'pipe'],
+          reject: false,
+        });
+        
+        if (result.exitCode === 0) {
+          spinner.succeed(chalk.green(`${req.name} installed successfully`));
+        } else {
+          spinner.fail(chalk.red(`Failed to install ${req.name}`));
+          console.log(chalk.yellow(`   Manual installation required: ${req.installCmd.join(' ')}`));
+        }
+      } catch (error) {
+        spinner.fail(chalk.red(`Error installing ${req.name}: ${error.message}`));
+      }
+    } else {
+      // Check version
+      try {
+        const version = await execa(req.checkCmd[0], req.checkCmd.slice(1));
+        spinner.info(chalk.cyan(`${req.name} ${version.stdout.trim()} already installed`));
+      } catch (error) {
+        spinner.info(chalk.cyan(`${req.name} already installed`));
+      }
+    }
+  }
+  
+  console.log('');
+}
+
 // Run onboarding
 async function main() {
   const spinner = ora();
 
   try {
+    // Step 0: Check and install system requirements
+    await checkAndInstallRequirements();
+    
     // Show help links upfront
     console.log(chalk.blue('\n📖 Need help getting API keys?'));
     console.log('   GitLab:  ' + chalk.gray(API_HELP_LINKS.gitlab));

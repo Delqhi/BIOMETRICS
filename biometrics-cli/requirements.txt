@@ -1,0 +1,14 @@
+# System Requirements for BIOMETRICS
+# Installed automatically by biometrics-onboard
+
+# Core Dependencies
+node>=18.0.0
+pnpm>=9.0.0
+git>=2.0.0
+homebrew>=4.0.0  # macOS only
+
+# Python (for some tools)
+python>=3.9.0
+
+# Optional but recommended
+docker>=20.0.0  # For containerized deployments

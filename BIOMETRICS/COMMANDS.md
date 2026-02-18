@@ -229,10 +229,138 @@ Verifikation:
 Endpoint-Referenz:
 - `API.NLM.GENERATE.TABLE`
 
+### CMD.QWEN.VISION
+Zweck:
+Bildanalyse und visuelle Erkennung mit Qwen 3.5 Vision.
+
+Rolle:
+Dev, Agent
+
+Input-Schema:
+- image_url oder base64
+- analysis_type: product | layout | diagram | ocr
+- options?: { detail_level: low|high }
+
+Output-Schema:
+- tags[]
+- description
+- metrics{}
+- confidence_score
+
+Fehlerfälle:
+- invalid_image_format
+- image_too_large
+- analysis_failed
+
+Nebenwirkungen:
+- keine
+
+Verifikation:
+- Qwen gibt strukturierte Analyse zurück.
+
+Endpoint-Referenz:
+- `API.QWEN.VISION`
+
+### CMD.QWEN.CODE
+Zweck:
+Full-Stack Code-Generierung mit Qwen 3.5.
+
+Rolle:
+Dev, Agent
+
+Input-Schema:
+- prompt
+- language: typescript | go | python
+- framework?: nextjs | supabase | generic
+- context?: {}
+
+Output-Schema:
+- code
+- file_path
+- dependencies[]
+
+Fehlerfälle:
+- prompt_too_long
+- unsupported_language
+- generation_failed
+
+Nebenwirkungen:
+- keine
+
+Verifikation:
+- Code ist syntaktisch korrekt.
+
+Endpoint-Referenz:
+- `API.QWEN.CHAT`
+
+### CMD.QWEN.CHAT
+Zweck:
+Natürliche Konversation mit Qwen 3.5 für Chat und Textaufgaben.
+
+Rolle:
+User, Dev, Agent
+
+Input-Schema:
+- message
+- context?: {}
+- temperature?: 0.0-1.0
+- max_tokens?: number
+
+Output-Schema:
+- response
+- usage{}
+- finish_reason
+
+Fehlerfälle:
+- invalid_message
+- rate_limit_exceeded
+- model_unavailable
+
+Nebenwirkungen:
+- keine
+
+Verifikation:
+- Antwort ist kontextbezogen.
+
+Endpoint-Referenz:
+- `API.QWEN.CHAT`
+
+### CMD.QWEN.OCR
+Zweck:
+Texterkennung aus Dokumenten und PDFs mit Qwen Vision.
+
+Rolle:
+Dev, Agent
+
+Input-Schema:
+- document_url oder base64
+- language?: de|en|fr
+- extract_tables?: boolean
+
+Output-Schema:
+- text
+- blocks[]
+- tables[]
+
+Fehlerfälle:
+- document_corrupt
+- no_text_found
+- extraction_failed
+
+Nebenwirkungen:
+- keine
+
+Verifikation:
+- Text korrekt extrahiert.
+
+Endpoint-Referenz:
+- `API.QWEN.OCR`
+
 ## Abnahme-Check COMMANDS
 1. Jeder Command hat Schema
 2. Endpoint-Referenz vorhanden
 3. Fehlerfälle und Verifikation enthalten
 4. NLM-Commands vollständig vorhanden
+5. Qwen-Commands vollständig vorhanden
 
 ---

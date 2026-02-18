@@ -319,10 +319,139 @@ Command-Referenz:
 Verifikation:
 - Typ-/Einheiten-/Zeitbezug vollständig.
 
+### API.QWEN.VISION
+Path:
+`/api/qwen/vision`
+
+Method:
+POST
+
+Auth:
+required (NVIDIA_API_KEY)
+
+Rollen:
+dev, agent
+
+Request-Schema:
+- image: string (base64 oder URL)
+- analysis_type: product | layout | diagram | ocr
+- options?: { detail_level: low|high }
+
+Response-Schema:
+- tags: string[]
+- description: string
+- metrics: object
+- confidence_score: number
+
+Fehlercodes:
+- 400 invalid_image_format
+- 413 image_too_large
+- 401 unauthorized
+- 500 analysis_failed
+- 503 model_unavailable
+
+Idempotenz:
+nein
+
+Rate-Limit:
+30/min
+
+Command-Referenz:
+- `CMD.QWEN.VISION`
+
+Verifikation:
+- Qwen gibt strukturierte Vision-Analyse zurück.
+
+### API.QWEN.CHAT
+Path:
+`/api/qwen/chat`
+
+Method:
+POST
+
+Auth:
+required (NVIDIA_API_KEY)
+
+Rollen:
+user, dev, agent
+
+Request-Schema:
+- message: string
+- context?: object
+- temperature?: number (0.0-1.0)
+- max_tokens?: number
+
+Response-Schema:
+- response: string
+- usage: { prompt_tokens, completion_tokens, total_tokens }
+- finish_reason: stop | length
+
+Fehlercodes:
+- 400 invalid_message
+- 401 unauthorized
+- 429 rate_limit_exceeded
+- 503 model_unavailable
+- 500 internal_error
+
+Idempotenz:
+nein
+
+Rate-Limit:
+40/min (NVIDIA NIM Limit)
+
+Command-Referenz:
+- `CMD.QWEN.CHAT`
+- `CMD.QWEN.CODE`
+
+Verifikation:
+- Kontextbezogene Antwort generiert.
+
+### API.QWEN.OCR
+Path:
+`/api/qwen/ocr`
+
+Method:
+POST
+
+Auth:
+required (NVIDIA_API_KEY)
+
+Rollen:
+dev, agent
+
+Request-Schema:
+- document: string (base64 oder URL)
+- language?: string
+- extract_tables?: boolean
+
+Response-Schema:
+- text: string
+- blocks: { bbox, text, confidence }[]
+- tables: { rows, columns, data }[]
+
+Fehlercodes:
+- 400 document_corrupt
+- 401 unauthorized
+- 404 no_text_found
+- 500 extraction_failed
+
+Idempotenz:
+nein
+
+Rate-Limit:
+30/min
+
+Command-Referenz:
+- `CMD.QWEN.OCR`
+
+Verifikation:
+- Text korrekt aus Dokument extrahiert.
+
 ## Abnahme-Check ENDPOINTS
 1. Jeder Endpoint hat Command-Referenz
 2. Auth und Rollen sind je Endpoint definiert
 3. Fehlercodes enthalten
 4. Verifikation pro Endpoint enthalten
+5. Qwen-Endpoints vollständig vorhanden
 
 ---

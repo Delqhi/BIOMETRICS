@@ -2,6 +2,101 @@
 
 ![BIOMETRICS Infografik](BIOMETRICS/infografik.png)
 
+## 🚀 POST-CLONE SETUP FOR AGENTS
+
+### ⚠️ WICHTIG: REIHENFOLGE EINHALTEN!
+
+**SCHRITT 1: OPENCODE KONFIGURIEREN (ALLERWICHTIGSTER SCHRITT!)**
+
+Opencode MUSS zuerst konfiguriert werden bevor irgendetwas anderes funktioniert!
+
+```bash
+# 1. Opencode authentifizieren
+opencode auth login
+
+# 2. Konfiguration prüfen
+opencode models
+
+# 3. Provider konfigurieren (falls nicht geschehen)
+opencode auth add moonshot-ai
+opencode auth add kimi-for-coding
+opencode auth add opencode-zen
+```
+
+**SCHRITT 2: OPENCODE.JSON PRÜFEN**
+
+Stelle sicher dass `~/.config/opencode/opencode.json` korrekt konfiguriert ist:
+
+- ✅ KEINE timeout-Einträge! (MANDATE 0.35)
+- ✅ Alle Provider korrekt eingerichtet
+- ✅ Models korrekt definiert
+
+**Verifizierung:**
+```bash
+# Prüfe auf timeout-Einträge (muss LEER sein!)
+grep -r "timeout" ~/.config/opencode/opencode.json
+```
+
+**SCHRITT 3: OH-MY-OPENCODE.JSON PRÜFEN**
+
+`~/.config/opencode/oh-my-opencode.json` muss korrekt sein:
+
+- ✅ Agent-Modelle korrekt zugewiesen
+- ✅ KEINE timeout-Einträge!
+
+**SCHRITT 4: OPENCLAW.JSON PRÜFEN**
+
+`~/.openclaw/openclaw.json` konfigurieren:
+
+- ✅ NVIDIA_API_KEY in env section
+- ✅ Models providers korrekt
+- ⚠️ HINWEIS: OpenClaw hat timeout in config (wird vom Gateway managed)
+
+**SCHRITT 5: TERMINAL SESSION NEU STARTEN (PFLICHT!)**
+
+⚠️ **NACH DER KONFIGURATION MUSS DAS TERMINAL NEU GESTARTET WERDEN!**
+
+```bash
+# Terminal schließen und neu öffnen
+# ODER
+exec zsh  # Shell neu laden
+```
+
+**Warum?** Neue Konfigurationen werden nur nach einem Neustart wirksam!
+
+**SCHRITT 6: VERIFIKATION**
+
+```bash
+# Opencode prüfen
+opencode --version
+opencode models
+
+# OpenClaw prüfen
+openclaw doctor --fix
+
+# Alle Dienste sollten ohne Fehler starten
+```
+
+### 🚨 HÄUFIGE FEHLER
+
+| Fehler | Lösung |
+|--------|--------|
+| Timeout in config | SOFORT entfernen! MANDATE 0.35 |
+| Models nicht gefunden | Terminal neu starten! |
+| Provider nicht auth | `opencode auth add <provider>` |
+| OpenClaw nicht gefunden | `~/.openclaw/openclaw.json` prüfen |
+
+### ✅ CHECKLISTE VOR DEM START
+
+- [ ] opencode.json hat KEINE timeout-Einträge
+- [ ] oh-my-opencode.json hat KEINE timeout-Einträge
+- [ ] openclaw.json wurde geprüft (Gateway managed timeout)
+- [ ] Terminal wurde neu gestartet
+- [ ] `opencode models` zeigt alle Modelle
+- [ ] `openclaw doctor` zeigt keine Fehler
+
+---
+
 ## 🚀 SCHNELLSTART
 
 ### One-Command Installation

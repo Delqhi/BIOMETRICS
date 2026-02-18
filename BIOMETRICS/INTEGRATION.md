@@ -130,6 +130,8 @@ Pattern:
 
 ### 8.1 Provider Setup
 
+⚠️ **WICHTIG:** KEIN timeout konfigurieren! MANDATE 0.35 - OpenCode managed timeouts intern.
+
 ```json
 {
   "provider": {
@@ -137,8 +139,7 @@ Pattern:
       "npm": "@ai-sdk/openai-compatible",
       "name": "NVIDIA NIM (Qwen 3.5)",
       "options": {
-        "baseURL": "https://integrate.api.nvidia.com/v1",
-        "timeout": 120000
+        "baseURL": "https://integrate.api.nvidia.com/v1"
       },
       "models": {
         "qwen-3.5-397b": {
@@ -823,8 +824,7 @@ OpenCode provides the AI coding capabilities for BIOMETRICS, enabling autonomous
       "npm": "@ai-sdk/openai-compatible",
       "name": "NVIDIA NIM (Qwen 3.5)",
       "options": {
-        "baseURL": "https://integrate.api.nvidia.com/v1",
-        "timeout": 120000
+        "baseURL": "https://integrate.api.nvidia.com/v1"
       },
       "models": {
         "qwen-3.5-397b": {

@@ -1866,6 +1866,60 @@ Regeländerungen nur mit:
 
 ## 108) Executive Review Checklist
 
+---
+
+## 🚨🚨🚨 MANDATE 0.35: NO-TIMEOUT POLICY - NIEMALS TIMEOUTS KONFIGURIEREN 🚨🚨🚨
+
+**EFFECTIVE:** 2026-02-18
+**SCOPE:** ALL OpenCode configurations, ALL agents, ALL projects
+**STATUS:** ABSOLUTE PRIORITY - ZERO TOLERANCE
+
+### 📋 ABSOLUTE REGEL
+
+**NIEMALS wird ein timeout in opencode.json oder oh-my-opencode.json konfiguriert!**
+
+❌ **VERBOTEN:**
+- `"timeout": 120000` in opencode.json
+- `"timeout": 120000` in oh-my-opencode.json
+- Jegliche timeout-Konfiguration in OpenCode Configs
+- Timeout-Einträge in OpenClaw.md Dokumentation
+
+✅ **RICHTIG:**
+- Modelle brauchen unterschiedlich lange (Qwen 3.5: 70-90s Latenz)
+- Das ist OKAY und muss akzeptiert werden
+- OpenCode timeout management ist intern
+- NIEMALS manuell timeouts konfigurieren
+
+### 🧹 BEREINIGUNG
+
+Wenn timeout-Einträge gefunden werden:
+1. SOFORT entfernen aus opencode.json
+2. SOFORT entfernen aus oh-my-opencode.json
+3. SOFORT entfernen aus OPENCLAW.md
+4. SOFORT entfernen aus OPENCODE.md
+5. Git commit mit "fix: Remove timeout configurations"
+
+### ⚠️ WARUM
+
+- Viele Modelle (Qwen 3.5 397B) haben hohe Latenz (70-90s)
+- Das ist NORMAL und erwartet
+- Timeouts führen zu unnötigen Abbrüchen
+- OpenCode managed timeouts intern korrekt
+
+### 🔍 VERIFIKATION
+
+```bash
+# Suche nach timeout in configs
+grep -r "timeout" ~/.config/opencode/*.json
+# Muss LEER sein!
+```
+
+**VIOLATION = TECHNISCHER HOCHVERRAT**
+
+---
+
+## 109) Executive Review Checklist
+
 - [ ] Ziele erreicht
 - [ ] Risiken akzeptabel
 - [ ] Doku vollständig

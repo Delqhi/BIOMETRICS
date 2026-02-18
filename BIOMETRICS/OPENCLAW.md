@@ -73,13 +73,13 @@ OpenClaw ist das zentrale Bindeglied zwischen den KI-Agenten und den zu steuernd
 
 ## Betriebsmodi
 
-| Modus | Verwendung | Timeout |
-|-------|------------|---------|
-| local | Entwicklungsmodus | 30000ms |
-| staging | Integrationsvalidierung | 60000ms |
-| production | Stabiler Betrieb | 120000ms |
+| Modus | Verwendung |
+|-------|------------|
+| local | Entwicklungsmodus |
+| staging | Integrationsvalidierung |
+| production | Stabiler Betrieb |
 
-Der erweiterte Timeout für Production ist aufgrund der Qwen 3.5 397B Modellgröße erforderlich.
+OpenCode managed timeouts intern - keine manuelle Konfiguration erforderlich.
 
 ## NVIDIA NIM Konfiguration
 
@@ -110,7 +110,6 @@ NVIDIA_API_KEY=nvapi-xxxxxxxxxxxxxxxxxxxxx
 # OpenClaw Configuration
 OPENCLAW_BASE_URL=http://localhost:18789
 OPENCLAW_AUTH_MODE=token
-OPENCLAW_TIMEOUT_MS=120000
 OPENCLAW_RETRY_COUNT=3
 ```
 
@@ -122,20 +121,9 @@ OPENCLAW_RETRY_COUNT=3
 | qwen2.5-coder-32b | 128K | 8K | Fast Code (FALLBACK) |
 | moonshotai/kimi-k2.5 | 1M | 64K | General (FALLBACK) |
 
-### Timeout-Konfiguration
+### ⚠️ WICHTIG: KEINE TIMEOUT KONFIGURATION
 
-Aufgrund der hohen Latenz von Qwen 3.5 397B (70-90 Sekunden) ist ein Timeout von mindestens 120000ms zwingend erforderlich.
-
-```typescript
-// OpenClaw Model Configuration
-const modelConfig = {
-  provider: 'nvidia',
-  model: 'qwen/qwen3.5-397b-a17b',
-  timeout: 120000,  // 120 seconds for 397B model
-  maxRetries: 3,
-  retryDelay: 5000
-};
-```
+**NIEMALS manuell Timeouts konfigurieren!** OpenCode managed timeouts intern. Modelle wie Qwen 3.5 397B brauchen 70-90s - das ist normal.
 
 ## Konfigurationsmatrix
 
@@ -469,7 +457,7 @@ OpenClaw soll sich selbst replizieren durch autonomes Erstellen neuer Skills via
 
 ## Best Practices 2026
 
-1. **Immer Timeout erhöhen** - Qwen 3.5 braucht 120s
+1. **KEINE Timeouts konfigurieren** - OpenCode managed das intern
 2. **Fallback-Chain definieren** - Nie nur ein Modell
 3. **Retry mit Backoff** - 5s, 10s, 20s
 4. **Rate-Limit beachten** - Max 40 RPM bei NVIDIA
@@ -481,7 +469,7 @@ OpenClaw soll sich selbst replizieren durch autonomes Erstellen neuer Skills via
 
 | Problem | Ursache | Lösung |
 |---------|---------|--------|
-| Timeout bei 90s | Modell zu groß | Timeout auf 120000ms erhöhen |
+| Lange Wartezeit (70-90s) | Qwen 3.5 397B Latenz | NORMAL - nicht unterbrechen! |
 | HTTP 429 | Rate-Limit erreicht | 60s warten + Fallback |
 | 401 Unauthorized | Token abgelaufen | Token refreshen |
 | Langsame Antworten | Netzwerklatenz | CDN/Region prüfen |
@@ -508,7 +496,7 @@ openclaw logs --last 50
 1. [ ] Konfigurationsmatrix vorhanden
 2. [ ] Qwen 3.5 Integration dokumentiert
 3. [ ] NVIDIA NIM Setup korrekt
-4. [ ] Timeout auf 120000ms gesetzt
+4. [ ] KEINE Timeout-Konfiguration (OpenCode managed das)
 5. [ ] Fallback-Kette definiert
 6. [ ] Authfluss dokumentiert
 7. [ ] Retry-/Fehlerstrategie definiert

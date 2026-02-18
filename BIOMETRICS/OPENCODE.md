@@ -109,7 +109,7 @@ export NVIDIA_API_KEY="nvapi-xxx"
       "name": "NVIDIA NIM (Qwen 3.5)",
       "options": {
         "baseURL": "https://integrate.api.nvidia.com/v1",
-        "timeout": 120000
+        // ⚠️ KEIN TIMEOUT - OpenCode managed das intern!
       },
       "models": {
         "qwen-3.5-397b": {
@@ -211,7 +211,7 @@ nano ~/.config/opencode/opencode.json
       "name": "NVIDIA NIM (Qwen 3.5)",
       "options": {
         "baseURL": "https://integrate.api.nvidia.com/v1",
-        "timeout": 120000
+        // ⚠️ KEIN TIMEOUT - OpenCode managed das intern!
       },
       "models": {
         "qwen-3.5-397b": {
@@ -231,7 +231,7 @@ nano ~/.config/opencode/opencode.json
 
 **KRITISCH:**
 - ✅ Model: `qwen/qwen3.5-397b-a17b` (NICHT qwen2.5!)
-- ✅ Timeout: `120000` (120 Sekunden!)
+- ✅ KEIN Timeout eintragen (OpenCode managed das intern!)
 - ❌ KEIN `reasoning: true` (verursacht Fehler!)
 - ❌ KEIN `stream: true` (nicht unterstützt!)
 
@@ -452,10 +452,11 @@ opencode auth login
 - Prüfe Model-ID: `qwen/qwen3.5-397b-a17b` (NICHT `qwen2.5`)
 - Config neu laden: `opencode --version`
 
-### Problem: "Timeout"
+### Problem: "Lange Wartezeit"
 **Lösung:**
-- Timeout auf `120000` setzen (120 Sekunden)
-- Qwen 3.5 397B hat hohe Latenz (70-90s)
+- Das ist NORMAL! Qwen 3.5 397B hat 70-90s Latenz
+- NIEMALS Timeout konfigurieren!
+- Einfach warten - Request wird erfolgreich abgeschlossen
 
 ### Problem: "HTTP 429 Too Many Requests"
 **Lösung:**
@@ -661,7 +662,7 @@ opencode auth login
       "name": "NVIDIA NIM (Qwen 3.5)",
       "options": {
         "baseURL": "https://integrate.api.nvidia.com/v1",
-        "timeout": 120000
+        // ⚠️ KEIN TIMEOUT - OpenCode managed das intern!
       },
       "models": {
         "qwen-3.5-397b": {
@@ -761,7 +762,7 @@ opencode auth login
 - ✅ Plugins: Immer `@latest` Tag verwenden
 
 ### Configuration
-- ✅ Timeout: `120000ms` für High-Latency Modelle (Qwen 3.5 397B)
+- ✅ KEINE Timeouts konfigurieren (OpenCode managed das intern!)
 - ✅ Model IDs: Immer exakte IDs verwenden (`qwen/qwen3.5-397b-a17b`)
 - ✅ Provider Schema: Offizielles `@ai-sdk/openai-compatible` Schema
 
@@ -1264,7 +1265,7 @@ Der NVIDIA NIM Provider ermöglicht Zugang zu verschiedenen KI-Modellen über di
       "name": "NVIDIA NIM",
       "options": {
         "baseURL": "https://integrate.api.nvidia.com/v1",
-        "timeout": 120000,
+        // ⚠️ KEIN TIMEOUT - OpenCode managed das intern!,
         "headers": {
           "Authorization": "Bearer ${NVIDIA_API_KEY}"
         }

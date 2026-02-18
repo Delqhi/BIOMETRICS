@@ -61,6 +61,16 @@ nlm source add <notebook-id> --file "file.md" --wait
 5. Next Task N+1
 6. Repeat infinitely
 
+---
+
+## 🚨 NO-TIMEOUT POLICY
+
+- NIEMALS timeout in opencode.json konfigurieren
+- NIEMALS timeout in oh-my-opencode.json konfigurieren
+- Modelle brauchen unterschiedlich lange (Qwen 3.5: 70-90s) - das ist OK!
+- Timeouts führen zu Abbrüchen
+- NIEMALS eintragen!
+
 ## Stack-Policy
 - Frontend: Next.js
 - Backend: Go + Supabase

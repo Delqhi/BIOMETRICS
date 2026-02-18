@@ -14,28 +14,53 @@ Stand: Februar 2026
 Schneller, rollenbasierter Einstieg für User, Dev und Admin in ein universelles Projektsetup.
 
 ## 10-Minuten Schnellstart
-1. `../README.md` lesen
-2. `../∞Best∞Practices∞Loop.md` lesen
-3. `AGENTS-PLAN.md` lesen
-4. Rolle wählen (User | Dev | Admin)
-5. Erste Aufgabe ausführen
+
+### Schritt 1: Projekt verstehen (2 Min)
+1. `../README.md` lesen - Übersicht und Vision
+2. `../∞Best∞Practices∞Loop.md` lesen - Arbeitsmethodik
+3. `AGENTS-PLAN.md` lesen - Aktuelle Tasks und Prioritäten
+
+### Schritt 2: Rolle definieren (1 Min)
+- **User:** Möchtest du das System nutzen → User-Pfad
+- **Developer:** Möchtest du entwickeln → Dev-Pfad  
+- **Admin:** Möchtest du verwalten → Admin-Pfad
+
+### Schritt 3: Setup durchführen (5 Min)
+```bash
+# CLI installieren
+cd ../biometrics-cli
+pnpm install
+pnpm link --global
+
+# Onboarding starten (automatisches Setup)
+biometrics
+```
+
+### Schritt 4: Erste Aufgabe ausführen (2 Min)
+- User: `USER-PLAN.md` öffnen → P0 Task erledigen
+- Dev: Aus `AGENTS-PLAN.md` einen Task übernehmen
+- Admin: Governance-Dateien prüfen
 
 ## Rollenpfade
+
 ### User-Pfad
 1. `USER-PLAN.md` öffnen
 2. offene P0 User-Tasks erledigen
 3. Verifikation dokumentieren
+4. Fortschritt in `MEETING.md` eintragen
 
 ### Dev-Pfad
-1. `AGENTS.md` lesen
+1. `AGENTS.md` lesen - Arbeitsregeln verstehen
 2. Task aus `AGENTS-PLAN.md` übernehmen
-3. Read-before-write durchführen
-4. Änderung + Tests + Doku-Update
+3. Read-before-write: Alle relevanten Dateien lesen
+4. Änderung durchführen + Tests + Doku-Update
+5. Evidenz in `CHANGELOG.md` dokumentieren
 
 ### Admin-Pfad
-1. Governance-Dateien prüfen
-2. Security-/Compliance-Status prüfen
+1. Governance-Dateien prüfen (`AGENTS-GLOBAL.md`, `AGENTS.md`)
+2. Security-/Compliance-Status prüfen (`SECURITY.md`)
 3. Task-20 Abschlussreport freigeben
+4. `MEETING.md` für Team-Koordination nutzen
 
 ## Betriebsbefehle (universell)
 - `pnpm install`

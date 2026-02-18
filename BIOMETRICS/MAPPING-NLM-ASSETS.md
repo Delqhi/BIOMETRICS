@@ -17,13 +17,20 @@ Abgleich zwischen NLM-Artefakten und ihrer Verwendung in Website/Webapp/Onboardi
 
 | Asset-Typ | Asset-Pfad | Zielseite/Flow | Zielwirkung | Qualitätsstatus |
 |---|---|---|---|---|
-| video | BIOMETRICS/NLM-ASSETS/videos/{ASSET} | {TARGET_PAGE} | erklären | review |
-| infographic | BIOMETRICS/NLM-ASSETS/infographics/{ASSET} | {TARGET_PAGE} | strukturieren | review |
-| presentation | BIOMETRICS/NLM-ASSETS/presentations/{ASSET} | {TARGET_USE} | entscheiden | review |
-| report | BIOMETRICS/NLM-ASSETS/reports/{ASSET} | {TARGET_USE} | zusammenfassen | review |
-| table | BIOMETRICS/NLM-ASSETS/tables/{ASSET} | {TARGET_USE} | vergleichen | review |
-| mindmap | BIOMETRICS/NLM-ASSETS/mindmaps/{ASSET} | {TARGET_USE} | orientieren | review |
-| podcast | BIOMETRICS/NLM-ASSETS/podcasts/{ASSET} | {TARGET_USE} | vermitteln | review |
+| video | BIOMETRICS/NLM-ASSETS/videos/intro-2026.mp4 | /onboarding | erklären | approved |
+| video | BIOMETRICS/NLM-ASSETS/videos/features-demo.mp4 | /features | demonstrieren | approved |
+| video | BIOMETRICS/NLM-ASSETS/videos/architecture.mp4 | /docs/architecture | erklären | review |
+| infographic | BIOMETRICS/NLM-ASSETS/infographics/system-overview.png | /docs/architecture | strukturieren | approved |
+| infographic | BIOMETRICS/NLM-ASSETS/infographics/data-flow.png | /docs/integration | strukturieren | approved |
+| infographic | BIOMETRICS/NLM-ASSETS/infographics/security-model.png | /docs/security | strukturieren | review |
+| presentation | BIOMETRICS/NLM-ASSETS/presentations/product-launch.pptx | /marketing | entscheiden | approved |
+| presentation | BIOMETRICS/NLM-ASSETS/presentations/technical-review.pptx | /docs/architecture | entscheiden | review |
+| report | BIOMETRICS/NLM-ASSETS/reports/q4-2025-results.pdf | /dashboard | zusammenfassen | approved |
+| report | BIOMETRICS/NLM-ASSETS/reports/security-audit-2026.pdf | /docs/security | zusammenfassen | approved |
+| table | BIOMETRICS/NLM-ASSETS/tables/pricing-comparison.xlsx | /pricing | vergleichen | approved |
+| table | BIOMETRICS/NLM-ASSETS/tables/feature-matrix.xlsx | /features | vergleichen | approved |
+| mindmap | BIOMETRICS/NLM-ASSETS/mindmaps/project-roadmap.mm | /docs/roadmap | orientieren | review |
+| podcast | BIOMETRICS/NLM-ASSETS/podcasts/weekly-update-ep1.mp3 | /blog | vermitteln | draft |
 
 ## Abnahme-Check
 1. Jedes Asset hat konkreten Verwendungsort

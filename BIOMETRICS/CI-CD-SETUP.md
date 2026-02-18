@@ -37,6 +37,41 @@ Universeller Pipeline-Standard für Qualitätssicherung und kontrollierte Auslie
 - Gate 4: `pnpm build` grün
 - Gate 5: `go test ./...` grün (falls Backend vorhanden)
 - Gate 6: Security-Check ohne kritische Findings
+- Gate 7: Qwen 3.5 Integration Tests grün
+
+## Qwen 3.5 Testing Pipeline
+- **Model:** qwen/qwen3.5-397b-a17b (NVIDIA NIM)
+- **Context:** 262K tokens
+- **Output:** 32K tokens
+- **Timeout:** 120000ms (2 Minuten)
+
+### Qwen Test Stages
+1. **Vision Analysis Test:** Bildanalyse-Qualität prüfen
+2. **Code Generation Test:** Syntax und Funktionalität des generierten Codes
+3. **OCR Test:** Texterkennungsgenauigkeit
+4. **Conversation Test:** Antwortkonsistenz und Kontextverständnis
+5. **Video Understanding Test:** Szenenbeschreibung-Genauigkeit
+
+### Qwen Test Configuration
+```yaml
+qwen_tests:
+  enabled: true
+  model: qwen/qwen3.5-397b-a17b
+  timeout: 120000
+  retry_attempts: 3
+  fallback_model: kimi-for-coding/k2p5
+  test_cases:
+    - vision_analysis_quality > 0.85
+    - code_generation_syntax_valid: true
+    - ocr_accuracy > 0.90
+    - conversation_context_retention: true
+```
+
+### Qwen Performance Benchmarks
+- Vision Analysis: < 5s pro Bild
+- Code Generation: < 30s pro Komponente
+- OCR: < 3s pro Seite
+- Conversation: < 2s pro Antwort
 
 ## Branch-/Merge-Regeln
 - PR Pflicht für geschützte Branches

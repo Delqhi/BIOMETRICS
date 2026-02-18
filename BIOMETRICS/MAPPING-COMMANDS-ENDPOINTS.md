@@ -24,10 +24,20 @@ Abgleich zwischen Commands und API-Endpunkten.
 | CMD.NLM.GENERATE.INFOGRAPHIC | API.NLM.GENERATE.INFOGRAPHIC | ja | ja | aligned |
 | CMD.NLM.GENERATE.PRESENTATION | API.NLM.GENERATE.PRESENTATION | ja | ja | aligned |
 | CMD.NLM.GENERATE.TABLE | API.NLM.GENERATE.TABLE | ja | ja | aligned |
+| CMD.QWEN.VISION | POST /api/qwen/vision | ja | ja | aligned |
+| CMD.QWEN.CODE | POST /api/qwen/chat | ja | ja | aligned |
+| CMD.QWEN.OCR | POST /api/qwen/ocr | ja | ja | aligned |
+| CMD.QWEN.VIDEO | POST /api/qwen/video | ja | ja | aligned |
+| CMD.QWEN.CONVERSATION | POST /api/qwen/chat | ja | ja | aligned |
+| CMD.AUTH.LOGIN | POST /api/auth/login | ja | ja | aligned |
+| CMD.AUTH.LOGOUT | POST /api/auth/logout | ja | ja | aligned |
+| CMD.PRODUCTS.LIST | GET /api/products | ja | ja | aligned |
+| CMD.PRODUCTS.CREATE | POST /api/products | ja | ja | aligned |
+| CMD.ORDERS.CREATE | POST /api/orders | ja | ja | aligned |
+| CMD.ORDERS.LIST | GET /api/orders | ja | ja | aligned |
 
 ## Offene Deltas
-- {DELTA_1}
-- {DELTA_2}
+- {none - alle Qwen 3.5 Skills gemappt}
 
 ## Abnahme-Check
 1. Jeder produktive Command hat Endpoint

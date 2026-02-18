@@ -81,4 +81,34 @@ Für jede Kernseite dokumentieren:
 3. KPI-Template vorhanden
 4. Verifikationsschritte enthalten
 
+## Qwen 3.5 AI Chat Integration
+
+### qwen_conversation
+Der Website-KI-Chat nutzt Qwen 3.5 für natürliche Konversations-KI.
+
+| Feature | Beschreibung | Implementierung |
+|---------|--------------|-----------------|
+| Intent-Erkennung | Versteht Benutzeranfragen | qwen_conversation API |
+| FAQ-Beantwortung | Automatische Antworten | Kontextbasierte Retrieval |
+| Lead-Qualifizierung | Besucher qualifizieren | Dialogfluss-Logik |
+| Appointment-Booking | Termine vereinbaren | Kalender-Integration |
+
+### API-Integration
+```typescript
+// POST /api/qwen/chat
+const response = await fetch('/api/qwen/chat', {
+  method: 'POST',
+  body: JSON.stringify({
+    messages: [{ role: 'user', content: userMessage }],
+    skill: 'qwen_conversation',
+    context: { page: 'pricing', userId: sessionId }
+  })
+});
+```
+
+### Qualitäts-Gates
+- Antwortzeit < 2 Sekunden
+- Kontextbezogene Relevanz > 90%
+- Eskalation bei unklaren Anfragen
+
 ---

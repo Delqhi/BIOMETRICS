@@ -217,4 +217,100 @@ Owner:
 3. Jede Aufgabe hat Risiko und Fälligkeit.
 4. Keine technischen Implementierungsaufgaben enthalten.
 
+## Qwen 3.5 User Tasks (NVIDIA NIM)
+
+### UT-QWEN-001
+Titel: NVIDIA NIM API-Key bereitstellen  
+Priorität: P0  
+Status: OPEN
+
+Warum User-Aufgabe:
+Qwen 3.5 erfordert einen NVIDIA API-Key für den NIM-Endpoint.
+
+Voraussetzungen:
+- NVIDIA Account vorhanden.
+
+Schritte:
+1. NVIDIA AI Foundation Entdecken.
+2. API-Key generieren.
+3. Key in Environment-Variable `NVIDIA_API_KEY` speichern.
+
+Erwartetes Ergebnis:
+API-Key ist gesetzt und erreichbar.
+
+Verifikation:
+- curl Test gegen NVIDIA NIM Endpoint.
+
+Risiko bei Nicht-Erledigung:
+Qwen-Skills nicht funktionsfähig.
+
+Fälligkeitsdatum:
+{DATE_DUE}
+
+Owner:
+{ACCOUNT_OWNER}
+
+### UT-QWEN-002
+Titel: Vercel Edge Functions deployen  
+Priorität: P1  
+Status: OPEN
+
+Warum User-Aufgabe:
+Qwen-Skills laufen über Vercel Edge Functions.
+
+Voraussetzungen:
+- Vercel Account vorhanden.
+- Projekt verbunden.
+
+Schritte:
+1. Vercel CLI installieren.
+2. Projekt deployen.
+3. Environment-Variablen setzen.
+
+Erwartetes Ergebnis:
+Edge Functions live unter vercel.app.
+
+Verifikation:
+- Endpoints erreichbar.
+
+Risiko bei Nicht-Erledigung:
+Keine externe API-Verfügbarkeit.
+
+Fälligkeitsdatum:
+{DATE_DUE}
+
+Owner:
+{ACCOUNT_OWNER}
+
+### UT-QWEN-003
+Titel: Qwen-Modell-Limits verstehen  
+Priorität: P2  
+Status: OPEN
+
+Warum User-Aufgabe:
+Qwen 3.5 hat Context-Limits (262K) und Output-Limits (32K).
+
+Voraussetzungen:
+- UT-QWEN-001 abgeschlossen.
+
+Schritte:
+1. Limits dokumentieren.
+2. Prompt-Längen optimieren.
+3. Chunking-Strategie planen.
+
+Erwartetes Ergebnis:
+Dokumentierte Strategie für lange Prompts.
+
+Verifikation:
+- Tests mit langen Prompts.
+
+Risiko bei Nicht-Erledigung:
+Abgeschnittene Antworten.
+
+Fälligkeitsdatum:
+{DATE_DUE}
+
+Owner:
+{ACCOUNT_OWNER}
+
 ---

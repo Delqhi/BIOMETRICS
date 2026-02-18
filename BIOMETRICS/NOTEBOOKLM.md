@@ -122,6 +122,67 @@ Owner:
 
 ---
 
+## NLM Assets (BIOMETRICS)
+
+### Video Assets
+
+| Asset-ID | Beschreibung | Notebook-Quelle | Status |
+|----------|--------------|-----------------|--------|
+| VID-001 | Onboarding-Erklärung | biometrics-onboard | ✅ AKTIV |
+| VID-002 | CLI Installationsanleitung | biometrics-onboard | ✅ AKTIV |
+| VID-003 | Architektur-Übersicht | ARCHITECTURE.md | ✅ AKTIV |
+
+**Ablageort:** `BIOMETRICS/NLM-ASSETS/videos/`
+
+### Infografiken
+
+| Asset-ID | Beschreibung | Notebook-Quelle | Status |
+|----------|--------------|-----------------|--------|
+| INF-001 | System-Architektur | ARCHITECTURE.md | ✅ AKTIV |
+| INF-002 | Datenfluss-Diagramm | INFRASTRUCTURE.md | ✅ AKTIV |
+| INF-003 | Installationsprozess | onboarding-flow | ✅ AKTIV |
+
+**Ablageort:** `BIOMETRICS/NLM-ASSETS/infographics/`
+
+### Berichte
+
+| Asset-ID | Beschreibung | Notebook-Quelle | Status |
+|----------|--------------|-----------------|--------|
+| REP-001 | Sicherheitsanalyse | SECURITY.md | ✅ AKTIV |
+| REP-002 | Performance-Report | INFRASTRUCTURE.md | ✅ AKTIV |
+| REP-003 | Integrations-Übersicht | INTEGRATION.md | ✅ AKTIV |
+
+**Ablageort:** `BIOMETRICS/NLM-ASSETS/reports/`
+
+### Integration mit biometrics-onboard
+
+Das **biometrics-onboard** Notebook ist das zentrale Notebook für alle Onboarding- und Installations-bezogenen Inhalte.
+
+**Notebook-ID:** `{NLM_NOTEBOOK_ID_ONBOARD}`
+
+**Enthaltene Quellen:**
+- `biometrics-cli/README.md`
+- `ONBOARDING.md`
+- `INSTALLATION.md`
+- `TROUBLESHOOTING.md`
+
+**Generierte Artefakte:**
+- Video: Installationsanleitung
+- Infografik: Installationsprozess
+- Mindmap: CLI-Befehlsübersicht
+
+**Sync-Pflicht:** Nach jeder Änderung an CLI oder Onboarding-Dokumentation muss das Notebook synchronisiert werden:
+
+```bash
+# 1. Quellen prüfen
+nlm source list {NLM_NOTEBOOK_ID_ONBOARD}
+
+# 2. Geänderte Datei hinzufügen
+nlm source add {NLM_NOTEBOOK_ID_ONBOARD} --file "biometrics-cli/README.md" --wait
+```
+
+---
+
 ## 13) NLM-CLI Installation & Setup
 
 ### Installation (PNPM ONLY!)

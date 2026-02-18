@@ -2504,6 +2504,2878 @@ const logger = {
 
 ---
 
+## 📋 13. Development Workflows
+
+### 13.1 Git Branch Strategy
+
+#### Overview
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        GIT BRANCH STRATEGY                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    main (production) ─────────────────────────────────────────────     │
+│         │                                                              │
+│         │ Merge via PR                                                │
+│         ▼                                                              │
+│    develop (integration) ──────────────────────────────────────       │
+│         │                                                              │
+│         │ Merge via PR                                                │
+│         ▼                                                              │
+│    feature/* ────────────────────────┬───────────────────────────     │
+│    bugfix/* ─────────────────────────┤                              │
+│    hotfix/* ──────────────────────────┘                              │
+│                                                                         │
+│    release/* ───────────────────────────────────────────────────       │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Branch Naming Convention
+
+```bash
+# Feature Branches
+feature/TICKET-ID-short-description
+feature/add-user-authentication
+feature/BIOMETRICS-123-payment-integration
+
+# Bugfix Branches
+bugfix/TICKET-ID-short-description
+bugfix/BIOMETRICS-456-login-error
+
+# Hotfix Branches
+hotfix/TICKET-ID-short-description
+hotfix/BIOMETRICS-789-security-patch
+
+# Release Branches
+release/2026.02.15
+release/v2.0.0
+```
+
+#### Branch Workflow Commands
+
+```bash
+# 1. Start new feature
+git checkout develop
+git pull origin develop
+git checkout -b feature/BIOMETRICS-123-new-feature
+
+# 2. Work on feature (commit regularly)
+git add .
+git commit -m "feat: add initial feature implementation"
+git push -u origin feature/BIOMETRICS-123-new-feature
+
+# 3. Keep branch updated with develop
+git fetch origin
+git rebase origin/develop
+
+# 4. When ready, create PR
+gh pr create \
+  --title "feat: Add new feature" \
+  --body "$(cat <<'EOF'
+## Summary
+- Added new feature for user authentication
+- Implemented OAuth2 flow with Google
+
+## Changes
+- New endpoint: /api/auth/google
+- Updated user table with provider field
+- Added OAuth callback handler
+
+## Testing
+- [ ] Unit tests pass
+- [ ] Integration tests pass
+- [ ] Manual testing completed
+
+## Screenshots
+(if applicable)
+EOF
+)"
+
+# 5. After PR merge, cleanup
+git checkout develop
+git pull origin develop
+git branch -d feature/BIOMETRICS-123-new-feature
+git push origin --delete feature/BIOMETRICS-123-new-feature
+```
+
+#### Branch Protection Rules
+
+```yaml
+# .github/branch-protection.yml
+rules:
+  - name: main
+    required_reviewers: 1
+    required_status_checks:
+      - ci/lint
+      - ci/typecheck
+      - ci/test
+      - ci/build
+    required_signed_commits: false
+    allow_force_pushes: false
+    allow_deletions: false
+    
+  - name: develop
+    required_reviewers: 0
+    required_status_checks:
+      - ci/lint
+      - ci/test
+    allow_force_pushes: false
+    allow_deletions: false
+```
+
+---
+
+### 13.2 Code Review Process
+
+#### Review Checklist
+
+```markdown
+## Code Review Checklist
+
+### Functionality
+- [ ] Does this code do what it's supposed to do?
+- [ ] Are all edge cases handled?
+- [ ] Is the error handling appropriate?
+- [ ] Are there any security vulnerabilities?
+
+### Code Quality
+- [ ] Is the code readable and well-structured?
+- [ ] Are variable/function names descriptive?
+- [ ] Is there any duplicated code?
+- [ ] Are there appropriate comments for complex logic?
+
+### Performance
+- [ ] Are there any N+1 queries?
+- [ ] Is caching considered where appropriate?
+- [ ] Are there any memory leaks?
+- [ ] Is the algorithm efficient?
+
+### Testing
+- [ ] Are there adequate unit tests?
+- [ ] Are edge cases covered in tests?
+- [ ] Do existing tests still pass?
+- [ ] Is test coverage maintained/increased?
+
+### Documentation
+- [ ] Is the README updated if needed?
+- [ ] Are API endpoints documented?
+- [ ] Are breaking changes documented?
+```
+
+#### Review Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        CODE REVIEW FLOW                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   Developer              Reviewer              System                   │
+│      │                     │                     │                      │
+│      │  Pushes branch      │                     │                      │
+│      │───────────────────▶│                     │                      │
+│      │                     │                     │                      │
+│      │                     │  Reviews code      │                      │
+│      │                     │  Adds comments     │                      │
+│      │                     │───────────────────▶│                     │
+│      │                     │                     │                      │
+│      │  Receives feedback │                     │                      │
+│      │◀───────────────────│                     │                      │
+│      │                     │                     │                      │
+│      │  Addresses comments│                     │                      │
+│      │  (if needed)       │                     │                      │
+│      │───────────────────▶│                     │                      │
+│      │                     │                     │                      │
+│      │               Approve                   │                      │
+│      │               Merge                     │                      │
+│      │───────────────────▶│───────────────────▶│                      │
+│      │                     │                     │                      │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Comment Types
+
+```typescript
+// Comment severity levels
+enum CommentType {
+  BLOCKING = 'blocking',      // Must fix before merge
+  REQUIRED = 'required',      // Should fix, but not blocking
+  SUGGESTION = 'suggestion', // Nice to have
+  QUESTION = 'question',      // Needs clarification
+  NITPICK = 'nitpick',       // Minor style issue
+}
+
+// Example comments
+{
+  type: CommentType.BLOCKING,
+  line: 45,
+  message: 'SQL injection vulnerability - use parameterized queries',
+  suggestion: 'Replace string concatenation with parameterized query'
+}
+
+{
+  type: CommentType.REQUIRED,
+  line: 78,
+  message: 'Missing error handling for network failure',
+  suggestion: 'Add try-catch block and retry logic'
+}
+
+{
+  type: CommentType.SUGGESTION,
+  line: 102,
+  message: 'Could use const instead of let',
+  suggestion: 'const is more appropriate here since value is never reassigned'
+}
+```
+
+#### Review Metrics
+
+```typescript
+interface ReviewMetrics {
+  reviewId: string;
+  author: string;
+  reviewer: string;
+  startTime: Date;
+  endTime: Date;
+  comments: {
+    blocking: number;
+    required: number;
+    suggestion: number;
+    question: number;
+  };
+  reviewDurationMinutes: number;
+  codeLinesReviewed: number;
+}
+
+// Track average review time
+const reviewMetrics = {
+  averageReviewTimeMinutes: 45,
+  maxReviewTimeHours: 24,
+  minReviewers: 1,
+  requiredReviewersForSecurity: 2,
+};
+```
+
+---
+
+### 13.3 PR Template Usage
+
+#### PR Template
+
+```markdown
+## 🎯 Pull Request
+
+**Project:** BIOMETRICS
+**Ticket:** [BIOMETRICS-XXX](link)
+**Type:** [Feature/Bugfix/Hotfix/Refactor/Docs]
+
+---
+
+### 📝 Summary
+
+<!-- What does this PR do? -->
+
+---
+
+### ✅ Changes
+
+<!-- List all changes made -->
+
+- [ ] Change 1
+- [ ] Change 2
+- [ ] Change 3
+
+---
+
+### 🧪 Testing
+
+**Test Environment:**
+- [ ] Local development
+- [ ] Staging
+- [ ] Production (if applicable)
+
+**Test Results:**
+- [ ] Unit tests passing
+- [ ] Integration tests passing
+- [ ] E2E tests passing
+- [ ] Manual testing completed
+
+**Test Coverage:**
+```
+<!-- Paste coverage report -->
+```
+
+---
+
+### 📸 Screenshots (if applicable)
+
+<!-- Add screenshots of changes -->
+
+---
+
+### ⚠️ Breaking Changes
+
+<!-- List any breaking changes -->
+
+None
+
+---
+
+### 📋 Checklist
+
+- [ ] Code follows style guidelines
+- [ ] No console.log statements (use proper logging)
+- [ ] No hardcoded secrets
+- [ ] Documentation updated
+- [ ] No merge conflicts
+- [ ] All checks passing
+
+---
+
+### 📎 Related Issues
+
+- Related to [BIOMETRICS-XXX](link)
+- Blocks [BIOMETRICS-YYY](link)
+
+---
+
+### 🚀 Deployment
+
+**Deploy Instructions:**
+<!-- How to deploy this PR -->
+
+---
+
+### 👥 Reviewers
+
+<!-- Tag reviewers -->
+
+---
+
+### 📝 Notes for Reviewers
+
+<!-- Any additional notes -->
+```
+
+#### PR Description Examples
+
+**Feature PR:**
+```markdown
+## Summary
+Adds OAuth2 authentication with Google and GitHub providers.
+
+### Changes
+- New table: `auth_providers`
+- New API: `/api/auth/[provider]`
+- New frontend: Login with OAuth buttons
+
+### Testing
+- Tested OAuth flow with Google account
+- Tested OAuth flow with GitHub account
+- Tested error handling for denied permissions
+
+### Screenshots
+![Login Page](screenshot.png)
+```
+
+**Bugfix PR:**
+```markdown
+## Summary
+Fixes login error when using special characters in password.
+
+### Root Cause
+Password validation regex was incorrectly rejecting special characters.
+
+### Fix
+Updated validation regex to allow: !@#$%^&*()
+
+### Testing
+- Tested with password containing each special character
+- Tested with password containing multiple special characters
+- Tested with password containing no special characters
+```
+
+---
+
+### 13.4 Merge Strategies
+
+#### Merge vs Rebase vs Squash
+
+```typescript
+enum MergeStrategy {
+  MERGE = 'merge',       // Preserves history, creates merge commit
+  REBASE = 'rebase',     // Linear history, rewrites commits
+  SQUASH = 'squash',     // Combines all commits into one
+}
+
+// When to use each strategy
+const mergeStrategyGuide = {
+  [MergeStrategy.MERGE]: {
+    when: 'When working on shared feature branches',
+    pros: [
+      'Preserves complete history',
+      'Shows when feature was merged',
+      'Easier to track down bugs in history'
+    ],
+    cons: [
+      'Can create cluttered history',
+      'Merge commits can be confusing'
+    ]
+  },
+  
+  [MergeStrategy.REBASE]: {
+    when: 'Before merging feature branch into develop',
+    pros: [
+      'Creates clean, linear history',
+      'Easier to follow the story',
+      'No unnecessary merge commits'
+    ],
+    cons: [
+      'Rewrites history',
+      'Can be dangerous if not done carefully',
+      'Loses context of when branch was created'
+    ]
+  },
+  
+  [MergeStrategy.SQUASH]: {
+    when: 'When branch has many small commits',
+    pros: [
+      'Clean history',
+      'Each PR = one commit',
+      'Easy to revert entire feature'
+    ],
+    cons: [
+      'Loses granular commit history',
+      'Loses context of development process'
+    ]
+  }
+};
+```
+
+#### Merge Workflow
+
+```bash
+# Standard merge (develop -> main)
+git checkout main
+git pull origin main
+git merge develop
+git push origin main
+
+# Rebase workflow (feature -> develop)
+git checkout feature/my-feature
+git fetch origin
+git rebase origin/develop
+# Resolve conflicts if any
+git push --force-with-lease origin feature/my-feature
+
+# Squash merge (feature -> main)
+git checkout main
+git merge --squash feature/my-feature
+git commit -m "feat: Add my feature (closes #123)"
+git push origin main
+```
+
+#### Conflict Resolution
+
+```bash
+# 1. Start rebase
+git checkout feature/my-feature
+git rebase develop
+
+# 2. Conflicts detected - resolve each file
+# Edit files to resolve conflicts
+git add resolved-file.ts
+git add another-file.ts
+
+# 3. Continue rebase
+git rebase --continue
+
+# 4. If things go wrong
+git rebase --abort
+
+# 5. Push after resolution
+git push --force-with-lease
+```
+
+---
+
+## 🚀 14. Deployment Workflows
+
+### 14.1 Staging to Production
+
+#### Deployment Pipeline
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    DEPLOYMENT PIPELINE                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐          │
+│   │  Code   │───▶│  Build  │───▶│  Test   │───▶│ Deploy  │          │
+│   │  Commit │    │         │    │         │    │ Staging │          │
+│   └─────────┘    └─────────┘    └─────────┘    └────┬────┘          │
+│                                                      │                │
+│                        ┌─────────────────────────────┘                │
+│                        ▼                                               │
+│                  ┌───────────┐    ┌───────────┐    ┌───────────┐     │
+│                  │  Manual   │───▶│  Deploy   │───▶│  Verify   │     │
+│                  │  Approval │    │ Production │    │           │     │
+│                  └───────────┘    └───────────┘    └───────────┘     │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Deployment Checklist
+
+```markdown
+## Pre-Deployment Checklist
+
+### Code
+- [ ] All tests passing
+- [ ] Code coverage maintained
+- [ ] No linting errors
+- [ ] Security scan passed
+- [ ] Dependencies updated
+
+### Testing
+- [ ] Unit tests: PASS
+- [ ] Integration tests: PASS
+- [ ] E2E tests: PASS
+- [ ] Performance tests: PASS
+- [ ] Manual QA: COMPLETE
+
+### Documentation
+- [ ] CHANGELOG updated
+- [ ] API docs updated
+- [ ] README updated (if needed)
+
+### Configuration
+- [ ] Environment variables verified
+- [ ] Feature flags configured
+- [ ] Rollback plan ready
+
+### Communication
+- [ ] Team notified
+- [ ] Downtime window communicated
+- [ ] On-call team prepared
+```
+
+#### Deployment Commands
+
+```bash
+# Build application
+npm run build
+
+# Run tests
+npm run test
+npm run test:e2e
+
+# Build Docker image
+docker build -t biometrics-app:$VERSION .
+docker tag biometrics-app:$VERSION biometrics-app:latest
+
+# Deploy to staging
+kubectl apply -f k8s/staging/
+kubectl set image deployment/app app=biometrics-app:$VERSION -n staging
+
+# Verify staging
+curl -f https://staging.biometrics.example.com/health
+
+# Deploy to production (requires approval)
+kubectl apply -f k8s/production/
+kubectl set image deployment/app app=biometrics-app:$VERSION -n production
+
+# Verify production
+curl -f https://biometrics.example.com/health
+```
+
+#### Environment Configuration
+
+```typescript
+// config/environments.ts
+interface EnvironmentConfig {
+  name: 'development' | 'staging' | 'production';
+  apiUrl: string;
+  databaseUrl: string;
+  sentryDsn: string;
+  features: {
+    enableAnalytics: boolean;
+    enableBetaFeatures: boolean;
+    maintenanceMode: boolean;
+  };
+}
+
+export const environments: Record<string, EnvironmentConfig> = {
+  development: {
+    name: 'development',
+    apiUrl: 'http://localhost:3000/api',
+    databaseUrl: process.env.DEV_DATABASE_URL,
+    sentryDsn: '',
+    features: {
+      enableAnalytics: false,
+      enableBetaFeatures: true,
+      maintenanceMode: false,
+    },
+  },
+  
+  staging: {
+    name: 'staging',
+    apiUrl: 'https://staging.biometrics.example.com/api',
+    databaseUrl: process.env.STAGING_DATABASE_URL,
+    sentryDsn: process.env.SENTRY_DSN_STAGING,
+    features: {
+      enableAnalytics: true,
+      enableBetaFeatures: true,
+      maintenanceMode: false,
+    },
+  },
+  
+  production: {
+    name: 'production',
+    apiUrl: 'https://biometrics.example.com/api',
+    databaseUrl: process.env.PROD_DATABASE_URL,
+    sentryDsn: process.env.SENTRY_DSN_PRODUCTION,
+    features: {
+      enableAnalytics: true,
+      enableBetaFeatures: false,
+      maintenanceMode: false,
+    },
+  },
+};
+```
+
+---
+
+### 14.2 Rollback Procedures
+
+#### Rollback Decision Tree
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      ROLLBACK DECISION TREE                             │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│                        Issue Detected                                   │
+│                             │                                           │
+│                             ▼                                           │
+│                   ┌─────────────────┐                                   │
+│                   │ Severity Level │                                   │
+│                   └────────┬────────┘                                   │
+│                            │                                             │
+│          ┌─────────────────┼─────────────────┐                          │
+│          ▼                 ▼                 ▼                          │
+│   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐                 │
+│   │  Critical  │   │    High     │   │   Medium    │                 │
+│   │  (P0)      │   │    (P1)     │   │    (P2)     │                 │
+│   └─────┬───────┘   └─────┬───────┘   └─────┬───────┘                 │
+│         │                  │                  │                         │
+│         ▼                  ▼                  ▼                         │
+│   ┌──────────┐       ┌──────────┐       ┌──────────┐                  │
+│   │ ROLLBACK │       │ Investig.│       │ Monitor  │                  │
+│   │ IMMEDIATE│       │ + Fix    │       │ + Fix    │                  │
+│   └──────────┘       └──────────┘       └──────────┘                  │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Rollback Commands
+
+```bash
+# Kubernetes rollback
+kubectl rollout undo deployment/app
+kubectl rollout status deployment/app
+
+# Or rollback to specific revision
+kubectl rollout undo deployment/app --to-revision=3
+
+# Docker rollback
+docker pull biometrics/app:previous-version
+kubectl set image deployment/app app=biometrics/app:previous-version
+
+# Database rollback (if needed)
+psql -h database.biometrics.example.com -U biometrics -c \
+  "SELECT pg_restore --verbose --clean --if-exists backup.dump"
+
+# Verify rollback
+curl -f https://biometrics.example.com/health
+```
+
+#### Rollback Checklist
+
+```markdown
+## Rollback Checklist
+
+### Immediate Actions
+- [ ] Confirm rollback decision
+- [ ] Notify on-call team
+- [ ] Document issue in incident tracker
+
+### Execution
+- [ ] Rollback application code
+- [ ] Rollback database (if needed)
+- [ ] Verify rollback success
+
+### Post-Rollback
+- [ ] Run health checks
+- [ ] Verify critical features
+- [ ] Monitor error rates
+- [ ] Update incident status
+
+### Post-Incident
+- [ ] Root cause analysis
+- [ ] Document lessons learned
+- [ ] Plan fix for re-deployment
+```
+
+---
+
+### 14.3 Blue-Green Deployment
+
+#### Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                   BLUE-GREEN DEPLOYMENT                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│                         Load Balancer                                   │
+│                              │                                          │
+│              ┌───────────────┴───────────────┐                         │
+│              ▼                               ▼                          │
+│      ┌─────────────┐                 ┌─────────────┐                   │
+│      │   BLUE      │                 │   GREEN     │                   │
+│      │  (Active)   │                 │  (Standby)  │                   │
+│      │             │                 │             │                   │
+│      │  v1.0.0     │                 │  v1.1.0     │                   │
+│      │             │   ◀──────▶     │             │                   │
+│      │  Production │   Switch       │  Testing    │                   │
+│      │             │                 │             │                   │
+│      └─────────────┘                 └─────────────┘                   │
+│                                                                         │
+│   Traffic: 100% Blue                    Traffic: 0%                   │
+│                                                                         │
+│   After Testing:                                                   │
+│                                                                         │
+│   Traffic: 0% Blue                       Traffic: 100% Green          │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Blue-Green Workflow
+
+```bash
+# 1. Current production is BLUE (v1.0.0)
+# Deploy GREEN (v1.1.0) for testing
+
+# 2. Deploy to green environment
+kubectl apply -f k8s/green/
+kubectl set image deployment/app-green app=biometrics-app:v1.1.0
+
+# 3. Run smoke tests on green
+./scripts/smoke-tests.sh --env=green
+
+# 4. If tests pass, switch traffic
+kubectl patch service app-lb -p '{"spec":{"selector":{"version":"green"}}}'
+
+# 5. Verify traffic switch
+curl -I https://biometrics.example.com
+# Should return: X-Green-Version: v1.1.0
+
+# 6. If issues, rollback to blue
+kubectl patch service app-lb -p '{"spec":{"selector":{"version":"blue"}}}'
+
+# 7. Promote green to production (old blue becomes standby)
+kubectl label deployment/app-blue version=blue --overwrite
+kubectl label deployment/app-green version=blue --overwrite
+```
+
+#### Traffic Switch Script
+
+```typescript
+// scripts/traffic-switch.ts
+import { k8sClient } from './k8s-client';
+
+interface TrafficSwitchOptions {
+  serviceName: string;
+  fromVersion: string;
+  toVersion: string;
+  percentage?: number;
+}
+
+async function switchTraffic(options: TrafficSwitchOptions) {
+  const { serviceName, fromVersion, toVersion, percentage = 100 } = options;
+  
+  console.log(`🔄 Switching traffic from ${fromVersion} to ${toVersion}`);
+  
+  if (percentage < 100) {
+    // Partial rollout - use canary
+    await applyCanaryTrafficSplit(serviceName, toVersion, percentage);
+    console.log(`📊 ${percentage}% traffic to ${toVersion}`);
+  } else {
+    // Full switch
+    await k8sClient.patchNamespacedService(
+      serviceName,
+      'default',
+      {
+        spec: {
+          selector: { version: toVersion }
+        }
+      }
+    );
+    console.log(`✅ 100% traffic now going to ${toVersion}`);
+  }
+  
+  // Verify switch
+  await verifyTrafficSwitch(serviceName, toVersion);
+}
+
+async function verifyTrafficSwitch(serviceName: string, version: string) {
+  const checks = 10;
+  let success = true;
+  
+  for (let i = 0; i < checks; i++) {
+    const response = await fetch(`https://biometrics.example.com/health`);
+    const versionHeader = response.headers.get('X-Version');
+    
+    if (versionHeader !== version) {
+      success = false;
+      console.error(`❌ Health check ${i + 1} failed: expected ${version}, got ${versionHeader}`);
+    }
+    
+    await sleep(1000);
+  }
+  
+  if (success) {
+    console.log(`✅ Traffic switch verified`);
+  } else {
+    throw new Error('Traffic switch verification failed');
+  }
+}
+```
+
+---
+
+### 14.4 Canary Releases
+
+#### Canary Strategy
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      CANARY RELEASE STRATEGY                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   Phase 1: 5% Traffic                                                  │
+│   ┌─────────────────────────────────────────────────────────────┐       │
+│   │  ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  │       │
+│   │  5% Canary ───────────────────────────────────────────────  │       │
+│   │  95% Stable ───────────────────────────────────────────────  │       │
+│   └─────────────────────────────────────────────────────────────┘       │
+│                                                                         │
+│   Phase 2: 20% Traffic (if Phase 1 OK)                                │
+│   ┌─────────────────────────────────────────────────────────────┐       │
+│   │  ████████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  │       │
+│   │  20% Canary ──────────────────────────────────────────────  │       │
+│   │  80% Stable ─────────────────────────────────────────────  │       │
+│   └─────────────────────────────────────────────────────────────┘       │
+│                                                                         │
+│   Phase 3: 50% Traffic (if Phase 2 OK)                                 │
+│   ┌─────────────────────────────────────────────────────────────┐       │
+│   │  ███████████████████████████████████████████████░░░░░░░░░░░ │       │
+│   │  50% Canary ─────────────────────────────────────────────  │       │
+│   │  50% Stable ────────────────────────────────────────────  │       │
+│   └─────────────────────────────────────────────────────────────┘       │
+│                                                                         │
+│   Phase 4: 100% Traffic (if Phase 3 OK)                               │
+│   ┌─────────────────────────────────────────────────────────────┐       │
+│   │  ████████████████████████████████████████████████████████  │       │
+│   │  100% Canary (New Version) ─────────────────────────────  │       │
+│   └─────────────────────────────────────────────────────────────┘       │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Canary Configuration
+
+```yaml
+# k8s/canary.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: biometrics-app
+spec:
+  replicas: 10
+  strategy:
+    canary:
+      canaryService: app-canary
+      stableService: app-stable
+      trafficRouting:
+        nginx:
+          stableIngress: app-ingress
+          additionalIngressAnnotations:
+            canary-by-header: X-Canary
+      steps:
+        - setWeight: 5
+        - pause: {duration: 10m}
+        - analysis:
+            templates:
+              - templateName: success-rate
+        - setWeight: 20
+        - pause: {duration: 15m}
+        - analysis:
+            templates:
+              - templateName: success-rate
+        - setWeight: 50
+        - pause: {duration: 30m}
+        - analysis:
+            templates:
+              - templateName: success-rate
+        - setWeight: 100
+      analysis:
+        templates:
+          - templateName: success-rate
+        startingStep: 1
+        args:
+          - name: service-name
+            value: app-canary
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate
+spec:
+  args:
+    - name: service-name
+  metrics:
+    - name: success-rate
+      interval: 1m
+      successCondition: result[0] >= 0.99
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: http://prometheus:9090
+          query: |
+            sum(rate(http_requests_total{service="{{args.service-name}}",status=~"2.."}[5m])) 
+            / 
+            sum(rate(http_requests_total{service="{{args.service-name}}"}[5m]))
+```
+
+#### Canary Monitoring
+
+```typescript
+// lib/canary-analysis.ts
+interface CanaryMetrics {
+  canaryVersion: string;
+  stableVersion: string;
+  metrics: {
+    errorRate: { canary: number; stable: number; threshold: number };
+    latencyP50: { canary: number; stable: number; threshold: number };
+    latencyP99: { canary: number; stable: number; threshold: number };
+    successRate: { canary: number; stable: number; threshold: number };
+  };
+  decision: 'promote' | 'rollback' | 'continue';
+}
+
+async function analyzeCanary(canaryWeight: number): Promise<CanaryMetrics> {
+  const metrics = await Promise.all([
+    getErrorRate('canary'),
+    getErrorRate('stable'),
+    getLatency('canary', 'p50'),
+    getLatency('stable', 'p50'),
+    getLatency('canary', 'p99'),
+    getLatency('stable', 'p99'),
+  ]);
+  
+  const [errorRate, latencyP50, latencyP99] = metrics;
+  
+  const analysis: CanaryMetrics = {
+    canaryVersion: 'v1.1.0',
+    stableVersion: 'v1.0.0',
+    metrics: {
+      errorRate,
+      latencyP50,
+      latencyP99,
+      successRate: {
+        canary: 1 - errorRate.canary,
+        stable: 1 - errorRate.stable,
+        threshold: 0.95,
+      },
+    },
+    decision: 'continue',
+  };
+  
+  // Decision logic
+  if (errorRate.canary > errorRate.stable * 2) {
+    analysis.decision = 'rollback';
+  } else if (latencyP99.canary > latencyP99.stable * 1.5) {
+    analysis.decision = 'rollback';
+  } else if (canaryWeight >= 100) {
+    analysis.decision = 'promote';
+  }
+  
+  return analysis;
+}
+```
+
+---
+
+## 🔴 15. Incident Management
+
+### 15.1 On-Call Rotation
+
+#### Rotation Schedule
+
+```typescript
+// config/oncall.ts
+interface OnCallSchedule {
+  team: string;
+  schedule: {
+    [week: string]: {
+      primary: string;
+      secondary: string;
+      startDate: string;
+      endDate: string;
+    };
+  };
+}
+
+const onCallSchedule: OnCallSchedule = {
+  team: 'BIOMETRICS-SRE',
+  schedule: {
+    '2026-W07': {
+      primary: 'agent-alpha',
+      secondary: 'agent-beta',
+      startDate: '2026-02-17',
+      endDate: '2026-02-24',
+    },
+    '2026-W08': {
+      primary: 'agent-beta',
+      secondary: 'agent-gamma',
+      startDate: '2026-02-24',
+      endDate: '2026-03-03',
+    },
+    '2026-W09': {
+      primary: 'agent-gamma',
+      secondary: 'agent-alpha',
+      startDate: '2026-03-03',
+      endDate: '2026-03-10',
+    },
+  },
+};
+
+function getCurrentOnCall(): { primary: string; secondary: string } {
+  const currentWeek = getWeekNumber(new Date());
+  return onCallSchedule.schedule[`2026-W${currentWeek}`];
+}
+```
+
+#### On-Call Responsibilities
+
+```markdown
+## On-Call Responsibilities
+
+### Primary On-Call
+- First responder to all alerts
+- Acknowledge alerts within 15 minutes
+- Initial triage and assessment
+- Escalate if unable to resolve within 30 minutes
+
+### Secondary On-Call
+- Backup for primary on-call
+- Assist if primary is overwhelmed
+- Handle non-critical issues
+- Take over if primary has an emergency
+
+### Escalation Levels
+1. **Primary On-Call** → Initial response
+2. **Secondary On-Call** → If primary unavailable
+3. **Team Lead** → If unresolved after 30 min
+4. **Engineering Manager** → If unresolved after 1 hour
+5. **CTO** → Critical production outage
+
+### Response Time SLA
+| Severity | First Response | Resolution Target |
+|----------|-----------------|-------------------|
+| P0/Critical | 15 min | 1 hour |
+| P1/High | 30 min | 4 hours |
+| P2/Medium | 2 hours | 24 hours |
+| P3/Low | 24 hours | 7 days |
+```
+
+---
+
+### 15.2 Severity Classification
+
+#### Severity Levels
+
+```typescript
+enum Severity {
+  P0_CRITICAL = 'P0',
+  P1_HIGH = 'P1',
+  P2_MEDIUM = 'P2',
+  P3_LOW = 'P3',
+}
+
+interface IncidentSeverity {
+  level: Severity;
+  definition: string;
+  examples: string[];
+  responseTime: number;
+  resolutionTarget: number;
+}
+
+const severityDefinitions: Record<Severity, IncidentSeverity> = {
+  [Severity.P0_CRITICAL]: {
+    level: Severity.P0_CRITICAL,
+    definition: 'Complete service outage affecting all users',
+    examples: [
+      'Database completely unavailable',
+      'All API endpoints returning 5xx errors',
+      'Complete data loss',
+      'Security breach with data exposure',
+    ],
+    responseTime: 15, // minutes
+    resolutionTarget: 60, // minutes
+  },
+  
+  [Severity.P1_HIGH]: {
+    level: Severity.P1_HIGH,
+    definition: 'Major functionality impaired affecting majority of users',
+    examples: [
+      'Payment processing not working',
+      'Login system completely down',
+      'API rate limiting affecting all users',
+      'High error rate (>10%) on main endpoints',
+    ],
+    responseTime: 30, // minutes
+    resolutionTarget: 240, // minutes
+  },
+  
+  [Severity.P2_MEDIUM]: {
+    level: Severity.P2_MEDIUM,
+    definition: 'Partial functionality affected, workaround available',
+    examples: [
+      'Search feature slow but working',
+      'Email notifications delayed',
+      'Non-critical feature broken',
+      'Performance degradation <50%',
+    ],
+    responseTime: 120, // minutes
+    resolutionTarget: 1440, // minutes (24 hours)
+  },
+  
+  [Severity.P3_LOW]: {
+    level: Severity.P3_LOW,
+    definition: 'Minor issue with minimal user impact',
+    examples: [
+      'Typo in UI',
+      'Minor cosmetic issue',
+      'Documentation error',
+      'Feature request',
+    ],
+    responseTime: 1440, // minutes (24 hours)
+    resolutionTarget: 10080, // minutes (7 days)
+  },
+};
+```
+
+#### Severity Decision Matrix
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                   SEVERITY DECISION MATRIX                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   Impact │   All Users   │   Some Users  │  Few Users    │            │
+│   ───────┼───────────────┼───────────────┼───────────────┤            │
+│   Time    │               │               │               │            │
+│   ───────┼───────────────┼───────────────┼───────────────┤            │
+│   <1 hr   │     P0        │      P1       │      P2       │            │
+│   1-4 hr  │     P1        │      P1       │      P2       │            │
+│   4-24 hr │     P1        │      P2       │      P3       │            │
+│   >24 hr  │     P2        │      P2       │      P3       │            │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 15.3 Escalation Paths
+
+#### Escalation Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        ESCALATION FLOW                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   Alert Triggered                                                        │
+│        │                                                                 │
+│        ▼                                                                 │
+│   ┌─────────────┐     ┌─────────────┐                                  │
+│   │  Primary    │ Yes │  Resolved?  │                                  │
+│   │  On-Call    │────▶│             │                                  │
+│   └─────────────┘     └──────┬──────┘                                  │
+│        │ No                  │ Yes                                      │
+│        ▼                     │                                          │
+│   ┌─────────────┐            ▼                                          │
+│   │  Ack?       │     ┌─────────────┐                                   │
+│   │   (15 min)  │     │   Close     │                                   │
+│   └──────┬──────┘     │   Incident  │                                   │
+│        │ No            └─────────────┘                                   │
+│        ▼                                                               │
+│   ┌─────────────┐     ┌─────────────┐                                  │
+│   │ Secondary   │ Yes │  Resolved?  │                                  │
+│   │  On-Call    │────▶│             │                                  │
+│   └─────────────┘     └──────┬──────┘                                  │
+│        │ No                  │ Yes                                      │
+│        ▼                     ▼                                          │
+│   ┌─────────────┐     ┌─────────────┐                                   │
+│   │  Team Lead  │ Yes │  Resolved?  │                                  │
+│   │  (30 min)   │────▶│             │                                  │
+│   └─────────────┘     └──────┬──────┘                                  │
+│        │ No                  │ Yes                                      │
+│        ▼                     ▼                                          │
+│   ┌─────────────┐     ┌─────────────┐                                   │
+│   │   Eng       │ Yes │  Resolved?  │                                  │
+│   │   Manager   │────▶│             │                                  │
+│   └─────────────┘     └──────┬──────┘                                  │
+│        │ No                  │ Yes                                      │
+│        ▼                     ▼                                          │
+│   ┌─────────────┐     ┌─────────────┐                                   │
+│   │     CTO     │────▶│  Resolved   │                                  │
+│   │  (Critical) │     │             │                                  │
+│   └─────────────┘     └─────────────┘                                   │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Escalation Contacts
+
+```typescript
+// config/escalation.ts
+interface EscalationContact {
+  role: string;
+  name: string;
+  phone: string;
+  email: string;
+  availability: '24x7' | 'business_hours';
+}
+
+const escalationContacts: EscalationContact[] = [
+  {
+    role: 'Primary On-Call',
+    name: 'System',
+    phone: '+49XXXOnCall1',
+    email: 'oncall-primary@biometrics.example.com',
+    availability: '24x7',
+  },
+  {
+    role: 'Secondary On-Call',
+    name: 'System',
+    phone: '+49XXXOnCall2',
+    email: 'oncall-secondary@biometrics.example.com',
+    availability: '24x7',
+  },
+  {
+    role: 'Team Lead - Platform',
+    name: 'TBD',
+    phone: '+49XXXTeamLead',
+    email: 'team-lead-platform@biometrics.example.com',
+    availability: '24x7',
+  },
+  {
+    role: 'Engineering Manager',
+    name: 'TBD',
+    phone: '+49XXXEngManager',
+    email: 'eng-manager@biometrics.example.com',
+    availability: 'business_hours',
+  },
+  {
+    role: 'CTO',
+    name: 'TBD',
+    phone: '+49XXXCTO',
+    email: 'cto@biometrics.example.com',
+    availability: '24x7',
+  },
+];
+```
+
+---
+
+### 15.4 Post-Mortem Process
+
+#### Post-Mortem Template
+
+```markdown
+# Incident Post-Mortem
+
+**Incident ID:** INC-2026-001
+**Date:** 2026-02-15
+**Duration:** 2 hours 34 minutes
+**Severity:** P1
+**Author:** [Name]
+
+---
+
+## Summary
+
+Brief description of what happened and impact.
+
+---
+
+## Timeline (UTC)
+
+| Time | Event |
+|------|-------|
+| 10:00 | Alert triggered: High error rate on /api/auth |
+| 10:15 | On-call acknowledged alert |
+| 10:22 | Initial investigation started |
+| 10:45 | Root cause identified: Database connection pool exhausted |
+| 11:15 | Fix deployed |
+| 11:30 | Service recovered |
+| 12:34 | Incident closed |
+
+---
+
+## Impact
+
+- **Users Affected:** ~5,000
+- **Error Rate:** 23%
+- **Downtime:** 1 hour 30 minutes
+- **Revenue Impact:** TBD
+
+---
+
+## Root Cause
+
+Detailed explanation of what caused the incident.
+
+---
+
+## Resolution
+
+How the issue was resolved.
+
+---
+
+## Lessons Learned
+
+### What Went Well
+- Alert was triggered quickly
+- Team responded promptly
+- Documentation was clear
+
+### What Could Be Improved
+- Database monitoring could be more detailed
+- Runbook for this scenario needed
+- Auto-scaling should be configured
+
+---
+
+## Action Items
+
+| Item | Owner | Due Date |
+|------|-------|----------|
+| Add database connection pool monitoring | @person1 | 2026-02-22 |
+| Create runbook for database issues | @person2 | 2026-02-25 |
+| Configure auto-scaling for API | @person3 | 2026-03-01 |
+
+---
+
+## Supporting Data
+
+- [Link to Grafana dashboard]
+- [Link to error logs]
+- [Link to related incidents]
+```
+
+#### Post-Mortem Meeting
+
+```typescript
+interface PostMortemMeeting {
+  scheduledWithin: '48 hours';
+  attendees: [
+    'On-call who responded',
+    'Team lead',
+    'Engineering manager',
+    'Relevant developers',
+  ];
+  agenda: [
+    'Timeline review (10 min)',
+    'Impact discussion (10 min)',
+    'Root cause analysis (20 min)',
+    'Lessons learned (15 min)',
+    'Action items (15 min)',
+  ];
+  output: [
+    'Published post-mortem document',
+    'Action items in tracking system',
+    'Updated runbooks if needed',
+  ];
+}
+```
+
+---
+
+## 💾 16. Data Workflows
+
+### 16.1 ETL Pipelines
+
+#### ETL Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         ETL PIPELINE                                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐          │
+│   │ Source  │───▶│ Extract │───▶│ Transform│───▶│  Load   │          │
+│   │         │    │         │    │         │    │         │          │
+│   │ API     │    │ Fetch   │    │ Clean   │    │ Insert  │          │
+│   │ Database│    │ Parse   │    │ Validate│    │ Update  │          │
+│   │ Files   │    │ Normalize│    │ Enrich  │    │ Merge   │          │
+│   └─────────┘    └─────────┘    └─────────┘    └────┬────┘          │
+│                                                      │                │
+│                                                      ▼                │
+│                                              ┌───────────┐          │
+│                                              │ Destination│          │
+│                                              │           │          │
+│                                              │ Data Lake │          │
+│                                              │ Warehouse │          │
+│                                              │ Analytics │          │
+│                                              └───────────┘          │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### ETL Job Configuration
+
+```yaml
+# config/etl/jobs/user-sync.yaml
+name: user-sync
+schedule: "0 */6 * * *"  # Every 6 hours
+source:
+  type: postgres
+  connection:
+    host: "{{ env.DATABASE_HOST }}"
+    port: 5432
+    database: biometrics
+    schema: public
+  query: |
+    SELECT 
+      id,
+      email,
+      name,
+      created_at,
+      updated_at,
+      status,
+      metadata
+    FROM users
+    WHERE updated_at > :last_sync_timestamp
+    OR created_at > :last_sync_timestamp
+
+transformations:
+  - name: normalize_email
+    type: transform
+    function: lowercase
+    field: email
+  
+  - name: enrich_profile
+    type: enrich
+    data:
+      source: http
+      url: https://api.gravatar.com/{{ hashlib.md5(email).hexdigest() }}
+      cache_ttl: 86400
+      
+  - name: validate_fields
+    type: validate
+    rules:
+      - field: email
+        type: email
+        required: true
+      - field: name
+        type: string
+        required: true
+        min_length: 1
+        max_length: 100
+
+destination:
+  type: bigquery
+  connection:
+    project: biometrics-prod
+    dataset: analytics
+    table: users
+  mode: merge
+  merge_keys:
+    - user_id
+
+error_handling:
+  on_error: log
+  retry_attempts: 3
+  retry_delay: 300  # seconds
+  dead_letter_queue: etl-errors
+```
+
+#### ETL Monitoring
+
+```typescript
+// lib/etl/monitor.ts
+interface ETLJobMetrics {
+  jobName: string;
+  startTime: Date;
+  endTime: Date;
+  duration: number;
+  status: 'success' | 'failed' | 'partial';
+  recordsExtracted: number;
+  recordsTransformed: number;
+  recordsLoaded: number;
+  errors: {
+    count: number;
+    messages: string[];
+  };
+}
+
+async function monitorETLJob(jobName: string): Promise<ETLJobMetrics> {
+  const startTime = Date.now();
+  
+  try {
+    const extraction = await extractData(jobName);
+    const transformation = await transformData(extraction);
+    const loadResult = await loadData(transformation);
+    
+    const metrics: ETLJobMetrics = {
+      jobName,
+      startTime: new Date(startTime),
+      endTime: new Date(),
+      duration: Date.now() - startTime,
+      status: loadResult.errors.length > 0 ? 'partial' : 'success',
+      recordsExtracted: extraction.count,
+      recordsTransformed: transformation.count,
+      recordsLoaded: loadResult.count,
+      errors: {
+        count: loadResult.errors.length,
+        messages: loadResult.errors,
+      },
+    };
+    
+    await sendMetrics(metrics);
+    return metrics;
+  } catch (error) {
+    const metrics: ETLJobMetrics = {
+      jobName,
+      startTime: new Date(startTime),
+      endTime: new Date(),
+      duration: Date.now() - startTime,
+      status: 'failed',
+      recordsExtracted: 0,
+      recordsTransformed: 0,
+      recordsLoaded: 0,
+      errors: {
+        count: 1,
+        messages: [error.message],
+      },
+    };
+    
+    await sendMetrics(metrics);
+    await alertOnCall(metrics);
+    throw error;
+  }
+}
+```
+
+---
+
+### 16.2 Data Migration
+
+#### Migration Strategy
+
+```typescript
+interface MigrationStrategy {
+  name: string;
+  description: string;
+  downtime: boolean;
+  risk: 'low' | 'medium' | 'high';
+  steps: string[];
+}
+
+const migrationStrategies: Record<string, MigrationStrategy> = {
+  copyTable: {
+    name: 'Copy Table',
+    description: 'Create new table, copy data, switch',
+    downtime: true,
+    risk: 'low',
+    steps: [
+      'Create new table with desired schema',
+      'Copy data from old table',
+      'Verify data integrity',
+      'Update application to use new table',
+      'Drop old table',
+    ],
+  },
+  
+  expandContract: {
+    name: 'Expand-Contract',
+    description: 'Add new column, migrate data, remove old',
+    downtime: false,
+    risk: 'medium',
+    steps: [
+      'Add new column to existing table',
+      'Update writes to populate both columns',
+      'Backfill new column with transformed data',
+      'Verify data consistency',
+      'Update reads to use new column',
+      'Remove old column',
+    ],
+  },
+  
+  parallelRun: {
+    name: 'Parallel Run',
+    description: 'Run both systems simultaneously',
+    downtime: false,
+    risk: 'low',
+    steps: [
+      'Implement new system alongside old',
+      'Write to both systems',
+      'Read from old system',
+      'Compare results in background',
+      'Switch reads to new system when stable',
+      'Decommission old system',
+    ],
+  },
+  
+  featureFlag: {
+    name: 'Feature Flag Migration',
+    description: 'Use feature flags for gradual rollout',
+    downtime: false,
+    risk: 'low',
+    steps: [
+      'Add feature flag to control migration',
+      'Implement new logic alongside old',
+      'Enable for small percentage',
+      'Monitor for errors',
+      'Increase percentage gradually',
+      'Remove old logic',
+      'Remove feature flag',
+    ],
+  },
+};
+```
+
+#### Migration Runbook
+
+```markdown
+# Data Migration Runbook: User Table Schema Update
+
+## Overview
+Migration of users table from schema v1 to v2
+
+## Pre-Migration Checklist
+- [ ] Backup created
+- [ ] Migration tested on staging
+- [ ] Rollback plan tested
+- [ ] Communication sent to team
+- [ ] Monitoring alerts configured
+
+## Migration Steps
+
+### Step 1: Create Backup
+```bash
+pg_dump -h database.biometrics.example.com \
+  -U biometrics \
+  -t users > backup_users_$(date +%Y%m%d).sql
+```
+
+### Step 2: Add New Columns
+```sql
+ALTER TABLE users 
+ADD COLUMN IF NOT EXISTS display_name VARCHAR(100),
+ADD COLUMN IF NOT EXISTS avatar_url TEXT,
+ADD COLUMN IF NOT EXISTS preferences JSONB DEFAULT '{}';
+```
+
+### Step 3: Backfill Data
+```sql
+UPDATE users 
+SET 
+  display_name = COALESCE(name, email),
+  avatar_url = CONCAT('https://api.dicebear.com/7.x/initials/svg?seed=', id),
+  preferences = COALESCE(preferences, '{}'::jsonb)
+WHERE display_name IS NULL;
+```
+
+### Step 4: Verify Data
+```sql
+SELECT 
+  COUNT(*) as total,
+  COUNT(display_name) as with_display_name,
+  COUNT(avatar_url) as with_avatar
+FROM users;
+```
+
+### Step 5: Switch Application
+- Deploy new application version
+- Monitor error rates
+
+### Step 6: Cleanup (after 7 days)
+```sql
+ALTER TABLE users DROP COLUMN IF EXISTS name;
+```
+
+## Rollback
+```bash
+psql -h database.biometrics.example.com \
+  -U biometrics < backup_users_20260215.sql
+```
+
+## Monitoring
+- Error rate dashboard: [Link]
+- Migration progress: [Link]
+- User reports: #biometrics-support
+```
+
+---
+
+### 16.3 Backup and Restore
+
+#### Backup Strategy
+
+```yaml
+# config/backup.yaml
+backups:
+  database:
+    - name: daily-full
+      schedule: "0 2 * * *"  # 2 AM daily
+      type: full
+      retention: 30 days
+      destination: s3://biometrics-backups/database/daily/
+      
+    - name: weekly-full
+      schedule: "0 3 * * 0"  # 3 AM Sunday
+      type: full
+      retention: 90 days
+      destination: s3://biometrics-backups/database/weekly/
+      
+    - name: incremental
+      schedule: "0 */4 * * *"  # Every 4 hours
+      type: incremental
+      retention: 7 days
+      destination: s3://biometrics-backups/database/incremental/
+      
+  files:
+    - name: user-uploads
+      schedule: "0 */6 * * *"  # Every 6 hours
+      source: /data/uploads
+      destination: s3://biometrics-backups/uploads/
+      retention: 30 days
+        
+  config:
+    - name: application-config
+      schedule: "0 * * * *"  # Hourly
+      source: /app/config
+      destination: s3://biometrics-backups/config/
+      retention: 90 days
+```
+
+#### Restore Procedures
+
+```bash
+#!/bin/bash
+# scripts/restore-database.sh
+
+set -e
+
+BACKUP_FILE=$1
+TARGET_DB=$2
+
+if [ -z "$BACKUP_FILE" ] || [ -z "$TARGET_DB" ]; then
+  echo "Usage: $0 <backup-file> <target-database>"
+  exit 1
+fi
+
+echo "🔄 Starting restore of $BACKUP_FILE to $TARGET_DB"
+
+# 1. Stop application
+echo "Stopping application..."
+kubectl scale deployment app --replicas=0 -n production
+
+# 2. Drop existing database
+echo "Dropping existing database..."
+psql -h $DB_HOST -U $DB_USER -c "DROP DATABASE IF EXISTS $TARGET_DB;"
+
+# 3. Create new database
+echo "Creating new database..."
+psql -h $DB_HOST -U $DB_USER -c "CREATE DATABASE $TARGET_DB;"
+
+# 4. Restore from backup
+echo "Restoring from backup..."
+pg_restore -h $DB_HOST -U $DB_USER -d $TARGET_DB \
+  --verbose \
+  --no-owner \
+  --no-privileges \
+  "$BACKUP_FILE"
+
+# 5. Verify restore
+echo "Verifying restore..."
+psql -h $DB_HOST -U $DB_USER -d $TARGET_DB -c "SELECT COUNT(*) FROM users;"
+
+# 6. Start application
+echo "Starting application..."
+kubectl scale deployment app --replicas=3 -n production
+
+# 7. Verify application
+echo "Verifying application health..."
+curl -f https://biometrics.example.com/health
+
+echo "✅ Restore complete!"
+```
+
+#### Backup Verification
+
+```typescript
+// lib/backup/verify.ts
+interface BackupVerification {
+  backupId: string;
+  timestamp: Date;
+  status: 'passed' | 'failed';
+  checks: {
+    name: string;
+    passed: boolean;
+    details: string;
+  }[];
+}
+
+async function verifyBackup(backupId: string): Promise<BackupVerification> {
+  const checks = [];
+  
+  // Check 1: File exists
+  const exists = await checkFileExists(backupId);
+  checks.push({
+    name: 'File exists',
+    passed: exists,
+    details: exists ? `File size: ${await getFileSize(backupId)}` : 'File not found',
+  });
+  
+  // Check 2: Checksum valid
+  const checksum = await verifyChecksum(backupId);
+  checks.push({
+    name: 'Checksum valid',
+    passed: checksum.valid,
+    details: checksum.details,
+  });
+  
+  // Check 3: Extractable
+  const extractable = await verifyExtractable(backupId);
+  checks.push({
+    name: 'Backup extractable',
+    passed: extractable,
+    details: extractable ? 'Backup can be extracted' : 'Extraction failed',
+  });
+  
+  // Check 4: Contains expected tables
+  const tables = await verifyTables(backupId);
+  checks.push({
+    name: 'Expected tables present',
+    passed: tables.valid,
+    details: tables.details,
+  });
+  
+  return {
+    backupId,
+    timestamp: new Date(),
+    status: checks.every(c => c.passed) ? 'passed' : 'failed',
+    checks,
+  };
+}
+```
+
+---
+
+### 16.4 Data Quality Checks
+
+#### DQ Check Framework
+
+```typescript
+// lib/data-quality/checks.ts
+interface DQCheck {
+  id: string;
+  name: string;
+  description: string;
+  severity: 'critical' | 'warning' | 'info';
+  query: string;
+  threshold: number;
+}
+
+const dataQualityChecks: DQCheck[] = [
+  {
+    id: 'dq-001',
+    name: 'Null Email Check',
+    description: 'Check for users with null email',
+    severity: 'critical',
+    query: `SELECT COUNT(*) FROM users WHERE email IS NULL`,
+    threshold: 0,
+  },
+  {
+    id: 'dq-002',
+    name: 'Duplicate Email Check',
+    description: 'Check for duplicate email addresses',
+    severity: 'critical',
+    query: `
+      SELECT COUNT(*) FROM (
+        SELECT email, COUNT(*) as cnt
+        FROM users
+        WHERE email IS NOT NULL
+        GROUP BY email
+        HAVING COUNT(*) > 1
+      ) duplicates
+    `,
+    threshold: 0,
+  },
+  {
+    id: 'dq-003',
+    name: 'Stale Data Check',
+    description: 'Check for users not updated in over 1 year',
+    severity: 'warning',
+    query: `
+      SELECT COUNT(*) FROM users 
+      WHERE updated_at < NOW() - INTERVAL '1 year'
+    `,
+    threshold: 1000,
+  },
+  {
+    id: 'dq-004',
+    name: 'Data Freshness',
+    description: 'Check last data load timestamp',
+    severity: 'info',
+    query: `SELECT MAX(updated_at) as last_update FROM users`,
+    threshold: 24, // hours
+  },
+];
+
+async function runDQCheck(check: DQCheck): Promise<DQCheckResult> {
+  const result = await db.query(check.query);
+  const value = result.rows[0]?.count || result.rows[0]?.last_update;
+  
+  return {
+    checkId: check.id,
+    passed: value <= check.threshold,
+    value,
+    threshold: check.threshold,
+    timestamp: new Date(),
+  };
+}
+```
+
+#### DQ Dashboard
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    DATA QUALITY DASHBOARD                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   Overall Score: ████████████████░░░  94%                              │
+│                                                                         │
+│   ┌───────────────────────────────────────────────────────────────┐    │
+│   │ Critical Issues (2)                                            │    │
+│   ├───────────────────────────────────────────────────────────────┤    │
+│   │ ❌ dq-001: Null Email Check    - 5 found (threshold: 0)       │    │
+│   │ ❌ dq-002: Duplicate Email     - 12 found (threshold: 0)      │    │
+│   └───────────────────────────────────────────────────────────────┘    │
+│                                                                         │
+│   ┌───────────────────────────────────────────────────────────────┐    │
+│   │ Warnings (1)                                                  │    │
+│   ├───────────────────────────────────────────────────────────────┤    │
+│   │ ⚠️ dq-003: Stale Data           - 850 found (threshold: 1000)│    │
+│   └───────────────────────────────────────────────────────────────┘    │
+│                                                                         │
+│   ┌───────────────────────────────────────────────────────────────┐    │
+│   │ Info (1)                                                      │    │
+│   ├───────────────────────────────────────────────────────────────┤    │
+│   │ ℹ️ dq-004: Data Freshness       - 2 hours ago                │    │
+│   └───────────────────────────────────────────────────────────────┘    │
+│                                                                         │
+│   Last Check: 2026-02-15 14:00 UTC                                    │
+│   Next Check: 2026-02-15 15:00 UTC                                    │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔒 17. Security Workflows
+
+### 17.1 Vulnerability Response
+
+#### Vulnerability Handling Process
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                  VULNERABILITY RESPONSE PROCESS                        │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   Vulnerability Discovered                                              │
+│             │                                                          │
+│             ▼                                                          │
+│   ┌─────────────────┐                                                  │
+│   │    Triage       │                                                  │
+│   │  (24 hours)     │                                                  │
+│   └────────┬────────┘                                                  │
+│            │                                                           │
+│            ▼                                                           │
+│   ┌─────────────────────────────────────┐                              │
+│   │        Severity Assessment          │                              │
+│   │                                     │                              │
+│   │   Critical (9-10) ───► Immediate    │                              │
+│   │   High (7-8)      ───► 7 days        │                              │
+│   │   Medium (4-6)    ───► 30 days       │                              │
+│   │   Low (1-3)       ───► 90 days       │                              │
+│   └─────────────────────────────────────┘                              │
+│            │                                                           │
+│            ▼                                                           │
+│   ┌─────────────────────────────────────┐                              │
+│   │           Fix Development           │                              │
+│   │                                     │                              │
+│   │   - Create fix                      │                              │
+│   │   - Write tests                     │                              │
+│   │   - Code review                     │                              │
+│   │   - Security review                 │                              │
+│   └─────────────────────────────────────┘                              │
+│            │                                                           │
+│            ▼                                                           │
+│   ┌─────────────────────────────────────┐                              │
+│   │           Deployment                 │                              │
+│   │                                     │                              │
+│   │   - Deploy to staging               │                              │
+│   │   - Run security tests              │                              │
+│   │   - Deploy to production            │                              │
+│   └─────────────────────────────────────┘                              │
+│            │                                                           │
+│            ▼                                                           │
+│   ┌─────────────────────────────────────┐                              │
+│   │           Post-Mortem                │                              │
+│   │                                     │                              │
+│   │   - Document vulnerability          │                              │
+│   │   - Review fix                      │                              │
+│   │   - Update dependencies             │                              │
+│   └─────────────────────────────────────┘                              │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Vulnerability Report Template
+
+```markdown
+# Vulnerability Report
+
+**ID:** VULN-2026-001
+**Date Reported:** 2026-02-15
+**Reported By:** [Name]
+**Status:** [Open/In Progress/Resolved]
+
+---
+
+## Summary
+
+Brief description of the vulnerability.
+
+---
+
+## Technical Details
+
+**Component:** [e.g., authentication-module]
+**CVSS Score:** [e.g., 8.5]
+**CVE ID:** [if applicable]
+
+**Vulnerability Type:**
+- [ ] SQL Injection
+- [ ] XSS
+- [ ] CSRF
+- [ ] Authentication Bypass
+- [ ] Authorization Bypass
+- [ ] Information Disclosure
+- [ ] Other: __________
+
+---
+
+## Reproduction Steps
+
+1. Step 1
+2. Step 2
+3. Step 3
+
+---
+
+## Impact
+
+What can an attacker do?
+
+---
+
+## Recommended Fix
+
+Suggested remediation approach.
+
+---
+
+## Timeline
+
+| Date | Action |
+|------|--------|
+| 2026-02-15 | Vulnerability reported |
+| 2026-02-16 | Triaged and assigned |
+| [Date] | Fix deployed |
+| [Date] | Verified fixed |
+```
+
+---
+
+### 17.2 Patch Management
+
+#### Patch Classification
+
+```typescript
+interface Patch {
+  id: string;
+  description: string;
+  severity: 'critical' | 'high' | 'medium' | 'low';
+  affectedSystems: string[];
+  requiresDowntime: boolean;
+  releaseDate: Date;
+  dependencies: string[];
+}
+
+const patchCategories = {
+  security: {
+    critical: {
+      responseTime: '24 hours',
+      deploymentWindow: 'Immediate',
+      testingRequired: 'Full regression',
+      approvalRequired: 'Security team',
+    },
+    high: {
+      responseTime: '7 days',
+      deploymentWindow: 'Next release',
+      testingRequired: 'Smoke tests',
+      approvalRequired: 'Team lead',
+    },
+  },
+  
+  bugfix: {
+    critical: {
+      responseTime: '48 hours',
+      deploymentWindow: 'Hotfix',
+      testingRequired: 'Targeted tests',
+      approvalRequired: 'Team lead',
+    },
+    normal: {
+      responseTime: 'Next sprint',
+      deploymentWindow: 'Release window',
+      testingRequired: 'Standard',
+      approvalRequired: 'None',
+    },
+  },
+};
+```
+
+#### Patch Deployment Process
+
+```bash
+#!/bin/bash
+# scripts/deploy-patch.sh
+
+PATCH_ID=$1
+VERSION=$2
+
+if [ -z "$PATCH_ID" ] || [ -z "$VERSION" ]; then
+  echo "Usage: $0 <patch-id> <version>"
+  exit 1
+fi
+
+echo "Deploying patch $PATCH_ID (v$VERSION)"
+
+# 1. Verify patch package
+echo "Verifying patch package..."
+./scripts/verify-patch.sh "$PATCH_ID"
+
+# 2. Run pre-deployment checks
+echo "Running pre-deployment checks..."
+./scripts/pre-deploy-checks.sh
+
+# 3. Create database backup
+echo "Creating backup..."
+./scripts/backup-database.sh
+
+# 4. Deploy patch
+echo "Deploying..."
+kubectl set image deployment/app app=biometrics-app:$VERSION
+
+# 5. Verify deployment
+echo "Verifying deployment..."
+./scripts/verify-deployment.sh
+
+# 6. Run smoke tests
+echo "Running smoke tests..."
+./scripts/smoke-tests.sh
+
+# 7. Monitor for 30 minutes
+echo "Monitoring for 30 minutes..."
+./scripts/monitor-deployment.sh 30
+
+echo "✅ Patch deployed successfully!"
+```
+
+---
+
+### 17.3 Key Rotation
+
+#### Rotation Schedule
+
+```typescript
+interface KeyRotationPolicy {
+  keyType: string;
+  rotationPeriod: number; // days
+  gracePeriod: number; // days
+  alertBeforeExpiry: number; // days
+}
+
+const keyRotationPolicies: KeyRotationPolicy[] = [
+  {
+    keyType: 'API Keys',
+    rotationPeriod: 90,
+    gracePeriod: 14,
+    alertBeforeExpiry: 7,
+  },
+  {
+    keyType: 'Database Passwords',
+    rotationPeriod: 180,
+    gracePeriod: 30,
+    alertBeforeExpiry: 14,
+  },
+  {
+    keyType: 'Encryption Keys',
+    rotationPeriod: 365,
+    gracePeriod: 30,
+    alertBeforeExpiry: 30,
+  },
+  {
+    keyType: 'OAuth Client Secrets',
+    rotationPeriod: 180,
+    gracePeriod: 14,
+    alertBeforeExpiry: 14,
+  },
+  {
+    keyType: 'JWT Signing Keys',
+    rotationPeriod: 90,
+    gracePeriod: 7,
+    alertBeforeExpiry: 7,
+  },
+];
+```
+
+#### Key Rotation Workflow
+
+```bash
+#!/bin/bash
+# scripts/rotate-api-key.sh
+
+KEY_NAME=$1
+
+if [ -z "$KEY_NAME" ]; then
+  echo "Usage: $0 <key-name>"
+  exit 1
+fi
+
+echo "Rotating API key: $KEY_NAME"
+
+# 1. Generate new key
+echo "Generating new key..."
+NEW_KEY=$(./scripts/generate-api-key.sh)
+echo "New key generated: ${NEW_KEY:0:8}..."
+
+# 2. Update secrets manager
+echo "Updating secrets manager..."
+aws secretsmanager put-secret-value \
+  --secret-id "$KEY_NAME" \
+  --secret-string "{\"key\": \"$NEW_KEY\"}" \
+  --version-staging-version-label AWSPENDING
+
+# 3. Update application config (without restart)
+kubectl set env deployment/app -n production \
+  API_KEY="$NEW_KEY"
+
+# 4. Verify new key works
+echo "Verifying new key..."
+./scripts/test-api-key.sh "$NEW_KEY"
+
+# 5. Finalize rotation
+echo "Finalizing rotation..."
+aws secretsmanager.update-secret-version-stage \
+  --secret-id "$KEY_NAME" \
+  --version-stage AWSPENDING \
+  --move-to-version-id $(aws secretsmanager list-secret-version-ids --secret-id "$KEY_NAME" | jq -r '.Versions[-1].VersionId')
+
+# 6. Revoke old key (after grace period)
+echo "Old key will be revoked in 14 days"
+echo "$KEY_NAME" >> keys_to_revoke.txt
+
+echo "✅ Key rotation complete!"
+```
+
+---
+
+### 17.4 Access Reviews
+
+#### Access Review Process
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      ACCESS REVIEW PROCESS                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   Quarterly Access Review                                               │
+│             │                                                          │
+│             ▼                                                          │
+│   ┌─────────────────┐                                                  │
+│   │ Generate Report │  (Who has access to what)                       │
+│   └────────┬────────┘                                                  │
+│            │                                                           │
+│            ▼                                                           │
+│   ┌─────────────────┐                                                  │
+│   │  Send to       │  (Team leads review their teams)                  │
+│   │  Team Leads    │                                                  │
+│   └────────┬────────┘                                                  │
+│            │                                                           │
+│            ▼                                                           │
+│   ┌─────────────────┐                                                  │
+│   │  Review Access │  (14 days to complete)                           │
+│   └────────┬────────┘                                                  │
+│            │                                                           │
+│      ┌─────┴─────┐                                                    │
+│      │            │                                                    │
+│      ▼            ▼                                                    │
+│   Approve     Request Removal                                          │
+│      │            │                                                    │
+│      │            ▼                                                    │
+│      │     ┌─────────────┐                                             │
+│      │     │  Remove     │                                             │
+│      │     │  Access     │                                             │
+│      │     └─────────────┘                                             │
+│      │            │                                                    │
+│      └──────┬─────┘                                                    │
+│             ▼                                                           │
+│   ┌─────────────────┐                                                  │
+│   │  Sign-off       │                                                  │
+│   │  & Document     │                                                  │
+│   └─────────────────┘                                                  │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Access Review Template
+
+```markdown
+# Quarterly Access Review - Q1 2026
+
+**Review Period:** January 1 - March 31, 2026
+**Due Date:** April 15, 2026
+**Reviewer:** [Team Lead Name]
+
+---
+
+## Systems Reviewed
+
+| System | Total Users | Active | Inactive | Removed |
+|--------|-------------|--------|----------|---------|
+| Production API | 25 | 20 | 3 | 2 |
+| Admin Dashboard | 15 | 12 | 2 | 1 |
+| Database | 8 | 6 | 1 | 1 |
+| CI/CD | 12 | 10 | 2 | 0 |
+
+---
+
+## Access Changes Needed
+
+| User | System | Action | Reason |
+|------|--------|--------|--------|
+| john@company.com | Production API | Remove | Left company |
+| jane@company.com | Admin | Remove | Role change |
+| new-hire@company.com | CI/CD | Add | New team member |
+
+---
+
+## Certification
+
+I certify that:
+- [ ] All access listed has been reviewed
+- [ ] Access is appropriate for job function
+- [ ] No unauthorized access exists
+- [ ] Access removals have been completed
+
+**Reviewer Signature:** _________________
+**Date:** _________________
+```
+
+---
+
+## 📊 18. Monitoring Workflows
+
+### 18.1 Alert Triage
+
+#### Alert Triage Process
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                       ALERT TRIAGE PROCESS                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   Alert Received                                                         │
+│        │                                                                │
+│        ▼                                                                │
+│   ┌─────────────────────┐                                              │
+│   │  Is this real?      │  (Automated classification)                  │
+│   └──────────┬──────────┘                                              │
+│              │                                                          │
+│       ┌──────┴──────┐                                                   │
+│       │             │                                                   │
+│       ▼             ▼                                                   │
+│    Yes/No        Yes/No                                                │
+│       │             │                                                   │
+│       ▼             ▼                                                   │
+│   ┌────────┐   ┌────────┐                                               │
+│   │  Investigate │  Dismiss    │                                       │
+│   │  + Fix   │   │ (no action)│                                       │
+│   └────────┘   └────────┘                                               │
+│       │                                                            │
+│       ▼                                                            │
+│   ┌─────────────────────────────────────┐                            │
+│   │         Resolution                   │                            │
+│   │                                     │                            │
+│   │  - Fix issue                         │                            │
+│   │  - Document in runbook              │                            │
+│   │  - Create alert if missing          │                            │
+│   └─────────────────────────────────────┘                            │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Alert Classification
+
+```typescript
+interface Alert {
+  id: string;
+  name: string;
+  severity: 'critical' | 'warning' | 'info';
+  source: string;
+  condition: string;
+  for: number; // minutes
+}
+
+const alertRules: Alert[] = [
+  {
+    id: 'alert-001',
+    name: 'High Error Rate',
+    severity: 'critical',
+    source: 'prometheus',
+    condition: 'rate(http_requests_total{status=~"5.."}[5m]) > 0.05',
+    for: 5,
+  },
+  {
+    id: 'alert-002',
+    name: 'High Latency P99',
+    severity: 'warning',
+    source: 'prometheus',
+    condition: 'histogram_quantile(0.99, http_request_duration_seconds_bucket) > 2',
+    for: 10,
+  },
+  {
+    id: 'alert-003',
+    name: 'Database Connection Pool Exhausted',
+    severity: 'critical',
+    source: 'prometheus',
+    condition: 'pg_stat_activity_count > 80',
+    for: 2,
+  },
+  {
+    id: 'alert-004',
+    name: 'Disk Space Low',
+    severity: 'warning',
+    source: 'prometheus',
+    condition: '(disk_free_bytes / disk_total_bytes) < 0.1',
+    for: 30,
+  },
+  {
+    id: 'alert-005',
+    name: 'Memory Usage High',
+    severity: 'warning',
+    source: 'prometheus',
+    condition: '(memory_used_bytes / memory_total_bytes) > 0.85',
+    for: 15,
+  },
+];
+```
+
+#### Triage Checklist
+
+```markdown
+## Alert Triage Checklist
+
+### Initial Assessment
+- [ ] Alert acknowledged
+- [ ] Severity confirmed
+- [ ] Impact understood
+
+### Investigation
+- [ ] Checked Grafana dashboard
+- [ ] Reviewed recent deployments
+- [ ] Checked related alerts
+- [ ] Reviewed error logs
+
+### Root Cause
+- [ ] Root cause identified
+- [ ] Related incidents found
+
+### Resolution
+- [ ] Fix applied
+- [ ] Verification successful
+- [ ] Post-incident actions documented
+
+### Follow-up
+- [ ] Runbook updated (if needed)
+- [ ] Alert tuned (if needed)
+- [ ] Team notified (if needed)
+```
+
+---
+
+### 18.2 Dashboard Reviews
+
+#### Daily Dashboard Review
+
+```markdown
+# Daily Dashboard Review
+
+**Date:** 2026-02-15
+**Reviewer:** [Name]
+
+---
+
+## Key Metrics
+
+| Metric | Current | Target | Status |
+|--------|---------|--------|--------|
+| Uptime | 99.95% | ≥99.9% | ✅ |
+| Error Rate | 0.3% | <1% | ✅ |
+| P50 Latency | 120ms | <200ms | ✅ |
+| P99 Latency | 850ms | <1s | ✅ |
+| CPU Usage | 45% | <80% | ✅ |
+| Memory Usage | 62% | <85% | ✅ |
+
+---
+
+## Services Status
+
+| Service | Status | Notes |
+|---------|--------|-------|
+| API | ✅ Healthy | |
+| Web | ✅ Healthy | |
+| Database | ✅ Healthy | |
+| Cache | ✅ Healthy | |
+| Queue | ✅ Healthy | |
+
+---
+
+## Alerts Triggered (24h)
+
+| Alert | Count | Resolved |
+|-------|-------|----------|
+| High Error Rate | 2 | 2 |
+| High Latency | 1 | 1 |
+| Disk Space | 0 | - |
+
+---
+
+## Notable Events
+
+- 10:00 - Deployment v2.1.0 (success)
+- 14:30 - Database maintenance (no impact)
+
+---
+
+## Action Items
+
+| Item | Owner | Due |
+|------|-------|-----|
+| None | | |
+
+---
+
+## Notes
+
+[Additional observations or concerns]
+```
+
+---
+
+### 18.3 Capacity Planning
+
+#### Capacity Metrics
+
+```typescript
+interface CapacityMetrics {
+  service: string;
+  currentUsage: {
+    cpu: number;      // percentage
+    memory: number;   // percentage
+    storage: number;  // percentage
+    requests: number; // per second
+  };
+  capacity: {
+    cpu: number;
+    memory: number;
+    storage: number;
+    requests: number;
+  };
+  trends: {
+    cpuGrowth: number;      // % per month
+    memoryGrowth: number;
+    requestGrowth: number;
+  };
+  forecast: {
+    cpuExhaustion: Date;
+    memoryExhaustion: Date;
+  };
+}
+
+const capacityThresholds = {
+  warning: 75,  // Trigger warning at 75%
+  critical: 90, // Trigger critical at 90%
+};
+
+function calculateCapacityForecast(metrics: CapacityMetrics): CapacityForecast {
+  const monthsUntilCPU = Math.log(capacityThresholds.critical / metrics.currentUsage.cpu) 
+    / Math.log(1 + metrics.trends.cpuGrowth / 100);
+  
+  const cpuExhaustionDate = new Date();
+  cpuExhaustionDate.setMonth(cpuExhaustionDate.getMonth() + monthsUntilCPU);
+  
+  return {
+    cpuExhaustion: cpuExhaustionDate,
+    recommendedAction: monthsUntilCPU < 3 ? 'scale_up' : 'monitor',
+  };
+}
+```
+
+#### Scaling Recommendations
+
+```markdown
+# Capacity Planning Report - February 2026
+
+## Current Capacity
+
+| Service | CPU | Memory | Storage | Requests/s |
+|---------|-----|--------|---------|------------|
+| API | 45% | 62% | 38% | 1,200 |
+| Web | 52% | 58% | 45% | 800 |
+| Database | 38% | 71% | 55% | 500 |
+
+## Growth Trends
+
+- API Requests: +15% month-over-month
+- Storage: +8% month-over-month
+- Database Queries: +12% month-over-month
+
+## Forecast
+
+| Resource | Current Peak | 3-Month Forecast | 6-Month Forecast |
+|----------|--------------|-------------------|------------------|
+| CPU | 65% | 78% | 95% |
+| Memory | 72% | 85% | 102% |
+| Storage | 55% | 65% | 80% |
+
+## Recommendations
+
+### Immediate (This Month)
+- [ ] Increase database connection pool from 100 to 150
+
+### Short-term (3 Months)
+- [ ] Scale API pods from 10 to 15
+- [ ] Upgrade database to larger instance
+
+### Long-term (6 Months)
+- [ ] Implement read replicas for database
+- [ ] Add CDN for static assets
+- [ ] Consider database sharding
+
+## Budget Impact
+
+Estimated monthly cost increase: €500
+```
+
+---
+
+### 18.4 Performance Tuning
+
+#### Performance Optimization Process
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│               PERFORMANCE OPTIMIZATION PROCESS                           │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│   Performance Issue Identified                                          │
+│             │                                                          │
+│             ▼                                                          │
+│   ┌─────────────────┐                                                  │
+│   │  Baseline       │  (Establish current performance)                │
+│   │  Measurement    │                                                  │
+│   └────────┬────────┘                                                  │
+│            │                                                           │
+│            ▼                                                           │
+│   ┌─────────────────┐                                                  │
+│   │  Analysis       │  (Identify bottlenecks)                         │
+│   │                 │                                                  │
+│   │  - CPU Profile  │                                                  │
+│   │  - Memory       │                                                  │
+│   │  - Database    │                                                  │
+│   │  - Network     │                                                  │
+│   └────────┬────────┘                                                  │
+│            │                                                           │
+│            ▼                                                           │
+│   ┌─────────────────┐                                                  │
+│   │  Identify       │  (Root cause)                                   │
+│   │  Root Cause     │                                                  │
+│   └────────┬────────┘                                                  │
+│            │                                                           │
+│            ▼                                                           │
+│   ┌─────────────────┐                                                  │
+│   │  Implement      │  (Fix)                                          │
+│   │  Fix            │                                                  │
+│   └────────┬────────┘                                                  │
+│            │                                                           │
+│            ▼                                                          │
+│   ┌─────────────────┐                                                  │
+│   │  Verify         │  (Compare to baseline)                          │
+│   │  Improvement    │                                                  │
+│   └────────┬────────┘                                                  │
+│            │                                                           │
+│            ▼                                                           │
+│   ┌─────────────────┐                                                  │
+│   │  Document       │  (Add to runbook)                              │
+│   │  & Monitor      │                                                  │
+│   └─────────────────┘                                                  │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Common Optimization Techniques
+
+```typescript
+const performanceOptimizations = {
+  database: [
+    {
+      issue: 'N+1 Query Problem',
+      detection: 'Many small queries in loop',
+      solution: 'Use eager loading or batch queries',
+      example: `
+        // Before
+        for (const user of users) {
+          const posts = await db.query('SELECT * FROM posts WHERE user_id = ?', user.id);
+        }
+        
+        // After
+        const posts = await db.query('SELECT * FROM posts WHERE user_id IN (?)', users.map(u => u.id));
+        const postsByUser = groupBy(posts, 'user_id');
+      `,
+    },
+    {
+      issue: 'Missing Index',
+      detection: 'Slow queries on large tables',
+      solution: 'Add appropriate index',
+      example: `
+        CREATE INDEX idx_users_email ON users(email);
+      `,
+    },
+    {
+      issue: 'Connection Pool Exhaustion',
+      detection: 'Connection pool errors under load',
+      solution: 'Optimize query performance, increase pool size',
+    },
+  ],
+  
+  caching: [
+    {
+      issue: 'Repeated Expensive Computations',
+      detection: 'Same calculation done multiple times',
+      solution: 'Cache results with TTL',
+    },
+    {
+      issue: 'Cache Miss Rate High',
+      detection: 'Low hit rate on cache',
+      solution: 'Review cache key strategy, increase TTL',
+    },
+  ],
+  
+  code: [
+    {
+      issue: 'Synchronous Operations Blocking',
+      detection: 'High latency under load',
+      solution: 'Use async/await, web workers',
+    },
+    {
+      issue: 'Large Bundle Size',
+      detection: 'Slow initial page load',
+      solution: 'Code splitting, tree shaking, lazy loading',
+    },
+  ],
+};
+```
+
+#### Performance Benchmark Template
+
+```markdown
+# Performance Benchmark Report
+
+**Date:** 2026-02-15
+**Test:** API Response Time Optimization
+**Objective:** Reduce P99 latency by 50%
+
+---
+
+## Baseline
+
+| Metric | Before | Target | After | Improvement |
+|--------|--------|--------|-------|-------------|
+| P50 | 120ms | 80ms | 75ms | 37.5% |
+| P95 | 350ms | 200ms | 180ms | 48.6% |
+| P99 | 850ms | 400ms | 380ms | 55.3% |
+| Error Rate | 0.3% | <0.5% | 0.2% | 33% |
+
+---
+
+## Changes Made
+
+1. Added Redis caching for user profiles (TTL: 5 min)
+2. Optimized database query with composite index
+3. Implemented connection pooling
+
+---
+
+## Test Environment
+
+- Load: 1000 RPS for 10 minutes
+- Region: eu-central-1
+- Instance: production-sized
+
+---
+
+## Conclusion
+
+Target achieved. P99 reduced by 55%, well below 400ms target.
+```
+
+---
+
 ## 📚 Referenzen
 
 - Architecture: `ARCHITECTURE.md`

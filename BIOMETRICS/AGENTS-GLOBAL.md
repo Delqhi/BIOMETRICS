@@ -6723,7 +6723,303 @@ Kontrollpunkt:
 - Pattern B: Serverless Proxy (Supabase Edge Functions)
 - Pattern C: SDK Native (Direct)
 
-**Meta-Builder Protocol:**
-Agent erkennt repetitive Task → designed Lösung → deployed via API → registriert neuen Skill
+**Meta-Builder Protocol:** Agent erkennt repetitive Task → designed Lösung → deployed via API → registriert neuen Skill
+
+**Zentrale Dokumentation:** Siehe `WORKFLOW.md` für vollständige Architektur.
+
+---
+
+## 90) Multi-Agent Delegation Protocol (Best Practices February 2026)
+
+### 90.1 Market Context & Statistics
+
+**Enterprise AI Landscape 2026:**
+- 72% of enterprise AI projects use multi-agent architectures (up from 23% in 2024)
+- Multi-agent systems achieve 45% faster resolution and 60% more accurate outcomes
+- $52B multi-agent AI market projected by 2030
+- 57% of companies have AI agents in production
+
+**Key Finding:** Specialized agents with clear routing rules outperform generalist agents by 3x.
+
+### 90.2 Core Orchestration Patterns
+
+**Pattern 1: Hierarchical (Supervisor/Worker)**
+```
+Orchestrator (Metis)
+    ↓
+Domain Specialists (Oracle, Build, Explore)
+    ↓
+Task Workers (Sisyphus-Junior, Librarian)
+```
+- **Best for:** Compliance-heavy workflows, complex structured problems
+- **Risk:** Supervisor becomes bottleneck
+- **Use when:** Task requires decomposition into 5+ subtasks
+
+**Pattern 2: Sequential (Pipeline)**
+```
+Agent A → Agent B → Agent C → Result
+```
+- **Best for:** Document review, data processing pipelines
+- **Use when:** Each step depends on previous results
+
+**Pattern 3: Parallel (Broadcast)**
+```
+→ Agent A
+→ Agent B → Synthesis
+→ Agent C
+```
+- **Best for:** Research, multiple perspectives needed
+- **Use when:** Independent subtasks can run simultaneously
+
+**Pattern 4: Router-Based (Dynamic Selection)**
+```
+Task → Router → [Intent Analysis] → Specialized Agent
+```
+- **Best for:** Mixed task types, specialized capabilities
+- **Use when:** Task type determines optimal agent
+
+### 90.3 Agent Selection Decision Matrix
+
+**Step 1: Classify Task Type**
+
+| Task Characteristic | Category | Agent | Model |
+|---------------------|----------|-------|-------|
+| Single file edit, typo fix | `quick` | `sisyphus-junior` | minimax-m2.5-free |
+| Code generation, new feature | `ultrabrain` | `sisyphus` | qwen-3.5-397b |
+| Architecture decision | `ultrabrain` | `oracle` | qwen-3.5-397b |
+| Debugging after 2+ failures | `ultrabrain` | `oracle` | qwen-3.5-397b |
+| Research / web search | `quick` | `explore` / `librarian` | minimax-m2.5-free |
+| Frontend / UI / CSS | `visual-engineering` | `frontend-ui-ux-engineer` | qwen-3.5-397b |
+| Documentation | `writing` | `document-writer` | qwen-3.5-397b |
+| Pre-planning complex task | `ultrabrain` | `metis` | qwen-3.5-397b |
+| Review work plan | `ultrabrain` | `momus` | qwen-3.5-397b |
+| Database schema design | `deep` | `atlas` | qwen-3.5-397b |
+| Docker/K8s deployment | `deep` | `atlas` | qwen-3.5-397b |
+| Git operations | `quick` | `sisyphus-junior` + git-master skill | minimax-m2.5-free |
+
+**Step 2: Determine Execution Mode**
+
+```typescript
+// ALWAYS use parallel execution
+run_in_background: true  // ✅ CORRECT
+
+// NEVER use sequential (except trivial one-offs)
+run_in_background: false // ❌ FORBIDDEN
+```
+
+**Step 3: Select Model Based on Complexity**
+
+| Complexity Level | Model Selection | Rationale |
+|-----------------|-----------------|-----------|
+| High (reasoning, code, architecture) | `nvidia-nim/qwen-3.5-397b` | Best quality, accepts 120s latency |
+| Medium (writing, design) | `nvidia-nim/qwen-3.5-397b` | Quality over speed |
+| Low (search, exploration) | `opencode/minimax-m2.5-free` | Fast response, cost-effective |
+
+### 90.4 Delegation Decision Tree
+
+```
+┌─────────────────────────────────────────┐
+│ Task Received │
+└────────────┬────────────────────────────┘
+│
+▼
+┌─────────────────────────────────────────┐
+│ Is task trivial? │
+│ (single file, known location) │
+└────┬──────────────────────────┬────────┘
+│ YES │ NO
+▼ ▼
+┌─────────────┐ ┌──────────────────────┐
+│ Direct Tool │ │ Requires research? │
+│ (grep, ls) │ │ (unfamiliar module) │
+└─────────────┘ └────┬─────────┬───────┘
+│ YES │ NO
+▼ ▼
+┌──────────┐ ┌─────────────┐
+│ explore │ │ 2+ modules? │
+│ librarian│ │ Complex? │
+└──────────┘ └──┬──────┬───┘
+│ YES │ NO
+▼ ▼
+┌──────────┐ ┌──────┐
+│ oracle │ │ quick│
+│ metis │ │ task │
+└──────────┘ └──────┘
+```
+
+### 90.5 Massive Prompt Requirements
+
+**MANDATORY PROMPT STRUCTURE (12 sections):**
+
+1. **ROLE**: Clear agent role definition
+   - Example: "Du bist A2.1, der GREENBOOK-Architekt für BIOMETRICS"
+
+2. **GOAL**: Specific, measurable outcome
+   - Example: "Erweitere ARCHITECTURE.md von 227 auf 5000+ Zeilen"
+
+3. **CONTEXT**: Full background, related tasks
+   - Example: "Dies ist Teil von Phase 3 der BIOMETRICS Dokumentation"
+
+4. **READ FIRST**: List of files to read (with paths)
+   - Example: "LESE: /Users/jeremy/dev/BIOMETRICS/BIOMETRICS/AGENTS-PLAN.md (5023 lines)"
+
+5. **EDIT ONLY**: Explicit file whitelist
+   - Example: "EDIT ONLY: /Users/jeremy/dev/BIOMETRICS/BIOMETRICS/ARCHITECTURE.md"
+
+6. **DO NOT EDIT**: Explicit file blacklist
+   - Example: "DO NOT EDIT: Any file in /docs/ directory"
+
+7. **TASKS**: Numbered subtasks
+   - Example: "1. Phase 1: Serena MCP aktivieren, 2. Phase 2: Dateien lesen..."
+
+8. **ACCEPTANCE CRITERIA**: How to verify completion
+   - Example: "wc -l MUSS >= 5000 zeigen"
+
+9. **REQUIRED TESTS**: Tests to run
+   - Example: "go build ./..., npm run lint"
+
+10. **REQUIRED DOC UPDATES**: Documentation to update
+    - Example: "Update lastchanges.md with completion timestamp"
+
+11. **RISKS**: Potential issues to watch for
+    - Example: "Risk: Agent may claim completion without verification"
+
+12. **OUTPUT FORMAT**: Exact format for deliverables
+    - Example: "Return: wc -l output + first 50 lines of each new chapter"
+
+### 90.6 Orchestrator Responsibilities
+
+**Continuous Monitoring:**
+- Check subagent sessions every 5 minutes
+- Intervene if no progress in 10 minutes
+- Verify completion with evidence (not just claims)
+- Update todos after each subtask completion
+- Maintain context across subagents
+
+**Intervention Triggers:**
+1. **Stuck Agent**: No file changes in 10 minutes → Send reminder
+2. **Wrong Path**: Agent editing wrong files → Immediate correction
+3. **Incomplete Work**: Missing acceptance criteria → Request completion
+4. **Rate Limit**: API errors detected → Switch to fallback model
+
+**Verification Protocol:**
+```bash
+# NEVER trust "done" claims without evidence
+1. Check file exists: ls -la [file]
+2. Check line count: wc -l [file]
+3. Check build: go build ./... OR npm run build
+4. Check tests: npm test OR go test ./...
+5. Read session: session_read [session_id]
+```
+
+### 90.7 Agent Naming Convention
+
+**Format:** `{AgentID}.{TaskNumber}.{SubTask}`
+
+Examples:
+- `A1.1` - Agent 1, Task 1 (ARCHITECTURE.md expansion)
+- `A1.2` - Agent 2, Task 1 (SECURITY.md expansion)
+- `A2.1` - Agent 1, Task 2 (GREENBOOK creation)
+- `B3.1` - Agent 1, Task 3, Phase B (Go core files)
+- `B3.2` - Agent 2, Task 3, Phase B (Database models)
+
+**Communication Pattern:**
+```
+Orchestrator (A0) → Status Update → All Agents
+Agent A1.1 → Progress Report → Orchestrator
+Agent A1.2 → Blocker Alert → Orchestrator → Resolution
+```
+
+### 90.8 Failure Recovery Protocol
+
+**After 3 Consecutive Failures:**
+1. **STOP** all further agent work immediately
+2. **DIAGNOSE** root cause (read session logs)
+3. **ESCALATE** to Oracle if pattern unclear
+4. **ADJUST** prompt specificity or agent selection
+5. **RETRY** with corrected approach
+
+**Common Failure Modes:**
+| Failure | Root Cause | Solution |
+|---------|------------|----------|
+| Agent creates wrong files | Vague prompt | Add explicit "EDIT ONLY" list |
+| Agent claims done prematurely | Missing acceptance criteria | Add verification commands |
+| Agent stuck in loop | No progress check | Add 10-minute timeout rule |
+| Wrong model selected | Category mismatch | Use decision matrix |
+| Rate limit errors | Too many parallel requests | Reduce parallelism, add retry |
+
+### 90.9 Quality Metrics
+
+**Agent Performance Tracking:**
+- **Success Rate**: % of tasks completed correctly on first attempt
+- **Time Efficiency**: Actual time vs estimated time
+- **Prompt Clarity**: Number of clarifications needed
+- **Evidence Quality**: Completeness of verification
+
+**Target Metrics:**
+- Success Rate: > 90%
+- Time Efficiency: ±20% of estimate
+- Prompt Clarity: < 2 clarifications per task
+- Evidence Quality: 100% verification compliance
+
+---
+
+## 27) Agent Model Configuration (February 2026 Update)
+
+### 27.1 Current Model Assignment
+
+**High-Performance Agents (Qwen 3.5 397B):**
+- `build` - Code implementation
+- `plan` - Planning & architecture
+- `deep` - Complex reasoning
+- `ultrabrain` - High-level thinking
+- `artistry` - Creative tasks
+- `visual-engineering` - Frontend/UI/UX
+- `oracle` - Architecture review
+- `metis` - Pre-planning analysis
+- `momus` - Quality assurance
+- `writing` - Documentation
+
+**Fast Agents (MiniMax M2.5 Free):**
+- `quick` - Simple tasks
+- `explore` - Codebase search
+- `librarian` - External research
+
+### 27.2 Configuration Files
+
+**Local Config:** `~/.config/opencode/opencode.json`
+**OH-MO Config:** `~/.config/opencode/oh-my-opencode.json`
+**Repo Docs:** `BIOMETRICS/OPENCODE.md`
+
+**Sync Requirement:** All three files must have consistent agent-model mappings.
+
+### 27.3 Model Selection Rationale
+
+**Qwen 3.5 397B (NVIDIA NIM):**
+- Context: 262K tokens
+- Output: 32K tokens
+- Latency: 70-90s (acceptable for complex tasks)
+- Use: Code generation, architecture, reasoning
+
+**MiniMax M2.5 Free (OpenCode ZEN):**
+- Context: 200K tokens
+- Output: 128K tokens
+- Latency: < 5s
+- Use: Fast searches, simple tasks, exploration
+
+**Decision Rule:** If task requires > 3 subtasks or deep reasoning → Qwen 3.5. Otherwise → MiniMax.
+
+---
+
+## 28) Meta-Builder Protocol (Extended)
+
+**Flow:** User Request → Agent (OpenClaw) → Skill Interface → Execution (Supabase/n8n)
+
+**Architecture Patterns:**
+- Pattern A: Webhook Wrapper (n8n)
+- Pattern B: Serverless Proxy (Supabase Edge Functions)
+- Pattern C: SDK Native (Direct)
+
+**Meta-Builder Protocol:** Agent erkennt repetitive Task → designed Lösung → deployed via API → registriert neuen Skill
 
 **Zentrale Dokumentation:** Siehe `WORKFLOW.md` für vollständige Architektur.

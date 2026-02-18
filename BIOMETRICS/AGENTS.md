@@ -73,6 +73,40 @@ Du musst NotebookLM vollständig über NLM-CLI nutzen, den passenden Vorlagenpro
 - P1: innerhalb der Session
 - P2: in nächsten 20er-Loop einplanen
 
+## Qwen 3.5 Skills
+
+Dieses Projekt nutzt Qwen 3.5 (NVIDIA NIM) für spezialisierte KI-Aufgaben. Die folgenden Skills sind verfügbar:
+
+### qwen_vision_analysis
+Bildanalyse und visuelle Erkennung für Produktbilder, Grafiken und Diagramme.
+- **Use Case:** Produktbild-Qualitätsprüfung, Layout-Analyse
+- **Input:** Bilder (PNG, JPG, WebP)
+- **Output:** Strukturierte Analyse mit Tags und Metriken
+
+### qwen_code_generation
+Full-Stack Code-Generierung mit Next.js, Go und Supabase.
+- **Use Case:** Komponenten, API-Routen, Datenbank-Schema
+- **Input:** Natürliche Sprache oder Spezifikation
+- **Output:** Fertiger, getesteter Code
+
+### qwen_document_ocr
+Texterkennung und Dokumentanalyse aus gescannten Dokumenten und PDFs.
+- **Use Case:** Rechnungsverarbeitung, Vertragsanalyse
+- **Input:** PDF, Bilder mit Text
+- **Output:** Extrahierter Text, Metadaten, Struktur
+
+### qwen_video_understanding
+Video-Inhaltsanalyse für帧-Extraction und Szenenbeschreibung.
+- **Use Case:** Video-Vorschau, Content-Indexierung
+- **Input:** Videos (MP4, MOV, WebM)
+- **Output:** Szenenbeschreibung, Key-Frames, Metadaten
+
+### qwen_conversation
+Natürliche Konversations-KI für Kundenservice und Chat-Interaktionen.
+- **Use Case:** Support-Chat, Produktberatung
+- **Input:** Benutzer-Nachrichten, Kontext
+- **Output:** Kontextbezogene Antworten
+
 ## Abnahme-Check AGENTS
 1. Regeln klar und widerspruchsfrei
 2. NLM-CLI Pflicht enthalten

@@ -28,6 +28,7 @@ Universeller Integrationsrahmen für externe Systeme und interne Automationspfad
 | n8n | Workflow Automation | bidirektional | service auth | mittel | {OWNER_ROLE} |
 | NLM-CLI | Content-Erzeugung | outbound | local policy | hoch | {OWNER_ROLE} |
 | Cloudflare | Netz-/Edge Layer | ingress | platform auth | hoch | {OWNER_ROLE} |
+| NVIDIA NIM | KI-Provider | outbound | API Key | hoch | {OWNER_ROLE} |
 
 ## 1) OpenClaw (Template)
 - Zweck: {OPENCLAW_PURPOSE}

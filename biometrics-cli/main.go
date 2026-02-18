@@ -97,6 +97,7 @@ func initialModel() Model {
 		{Title: "Installing NLM CLI", Status: "pending"},
 		{Title: "Installing OpenCode", Status: "pending"},
 		{Title: "Installing OpenClaw", Status: "pending"},
+		{Title: "Installing Serena MCP (Orchestration)", Status: "pending"},
 		{Title: "Configuring WhatsApp (QR Code)", Status: "pending"},
 		{Title: "Configuring Telegram", Status: "pending"},
 		{Title: "Installing skills (ordercli, github, gitlab)", Status: "pending"},
@@ -205,7 +206,7 @@ func (m Model) View() string {
 	b.WriteString("\n")
 	b.WriteString(titleStyle.Render(" BIOMETRICS ONBOARD "))
 	b.WriteString("\n")
-	b.WriteString(subtitleStyle.Render(" Professional Setup - OpenCode + OpenClaw + Skills "))
+	b.WriteString(subtitleStyle.Render(" Professional Setup - OpenCode + OpenClaw + Serena MCP "))
 	b.WriteString("\n")
 
 	for i, step := range m.steps {
@@ -289,10 +290,12 @@ func nextStep(index int) tea.Cmd {
 	case 9:
 		return installOpenClaw
 	case 10:
-		return configureWhatsApp
+		return installSerenaMCP
 	case 11:
-		return configureTelegram
+		return configureWhatsApp
 	case 12:
+		return configureTelegram
+	case 13:
 		return installSkills
 	default:
 		return nil
@@ -400,6 +403,18 @@ func installOpenClaw() tea.Msg {
 	return statusMsg{Index: 9, Status: "success", Message: "installed"}
 }
 
+func installSerenaMCP() tea.Msg {
+	// Install Serena MCP for OpenCode
+	fmt.Println("\n🔧 Installing Serena MCP for OpenCode...")
+	runCommand("opencode", "mcp", "add", "serena")
+	
+	// Install Serena skill for OpenClaw
+	fmt.Println("🔧 Installing Serena skill for OpenClaw...")
+	runCommand("openclaw", "skills", "install", "openclaw/skills--serena")
+	
+	return statusMsg{Index: 10, Status: "success", Message: "Serena MCP installed"}
+}
+
 func configureWhatsApp() tea.Msg {
 	fmt.Println("\n📱 WhatsApp QR Code Pairing")
 	fmt.Println("OpenClaw will now show a QR code...")
@@ -411,10 +426,10 @@ func configureWhatsApp() tea.Msg {
 	cmd.Stdin = os.Stdin
 	
 	if err := cmd.Run(); err != nil {
-		return statusMsg{Index: 10, Status: "error", Message: err.Error()}
+		return statusMsg{Index: 11, Status: "error", Message: err.Error()}
 	}
 	
-	return statusMsg{Index: 10, Status: "success", Message: "WhatsApp connected"}
+	return statusMsg{Index: 11, Status: "success", Message: "WhatsApp connected"}
 }
 
 func configureTelegram() tea.Msg {
@@ -427,10 +442,10 @@ func configureTelegram() tea.Msg {
 	cmd.Stdin = os.Stdin
 	
 	if err := cmd.Run(); err != nil {
-		return statusMsg{Index: 11, Status: "error", Message: err.Error()}
+		return statusMsg{Index: 12, Status: "error", Message: err.Error()}
 	}
 	
-	return statusMsg{Index: 11, Status: "success", Message: "Telegram connected"}
+	return statusMsg{Index: 12, Status: "success", Message: "Telegram connected"}
 }
 
 func installSkills() tea.Msg {
@@ -444,7 +459,7 @@ func installSkills() tea.Msg {
 		runCommand("openclaw", "skills", "install", skill)
 	}
 	
-	return statusMsg{Index: 12, Status: "success", Message: "skills installed"}
+	return statusMsg{Index: 13, Status: "success", Message: "skills installed"}
 }
 
 func runCommand(cmd string, args ...string) (string, error) {

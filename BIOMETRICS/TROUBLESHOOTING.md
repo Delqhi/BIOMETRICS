@@ -123,6 +123,100 @@ Lösung:
 Verifikation:
 - 1:1 Mapping konsistent
 
+### Fall 06: Qwen 3.5 API Errors
+Symptom:
+- HTTP 429 Too Many Requests
+- HTTP 401 Unauthorized
+- HTTP 500 Internal Server Error
+
+Wahrscheinliche Ursachen:
+- Rate Limit überschritten (40 RPM Free Tier)
+- Ungültiger API Key
+- NVIDIA NIM Service outage
+
+Diagnose:
+- `curl -H "Authorization: Bearer $NVIDIA_API_KEY" https://integrate.api.nvidia.com/v1/models`
+- NVIDIA API Status prüfen
+
+Lösung:
+1. Bei HTTP 429: 60 Sekunden warten + Fallback-Modelle nutzen
+2. API Key verifizieren: `echo $NVIDIA_API_KEY`
+3. Fallback-Chain: qwen/qwen3.5-397b-a17b → qwen2.5-coder-32b
+4. Timeout in Config auf 120000ms erhöhen
+
+Verifikation:
+- API Call erfolgreich
+- Modell antwortet
+
+### Fall 07: Qwen 3.5 Timeout Issues
+Symptom:
+- Request hängt > 60 Sekunden
+- Modell antwortet nicht
+
+Wahrscheinliche Ursachen:
+- Qwen 3.5 397B hat extreme Latenz (70-90s)
+- Netzwerkprobleme
+- Modell overloaded
+
+Diagnose:
+- Timeout-Messung durchführen
+- Ping zu NVIDIA API
+
+Lösung:
+1. Timeout auf 120000ms (120s) setzen (PFLICHT für Qwen 3.5!)
+2. Fallback zu schnelleren Modellen: qwen2.5-coder-7b
+3. Request-Queue reduzieren
+4. Streaming deaktivieren (nicht supported bei NVIDIA NIM)
+
+Verifikation:
+- Request innerhalb von 120s abgeschlossen
+- Keine Timeout-Fehler mehr
+
+### Fall 08: Qwen 3.5 Model Loading Problems
+Symptom:
+- Modell kann nicht geladen werden
+- "Model not found" Fehler
+
+Wahrscheinliche Ursachen:
+- Falsche Modell-ID verwendet
+- Modell nicht verfügbar im NVIDIA NIM
+
+Diagnose:
+- Verfügbare Modelle listen: `curl https://integrate.api.nvidia.com/v1/models`
+
+Lösung:
+1. Korrekte Modell-ID verwenden: `qwen/qwen3.5-397b-a17b`
+2. NICHT `qwen2.5` verwenden (falsches Modell!)
+3. Provider-Konfiguration prüfen
+4. Model-Limit in opencode.json verifizieren
+
+Verifikation:
+- Modell geladen und antwortfähig
+
+### Fall 09: Qwen 3.5 Context Window Exceeded
+Symptom:
+- "context_length_exceeded" Fehler
+- Modell schneidet Antworten ab
+
+Wahrscheinliche Ursachen:
+- Input überschreitet 262K Token Limit
+- Zu viele Nachrichten im Chat-Verlauf
+
+Diagnose:
+- Token-Count der Anfrage prüfen
+- Chat-History analysieren
+
+Lösung:
+1. Context-Mode: summarize oder restart verwenden
+2. Nachrichten-History kürzen (nur letzte N behalten)
+3. Input kürzen: Nicht alle Dokumente gleichzeitig
+4. Chunking: Große Dokumente in Teile aufteilen
+5. Besseres Modell: qwen3.5-397b hat 262K, qwen2.5-coder-32b nur 128K
+
+Verifikation:
+- Keine Context-Fehler
+- Vollständige Antworten
+
 ## Eskalations-Playbook
 - P0: sofortige Eskalation und Schadensbegrenzung
 - P1: innerhalb Session beheben/eskalieren

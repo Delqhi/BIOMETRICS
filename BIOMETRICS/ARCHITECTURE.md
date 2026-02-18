@@ -135,11 +135,6 @@ User Request → Frontend → API Gateway → Service Core
 | Multimodal | ✅ Active | Combined Skills |
 | Tool Calling | ✅ Active | Function Definitions |
 | Streaming | ❌ Not Supported | Polling fallback |
-1. User interagiert mit Next.js Frontend.
-2. Frontend ruft API-Endpunkte auf.
-3. Go-Services validieren, orchestrieren und persistieren.
-4. Supabase liefert DB/Auth/Storage.
-5. Bei Content-Jobs delegiert der Agent via NLM-CLI.
 
 ---
 
@@ -228,9 +223,5 @@ User Request → Frontend → API Gateway → Service Core
 - **HTTP 429:** Wait 60s + Fallback to Kimi K2.5
 - **Timeout:** Retry with exponential backoff
 - **Invalid Request:** Log + Return user-friendly error
-
----
-
-## 6) NLM-Architekturanker
 
 ---

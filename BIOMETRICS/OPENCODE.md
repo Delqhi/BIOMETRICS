@@ -1728,8 +1728,8 @@ opencode run "Write a React component" --model opencode-zen/zen/code
 
 **Performance-Tipps:**
 
-- Timeout auf 120000ms setzen
-- First Token Latency: ~70-90s
+- KEIN Timeout konfigurieren (OpenCode managed das!)
+- First Token Latency: ~70-90s (NORMAL bei Qwen 3.5)
 - Buffer für lange Outputs einplanen
 - Fallback für Rate Limits definieren
 

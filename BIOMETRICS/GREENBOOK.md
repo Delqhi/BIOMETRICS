@@ -1,10 +1,48 @@
 # GREENBOOK - MODULAR GO ARCHITECTURE PLAN
 
-**Status:** ACTIVE  
-**Version:** 1.0  
-**Stand:** Februar 2026  
-**Agent:** A2.1 (GREENBOOK Architect)  
+**Status:** ACTIVE
+**Version:** 1.0
+**Stand:** Februar 2026
+**Agent:** A2.1 (GREENBOOK Architect)
 **Purpose:** Vollständiger, schlüsselfertiger Architekturplan für BIOMETRICS
+
+---
+
+## 🧠 NLM CLI COMMANDS
+
+```bash
+# Create notebook
+nlm notebook create "Title"
+
+# List sources
+nlm source list <notebook-id>
+
+# Delete old source (BEFORE adding new!)
+nlm source delete <source-id> -y
+
+# Add new source
+nlm source add <notebook-id> --file "file.md" --wait
+```
+
+**⚠️ DUPLICATE PREVENTION:** ALWAYS run `nlm source list` before `nlm source add`!
+
+---
+
+## 🔄 DEQLHI-LOOP (INFINITE WORK MODE)
+
+- After each completed task → Add 5 new tasks immediately
+- Never "done" - only "next task"
+- Always document → Every change in files
+- Git commit + push after EVERY change
+- Parallel execution ALWAYS (run_in_background=true)
+
+### Loop Mechanism:
+1. Task N Complete
+2. Git Commit + Push
+3. Update Docs
+4. Add 5 New Tasks
+5. Next Task N+1
+6. Repeat infinitely
 
 ---
 

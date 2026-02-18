@@ -16,6 +16,44 @@ Universeller Betriebsleitfaden für NotebookLM-Nutzung über NLM-CLI in Projekte
 ## Pflichtsatz
 NotebookLM wird vollständig über NLM-CLI genutzt. Alle Outputs werden mit Qualitätsmatrix bewertet und nur verifiziert übernommen.
 
+---
+
+## 🧠 NLM CLI COMMANDS
+
+```bash
+# Create notebook
+nlm notebook create "Title"
+
+# List sources
+nlm source list <notebook-id>
+
+# Delete old source (BEFORE adding new!)
+nlm source delete <source-id> -y
+
+# Add new source
+nlm source add <notebook-id> --file "file.md" --wait
+```
+
+**⚠️ DUPLICATE PREVENTION:** ALWAYS run `nlm source list` before `nlm source add`!
+
+---
+
+## 🔄 DEQLHI-LOOP (INFINITE WORK MODE)
+
+- After each completed task → Add 5 new tasks immediately
+- Never "done" - only "next task"
+- Always document → Every change in files
+- Git commit + push after EVERY change
+- Parallel execution ALWAYS (run_in_background=true)
+
+### Loop Mechanism:
+1. Task N Complete
+2. Git Commit + Push
+3. Update Docs
+4. Add 5 New Tasks
+5. Next Task N+1
+6. Repeat infinitely
+
 ## Universalitäts-Regeln
 1. Keine projektspezifischen Secrets in dieser Datei.
 2. IDs, Quellen und Artefakte nur mit Platzhaltern dokumentieren.

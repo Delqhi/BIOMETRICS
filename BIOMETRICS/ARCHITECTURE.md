@@ -146,7 +146,18 @@ User Request → Frontend → API Gateway → Service Core
 4. Supabase liefert DB/Auth/Storage.
 5. Bei Content-Jobs delegiert der Agent via NLM-CLI.
 
+---
+
 ## 5) Integrationsschnittstellen
+
+### Qwen 3.5 Integration
+- **Endpoint:** `https://integrate.api.nvidia.com/v1`
+- **API:** OpenAI-Compatible (`openai-completions`)
+- **Auth:** Bearer Token (`NVIDIA_API_KEY`)
+- **Timeout:** 120.000ms (Critical for high-latency)
+- **Rate Limit:** 40 RPM (Free Tier)
+
+### Andere Integrationen
 - OpenClaw: Integrationsauth und Connector-Flows
 - n8n: Workflow-Orchestrierung
 - Cloudflare: Netz-/Zugangsabsicherung
@@ -159,15 +170,18 @@ User Request → Frontend → API Gateway → Service Core
 - Protokollierung in `MEETING.md`
 
 ## 7) Nicht-funktionale Anforderungen
-- Performance: {PERFORMANCE_TARGETS}
-- Verfügbarkeit: {AVAILABILITY_TARGETS}
-- Sicherheit: {SECURITY_TARGETS}
-- Wartbarkeit: kleine, klar getrennte Module
+- Performance: **Qwen 3.5 Latenz:** 70-90s, **Timeout:** 120s mandatory
+- Verfügbarkeit: **Target:** 99.9%, **Fallback Chain:** Qwen → Kimi → Claude
+- Sicherheit: API-Keys in Environment, Cloudflare WAF
+- Wartbarkeit: kleine, klar getrennte Module, Qwen-Skills als separate Funktionen
 
 ## 8) Risiken
-- {ARCH_RISK_1}
-- {ARCH_RISK_2}
-- {ARCH_RISK_3}
+
+| Risiko | Wahrscheinlichkeit | Auswirkung | Mitigation |
+|--------|------------------|------------|------------|
+| Qwen 3.5 Latenz (70-90s) | Hoch | Mittel | Async Polling, User Feedback |
+| NVIDIA Rate Limit (429) | Mittel | Hoch | Fallback Chain, Retry-Logic |
+| API Key Rotation | Niedrig | Hoch | Automatisierte Rotation |
 
 ## 9) Entscheidungen (ADR-Index)
 

@@ -10,6 +10,49 @@ Status: ACTIVE
 Version: 1.0 (Universal)  
 Stand: Februar 2026
 
+## Latest Changes (Februar 2026)
+
+### Qwen 3.5 397B Integration
+- **Modell:** qwen/qwen3.5-397b-a17b
+- **Context:** 262K tokens
+- **Output:** 32K tokens
+- **Provider:** NVIDIA NIM
+- **Status:** ✅ Aktiv
+- **Use Case:** Code-Generation (Best-in-Class)
+
+### NVIDIA NIM Konfiguration
+- **Endpoint:** https://integrate.api.nvidia.com/v1
+- **API:** openai-completions
+- **Timeout:** 120000ms (120s) - erforderlich wegen hoher Latenz
+- **Rate Limit:** 40 RPM (Free Tier)
+- **HTTP 429 Lösung:** 60 Sekunden warten + Fallback nutzen
+
+### Verfügbare NVIDIA NIM Modelle
+| Modell | Context | Output | Use Case |
+|--------|---------|--------|----------|
+| qwen3.5-397b | 262K | 32K | Code (BEST) |
+| Qwen2.5-Coder-32B | 128K | 8K | Code (fast) |
+| Qwen2.5-Coder-7B | 128K | 8K | Code (fastest) |
+| Kimi K2.5 | 1M | 64K | General |
+
+### OpenCode.json Konfiguration (NVIDIA NIM)
+```json
+"nvidia-nim": {
+  "npm": "@ai-sdk/openai-compatible",
+  "name": "NVIDIA NIM (Qwen 3.5)",
+  "options": {
+    "baseURL": "https://integrate.api.nvidia.com/v1",
+    "timeout": 120000
+  },
+  "models": {
+    "qwen-3.5-397b": {
+      "id": "qwen/qwen3.5-397b-a17b",
+      "limit": { "context": 262144, "output": 32768 }
+    }
+  }
+}
+```
+
 ## Zweck
 Universeller Kontext-Container für Ziele, Zielgruppen, Scope und Randbedingungen.
 

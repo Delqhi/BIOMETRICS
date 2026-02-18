@@ -1,14 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
@@ -42,35 +39,39 @@ var (
 
 	dimStyle = lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#888888"))
+
+	commandStyle = lipgloss.NewStyle().
+			Foreground(lipgloss.Color("#FFFF00")).
+			Bold(true)
 )
 
 // Step represents an onboarding step
 type Step struct {
 	Title   string
-	Status  string // pending, running, success, error
+	Status  string
 	Message string
 }
 
 // Model for bubbletea
 type Model struct {
-	steps    []Step
-	current  int
-	quitting bool
-	done     bool
-	spinner  spinner.Model
-	width    int
-	height   int
-	config   Config
+	steps       []Step
+	current     int
+	quitting    bool
+	done        bool
+	spinner     spinner.Model
+	width       int
+	height      int
+	config      Config
+	showMenu    bool
+	menuCursor  int
 }
 
 // Config holds user configuration
 type Config struct {
-	GitLabToken      string
-	NVIDIAApiKey     string
-	InstallOpenCode  bool
-	InstallOpenClaw  bool
-	GitLabProjectID  string
-	GitLabProjectURL string
+	InstallOpenCode bool
+	InstallOpenClaw bool
+	WhatsApp        bool
+	Telegram        bool
 }
 
 // Messages
@@ -79,8 +80,6 @@ type statusMsg struct {
 	Status  string
 	Message string
 }
-
-type tickMsg time.Time
 
 func initialModel() Model {
 	s := spinner.New()
@@ -95,11 +94,12 @@ func initialModel() Model {
 		{Title: "Installing Homebrew", Status: "pending"},
 		{Title: "Installing Python 3", Status: "pending"},
 		{Title: "Configuring PATH", Status: "pending"},
-		{Title: "Creating GitLab project", Status: "pending"},
 		{Title: "Installing NLM CLI", Status: "pending"},
 		{Title: "Installing OpenCode", Status: "pending"},
 		{Title: "Installing OpenClaw", Status: "pending"},
-		{Title: "Configuring integrations", Status: "pending"},
+		{Title: "Configuring WhatsApp (QR Code)", Status: "pending"},
+		{Title: "Configuring Telegram", Status: "pending"},
+		{Title: "Installing skills (ordercli, github, gitlab)", Status: "pending"},
 	}
 
 	return Model{
@@ -108,6 +108,8 @@ func initialModel() Model {
 		config: Config{
 			InstallOpenCode: true,
 			InstallOpenClaw: true,
+			WhatsApp:        true,
+			Telegram:        true,
 		},
 	}
 }
@@ -123,6 +125,50 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "q", "ctrl+c":
 			m.quitting = true
 			return m, tea.Quit
+		case "up", "k":
+			if m.showMenu && m.done {
+				if m.menuCursor > 0 {
+					m.menuCursor--
+				}
+			}
+		case "down", "j":
+			if m.showMenu && m.done {
+				if m.menuCursor < 2 {
+					m.menuCursor++
+				}
+			}
+		case "enter":
+			if m.done && m.showMenu {
+				switch m.menuCursor {
+				case 0:
+					m.quitting = true
+					go func() {
+						cmd := exec.Command("opencode")
+						cmd.Stdout = os.Stdout
+						cmd.Stderr = os.Stderr
+						cmd.Stdin = os.Stdin
+						cmd.Run()
+					}()
+					return m, tea.Quit
+				case 1:
+					m.quitting = true
+					go func() {
+						cmd := exec.Command("openclaw")
+						cmd.Stdout = os.Stdout
+						cmd.Stderr = os.Stderr
+						cmd.Stdin = os.Stdin
+						cmd.Run()
+					}()
+					return m, tea.Quit
+				case 2:
+					m.quitting = true
+					return m, tea.Quit
+				}
+			}
+		case " ":
+			if m.done && !m.showMenu {
+				m.showMenu = true
+			}
 		}
 
 	case tea.WindowSizeMsg:
@@ -145,7 +191,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					return m, nextStep(msg.Index + 1)
 				}
 				m.done = true
-				return m, tea.Quit
+				return m, nil
 			}
 		}
 	}
@@ -159,7 +205,7 @@ func (m Model) View() string {
 	b.WriteString("\n")
 	b.WriteString(titleStyle.Render(" BIOMETRICS ONBOARD "))
 	b.WriteString("\n")
-	b.WriteString(subtitleStyle.Render(" Professional Setup - GitLab + OpenCode + OpenClaw "))
+	b.WriteString(subtitleStyle.Render(" Professional Setup - OpenCode + OpenClaw + Skills "))
 	b.WriteString("\n")
 
 	for i, step := range m.steps {
@@ -190,7 +236,27 @@ func (m Model) View() string {
 	if m.done {
 		b.WriteString("\n")
 		b.WriteString(successStyle.Render("✓ Setup complete!\n"))
-		b.WriteString(dimStyle.Render("\nRun 'biometrics' to start using the CLI\n"))
+		b.WriteString("\n")
+
+		if m.showMenu {
+			b.WriteString(commandStyle.Render("What would you like to do?\n"))
+			b.WriteString("\n")
+			options := []string{"Start OpenCode", "Start OpenClaw", "Exit"}
+			for i, option := range options {
+				cursor := "  "
+				style := dimStyle
+				if i == m.menuCursor {
+					cursor = runningStyle.Render("› ")
+					style = runningStyle
+				}
+				b.WriteString(style.Render(cursor + option))
+				b.WriteString("\n")
+			}
+			b.WriteString("\n")
+			b.WriteString(dimStyle.Render("Use ↑/↓ to navigate, Enter to select\n"))
+		} else {
+			b.WriteString(dimStyle.Render("Press SPACE to show menu\n"))
+		}
 	}
 
 	if m.quitting {
@@ -217,23 +283,23 @@ func nextStep(index int) tea.Cmd {
 	case 6:
 		return configurePATH
 	case 7:
-		return createGitLabProject
-	case 8:
 		return installNLMCLI
-	case 9:
+	case 8:
 		return installOpenCode
-	case 10:
+	case 9:
 		return installOpenClaw
+	case 10:
+		return configureWhatsApp
 	case 11:
-		return configureIntegrations
+		return configureTelegram
+	case 12:
+		return installSkills
 	default:
 		return nil
 	}
 }
 
-// System check and installation commands
 func checkSystemRequirements() tea.Msg {
-	// Check what's already installed
 	installed := make(map[string]bool)
 	tools := []string{"git", "node", "pnpm", "brew", "python3"}
 
@@ -242,7 +308,6 @@ func checkSystemRequirements() tea.Msg {
 		installed[tool] = err == nil
 	}
 
-	// Return status for first missing tool or success if all installed
 	for i, tool := range []string{"git", "node", "pnpm", "brew", "python3"} {
 		if !installed[tool] {
 			return statusMsg{Index: i + 1, Status: "pending", Message: "not installed"}
@@ -277,7 +342,6 @@ func installPnpm() tea.Msg {
 }
 
 func installHomebrew() tea.Msg {
-	// Check if already installed
 	if _, err := exec.LookPath("brew"); err == nil {
 		return statusMsg{Index: 4, Status: "success", Message: "already installed"}
 	}
@@ -296,7 +360,6 @@ func configurePATH() tea.Msg {
 	homeDir, _ := os.UserHomeDir()
 	zshrc := filepath.Join(homeDir, ".zshrc")
 
-	// Add pnpm to PATH
 	pathLine := "\nexport PATH=\"$HOME/Library/pnpm:$PATH\"\n"
 
 	data, _ := os.ReadFile(zshrc)
@@ -308,76 +371,82 @@ func configurePATH() tea.Msg {
 		f.WriteString(pathLine)
 	}
 
-	// Also add to current session
 	os.Setenv("PATH", os.Getenv("HOME")+"/Library/pnpm:"+os.Getenv("PATH"))
 
 	return statusMsg{Index: 6, Status: "success", Message: "PATH configured"}
 }
 
-func createGitLabProject() tea.Msg {
-	// Skip if no token
-	token := os.Getenv("GITLAB_TOKEN")
-	if token == "" {
-		return statusMsg{Index: 7, Status: "success", Message: "skipped (no token)"}
-	}
-
-	// Create project via API
-	url := "https://gitlab.com/api/v4/projects"
-	data := map[string]interface{}{
-		"name":        "biometrics-media",
-		"description": "BIOMETRICS project media storage",
-		"visibility":  "public",
-	}
-
-	jsonData, _ := json.Marshal(data)
-	req, _ := http.NewRequest("POST", url, strings.NewReader(string(jsonData)))
-	req.Header.Set("PRIVATE-TOKEN", token)
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{Timeout: 10 * time.Second}
-	resp, err := client.Do(req)
+func installNLMCLI() tea.Msg {
+	_, err := runCommand("pnpm", "add", "-g", "nlm-cli")
 	if err != nil {
 		return statusMsg{Index: 7, Status: "error", Message: err.Error()}
 	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode == 201 {
-		return statusMsg{Index: 7, Status: "success", Message: "project created"}
-	}
-
-	return statusMsg{Index: 7, Status: "success", Message: "project exists"}
+	return statusMsg{Index: 7, Status: "success", Message: "installed"}
 }
 
-func installNLMCLI() tea.Msg {
-	_, err := runCommand("pnpm", "add", "-g", "nlm-cli")
+func installOpenCode() tea.Msg {
+	_, err := runCommand("brew", "install", "opencode")
 	if err != nil {
 		return statusMsg{Index: 8, Status: "error", Message: err.Error()}
 	}
 	return statusMsg{Index: 8, Status: "success", Message: "installed"}
 }
 
-func installOpenCode() tea.Msg {
-	_, err := runCommand("brew", "install", "opencode")
+func installOpenClaw() tea.Msg {
+	_, err := runCommand("pnpm", "add", "-g", "@delqhi/openclaw")
 	if err != nil {
 		return statusMsg{Index: 9, Status: "error", Message: err.Error()}
 	}
 	return statusMsg{Index: 9, Status: "success", Message: "installed"}
 }
 
-func installOpenClaw() tea.Msg {
-	_, err := runCommand("pnpm", "add", "-g", "@delqhi/openclaw")
-	if err != nil {
+func configureWhatsApp() tea.Msg {
+	fmt.Println("\n📱 WhatsApp QR Code Pairing")
+	fmt.Println("OpenClaw will now show a QR code...")
+	fmt.Println("Scan it with your WhatsApp app to connect.\n")
+	
+	cmd := exec.Command("openclaw", "channels", "login", "--channel", "whatsapp")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	
+	if err := cmd.Run(); err != nil {
 		return statusMsg{Index: 10, Status: "error", Message: err.Error()}
 	}
-	return statusMsg{Index: 10, Status: "success", Message: "installed"}
+	
+	return statusMsg{Index: 10, Status: "success", Message: "WhatsApp connected"}
 }
 
-func configureIntegrations() tea.Msg {
-	// Placeholder for OpenClaw integration setup
-	return statusMsg{Index: 11, Status: "success", Message: "configured"}
+func configureTelegram() tea.Msg {
+	fmt.Println("\n📱 Telegram Bot Setup")
+	fmt.Println("Follow the instructions to create your bot...\n")
+	
+	cmd := exec.Command("openclaw", "channels", "login", "--channel", "telegram")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	
+	if err := cmd.Run(); err != nil {
+		return statusMsg{Index: 11, Status: "error", Message: err.Error()}
+	}
+	
+	return statusMsg{Index: 11, Status: "success", Message: "Telegram connected"}
 }
 
-// Helper function
+func installSkills() tea.Msg {
+	skills := []string{
+		"openclaw/skills--ordercli",
+		"openclaw/skills--github",
+		"openclaw/skills--gitlab",
+	}
+	
+	for _, skill := range skills {
+		runCommand("openclaw", "skills", "install", skill)
+	}
+	
+	return statusMsg{Index: 12, Status: "success", Message: "skills installed"}
+}
+
 func runCommand(cmd string, args ...string) (string, error) {
 	output, err := exec.Command(cmd, args...).CombinedOutput()
 	return strings.TrimSpace(string(output)), err

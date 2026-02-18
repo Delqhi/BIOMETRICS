@@ -4,7 +4,8 @@
   "description": "Interactive onboarding CLI for BIOMETRICS project",
   "main": "src/index.js",
   "bin": {
-    "biometrics-onboard": "./src/index.js"
+    "biometrics-onboard": "./src/index.js",
+    "biometrics": "./src/index.js"
   },
   "type": "module",
   "scripts": {

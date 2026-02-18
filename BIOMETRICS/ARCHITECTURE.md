@@ -190,6 +190,9 @@ User Request → Frontend → API Gateway → Service Core
 | ADR-001 | Frontend-Stack | Next.js | accepted |
 | ADR-002 | Backend-Stack | Go + Supabase | accepted |
 | ADR-003 | Content-Generierung | NLM-CLI Pflicht | accepted |
+| ADR-004 | Primary AI Brain | Qwen 3.5 (NVIDIA NIM) | accepted |
+| ADR-005 | Qwen Timeout | 120s Mandatory | accepted |
+| ADR-006 | Fallback Chain | Qwen → Kimi → Claude | accepted |
 
 ## 10) Verifikation
 - Konsistenzcheck mit `COMMANDS.md` und `ENDPOINTS.md`
@@ -197,10 +200,42 @@ User Request → Frontend → API Gateway → Service Core
 - Task-20 Integrationsreview
 
 ## Abnahme-Check ARCHITECTURE
-1. Module und Verantwortungen klar
-2. Datenflüsse nachvollziehbar
-3. NLM-Integration verankert
-4. Risiken dokumentiert
-5. ADR-Index gepflegt
+1. ✅ Module und Verantwortungen klar
+2. ✅ Datenflüsse nachvollziehbar
+3. ✅ NLM-Integration verankert
+4. ✅ Qwen 3.5 Brain dokumentiert
+5. ✅ Risiken dokumentiert
+6. ✅ ADR-Index gepflegt
+
+---
+
+## Anhang: Qwen 3.5 API-Referenz
+
+### Request Format
+```json
+{
+  "model": "qwen/qwen3.5-397b-a17b",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        { "type": "text", "text": "Analyze this image" },
+        { "type": "image_url", "image_url": { "url": "data:image/jpeg;base64,..." } }
+      ]
+    }
+  ],
+  "temperature": 0.7,
+  "max_tokens": 32768
+}
+```
+
+### Error Handling
+- **HTTP 429:** Wait 60s + Fallback to Kimi K2.5
+- **Timeout:** Retry with exponential backoff
+- **Invalid Request:** Log + Return user-friendly error
+
+---
+
+## 6) NLM-Architekturanker
 
 ---

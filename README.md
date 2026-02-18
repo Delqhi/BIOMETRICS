@@ -28,7 +28,7 @@ biometrics
 - ✅ **GitLab:** Erstellt Media-Storage Projekt
 - ✅ **NLM CLI:** Installiert + authentifiziert
 - ✅ **OpenCode:** Installiert + konfiguriert (optional)
-- ✅ **OpenClaw:** Installiert + konfiguriert (optional)
+- ✅ **OpenClaw 🦞:** Installiert + konfiguriert (optional)
 - ✅ **Google Antigravity:** Plugin + OAuth
 - ✅ **Social Media:** WhatsApp, Telegram, Gmail, Twitter (optional)
 - ✅ **ClawdBot:** Verbindet alle Channels
@@ -49,7 +49,7 @@ biometrics-onboard   # Vollständige Version
 
 <table>
 <tr>
-<td align="center">
+<td align="center" valign="top" width="320">
 
 ### 📹 Erklärvideo
 
@@ -58,7 +58,7 @@ biometrics-onboard   # Vollständige Version
 **[Video abspielen ▶](https://gitlab.com/zukunftsorientierte.energie/biometrics-videos/-/uploads/d23d181f4278365b97454a3c0602d132/video.mp4)**
 
 </td>
-<td align="center">
+<td align="center" valign="top" width="320">
 
 ### 📄 Präsentation
 
@@ -69,6 +69,8 @@ biometrics-onboard   # Vollständige Version
 </td>
 </tr>
 </table>
+
+*Hinweis: Das Video wird von GitLab gestreamt. Bei Wiedergabeproblemen bitte [hier herunterladen](https://gitlab.com/zukunftsorientierte.energie/biometrics-videos/-/uploads/d23d181f4278365b97454a3c0602d132/video.mp4).*
 
 ---
 
@@ -198,5 +200,3 @@ Der Agent kann autonom:
 **Vollständige Dokumentation:** Siehe [`WORKFLOW.md`](BIOMETRICS/WORKFLOW.md)
 
 ---
-
-<img src="BIOMETRICS/logo.png" alt="BIOMETRICS Logo" width="128" height="128">

@@ -461,10 +461,51 @@ Follow-ups:
 - Nachlaufende Cross-Doc Prüfung wiederholen.
 
 Referenzen (Task-IDs/Meetings):
-- LOOP-002-T01
 - LOOP-002-T19
 - LOOP-002-T20
-- M-010
+- M-012
+
+## [2026-02-18 00:00] CHG-014
+Typ: Docs
+Zusammenfassung:
+WORKFLOW.md auf 2520 Zeilen erweitert, Qwen 3.5 NVIDIA NIM Integration dokumentiert, OpenCode/OpenClaw Konfiguration vollständig abgeschlossen, biometrics-onboard CLI erstellt.
+
+Hintergrund:
+Projektweiter Qualitätsausbau mit Fokus auf Dokumentationstiefe und KI-Integration.
+
+Geänderte Dateien:
+- `BIOMETRICS/WORKFLOW.md` (erweitert auf 2520 Zeilen)
+- `~/.config/opencode/opencode.json` (OpenCode Konfiguration)
+- `~/.openclaw/openclaw.json` (OpenClaw Konfiguration)
+- `BIOMETRICS/biometrics-cli/bin/biometrics-onboard.js` (CLI erstellt)
+
+Neue Integrationen:
+- Qwen 3.5 NVIDIA NIM (qwen/qwen3.5-397b-a17b)
+- OpenCode NVIDIA NIM Provider konfiguriert
+- OpenClaw NVIDIA NIM Provider konfiguriert
+- biometrics-onboard CLI Befehl vollständig funktionsfähig
+
+Prüfungen:
+- Datei-Fehlerprüfung
+- CLI-Funktionalitätstest
+- NVIDIA NIM Konnektivitätstest
+
+Ergebnis:
+- Erfolgreich.
+
+Risiken/Offen:
+- NVIDIA NIM Rate Limits (40 RPM) beachten bei hoher Last.
+
+Follow-ups:
+- Weitere NVIDIA NIM Modelle evaluieren.
+- Performance-Benchmarks mit Qwen 3.5 durchführen.
+
+Referenzen (Task-IDs/Meetings):
+- Task-07
+- NVIDIA NIM Integration
+- OpenCode/OpenClaw Setup
+
+---
 
 ## Abnahme-Check CHANGELOG
 1. Jeder substanzielle Schritt protokolliert.

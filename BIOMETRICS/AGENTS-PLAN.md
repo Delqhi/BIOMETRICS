@@ -903,3 +903,222 @@ Akzeptanzkriterien: Vollprüfung dokumentiert, Risiken priorisiert, nächste 20 
 Tests: Gesamt-Gate-Check
 
 ---
+
+## DELQHI-LOOP Tasks (BIOMETRICS spezifisch)
+
+Diese Tasks sind spezifisch für das BIOMETRICS-Projekt und werden im DELQHI-LOOP kontinuierlich ausgeführt.
+
+### DELQHI-Task 01
+Task-ID: DELQHI-001-T01
+Titel: CLI Installation verifizieren
+Kategorie: Infrastructure
+Priorität: P0
+Read First: `biometrics-cli/README.md`
+Edit: `TESTING.md`
+Akzeptanzkriterien: `biometrics --version` gibt Version aus
+
+### DELQHI-Task 02
+Task-ID: DELQHI-001-T02
+Titel: NVIDIA NIM Qwen 3.5 Integration testen
+Kategorie: Integration
+Priorität: P0
+Read First: `OPENCLAW.md`
+Edit: `OPENCLAW.md`
+Akzeptanzkriterien: Qwen 3.5 beantwortet Test-Prompt
+
+### DELQHI-Task 03
+Task-ID: DELQHI-001-T03
+Titel: Supabase Schema validieren
+Kategorie: Database
+Priorität: P0
+Read First: `SUPABASE.md`
+Edit: `SUPABASE.md`
+Akzeptanzkriterien: Alle Tabellen und RLS-Policies definiert
+
+### DELQHI-Task 04
+Task-ID: DELQHI-001-T04
+Titel: n8n Workflows importieren
+Kategorie: Automation
+Priorität: P1
+Read First: `N8N.md`
+Edit: `N8N.md`
+Akzeptanzkriterien: Alle Workflows importiert und aktiv
+
+### DELQHI-Task 05
+Task-ID: DELQHI-001-T05
+Titel: OpenCode Modelle konfigurieren
+Kategorie: Configuration
+Priorität: P0
+Read First: `OPENCODE.md`
+Edit: `OPENCODE.md`
+Akzeptanzkriterien: Alle Modelle in opencode.json konfiguriert
+
+### DELQHI-Task 06
+Task-ID: DELQHI-001-T06
+Titel: NLM-ASSETS Struktur erstellen
+Kategorie: Documentation
+Priorität: P1
+Read First: `NOTEBOOKLM.md`
+Edit: `NLM-ASSETS/README.md`
+Akzeptanzkriterien: Alle Verzeichnisse vorhanden, README vollständig
+
+### DELQHI-Task 07
+Task-ID: DELQHI-001-T07
+Titel: Crashtests ausführen
+Kategorie: Testing
+Priorität: P0
+Read First: `TESTING.md`
+Edit: `TESTING.md`
+Akzeptanzkriterien: Alle 10 Crashtests bestanden
+
+### DELQHI-Task 08
+Task-ID: DELQHI-001-T08
+Titel: Security Audit durchführen
+Kategorie: Security
+Priorität: P0
+Read First: `SECURITY.md`
+Edit: `SECURITY.md`
+Akzeptanzkriterien: Keine kritischen Vulnerabilities
+
+### DELQHI-Task 09
+Task-ID: DELQHI-001-T09
+Titel: Performance Benchmarks ausführen
+Kategorie: Performance
+Priorität: P1
+Read First: `TESTING.md`
+Edit: `TESTING.md`
+Akzeptanzkriterien: Alle Latenz-Anforderungen erfüllt
+
+### DELQHI-Task 10
+Task-ID: DELQHI-001-T10
+Titel: E2E Test-Suite erstellen
+Kategorie: Testing
+Priorität: P1
+Read First: `TESTING.md`
+Edit: `TESTING.md`
+Akzeptanzkriterien: Playwright Tests für kritische Journeys
+
+### DELQHI-Task 11
+Task-ID: DELQHI-001-T11
+Titel: GitHub Actions Pipeline einrichten
+Kategorie: CI/CD
+Priorität: P1
+Read First: `CI-CD-SETUP.md`
+Edit: `CI-CD-SETUP.md`
+Akzeptanzkriterien: Pipeline läuft bei jedem Push
+
+### DELQHI-Task 12
+Task-ID: DELQHI-001-T12
+Titel: Documentation vollständig verifizieren
+Kategorie: Documentation
+Priorität: P0
+Read First: `README.md`, `AGENTS.md`, `AGENTS-PLAN.md`
+Edit: `README.md`
+Akzeptanzkriterien: Alle Pflichtdokumente vorhanden
+
+### DELQHI-Task 13
+Task-ID: DELQHI-001-T13
+Titel: Onboarding-Prozess testen
+Kategorie: UX
+Priorität: P1
+Read First: `ONBOARDING.md`
+Edit: `ONBOARDING.md`
+Akzeptanzkriterien: Neuer User kann in 5 Min starten
+
+### DELQHI-Task 14
+Task-ID: DELQHI-001-T14
+Titel: Cloudflare Tunnel verifizieren
+Kategorie: Infrastructure
+Priorität: P1
+Read First: `CLOUDFLARE.md`
+Edit: `CLOUDFLARE.md`
+Akzeptanzkriterien: Alle Services über HTTPS erreichbar
+
+### DELQHI-Task 15
+Task-ID: DELQHI-001-T15
+Titel: Vercel Deployment konfigurieren
+Kategorie: Deployment
+Priorität: P1
+Read First: `VERCEL.md`
+Edit: `VERCEL.md`
+Akzeptanzkriterien: Auto-Deploy bei Push aktiv
+
+### DELQHI-Task 16
+Task-ID: DELQHI-001-T16
+Titel: GitLab Media Storage einrichten
+Kategorie: Infrastructure
+Priorität: P1
+Read First: `GITLAB.md`
+Edit: `GITLAB.md`
+Akzeptanzkriterien: NLM-Videos und Assets hochladbar
+
+### DELQHI-Task 17
+Task-ID: DELQHI-001-T17
+Titel: OpenClaw Skills registrieren
+Kategorie: Integration
+Priorität: P1
+Read First: `OPENCLAW.md`
+Edit: `OPENCLAW.md`
+Akzeptanzkriterien: Master-Skills funktionsfähig
+
+### DELQHI-Task 18
+Task-ID: DELQHI-001-T18
+Titel: Troubleshooting Guide erweitern
+Kategorie: Documentation
+Priorität: P2
+Read First: `TROUBLESHOOTING.md`
+Edit: `TROUBLESHOOTING.md`
+Akzeptanzkriterien: 10+ häufige Probleme dokumentiert
+
+### DELQHI-Task 19
+Task-ID: DELQHI-001-T19
+Titel: Cross-Doc Konsistenzprüfung
+Kategorie: Reliability
+Priorität: P0
+Read First: alle Kern-Dokumente
+Edit: `MEETING.md`
+Akzeptanzkriterien: Keine Widersprüche in Dokumenten
+
+### DELQHI-Task 20
+Task-ID: DELQHI-001-T20
+Titel: DELQHI-LOOP-002 vorbereiten
+Kategorie: Abschluss
+Priorität: P0
+Read First: `CHANGELOG.md`, `MEETING.md`
+Edit: `AGENTS-PLAN.md`, `CHANGELOG.md`
+Akzeptanzkriterien: 20 neue Tasks erstellt, alte archiviert
+
+## Success Criteria (Evidenz-Standard)
+
+Für jede abgeschlossene Task muss Evidenz erbracht werden:
+
+| Kriterium | Beschreibung | Nachweis |
+|-----------|--------------|----------|
+| Test bestanden | Automatisierter Test erfolgreich | Test-Output |
+| Code funktioniert | Manueller Verifikationstest | Screenshot |
+| Dokumentation | README/Guide aktualisiert | Git-Diff |
+| Integration | Externe Service-Verbindung | API-Response |
+
+## Delegation Templates
+
+### Subagent Auftrag (Standard)
+```
+ROLE: {agent_type}
+GOAL: {klare_aufgabenbeschreibung}
+CONTEXT: {relevant_history}
+READ FIRST: {pflichtdokumente}
+EDIT ONLY: {zu_bearbeitende_dateien}
+TASKS: {aufgabenliste}
+ACCEPTANCE CRITERIA: {erfolgskriterien}
+REQUIRED TESTS: {test_typen}
+REQUIRED DOC UPDATES: {doku_dateien}
+RISKS: {potentielle_probleme}
+OUTPUT FORMAT: {strukturiertes_uebergabeformat}
+```
+
+---
+
+**Version:** 2.0 (DELQHI-LOOP)  
+**Letzte Aktualisierung:** 2026-02-18  
+**DELQHI-LOOP Tasks:** 20  
+**Status:** ACTIVE

@@ -3803,11 +3803,11 @@ Custom providers MUST use `@ai-sdk/openai-compatible` with `options.baseURL`:
           "name": "Big Pickle (OpenCode ZEN - UNCENSORED)",
           "limit": { "context": 200000, "output": 128000 }
         },
-        "zen/uncensored": {
+        "opencode/minimax-m2.5-free": {
           "name": "Uncensored (OpenCode ZEN)",
           "limit": { "context": 200000, "output": 128000 }
         },
-        "zen/code": {
+        "opencode/minimax-m2.5-free": {
           "name": "Code (OpenCode ZEN)",
           "limit": { "context": 200000, "output": 128000 }
         },
@@ -4384,8 +4384,8 @@ Detaillierte Dokumentation: `~/dev/sin-code/OpenCode/Docs/agent-models-config.md
 | **document-writer** | qwen/qwen3.5-397b-a17b | Kimi For Coding | 💰 |
 | **multimodal-looker** | qwen/qwen3.5-397b-a17b | Kimi For Coding | 💰 |
 | **atlas** | qwen/qwen3.5-397b-a17b | Kimi For Coding | 💰 |
-| **librarian** | opencode-zen/opencode/minimax-m2.5-free | OpenCode ZEN | 🆓 FREE |
-| **explore** | opencode-zen/opencode/minimax-m2.5-free | OpenCode ZEN | 🆓 FREE |
+| **librarian** | opencode/minimax-m2.5-free | OpenCode ZEN | 🆓 FREE |
+| **explore** | opencode/minimax-m2.5-free | OpenCode ZEN | 🆓 FREE |
 
 ### Warum diese Verteilung?
 

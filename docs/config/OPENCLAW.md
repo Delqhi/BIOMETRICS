@@ -3622,21 +3622,21 @@ OpenCode ZEN bietet eine kostenlose Alternative zu kommerziellen Modellen und ei
         "api": "openai-completions",
         "models": [
           {
-            "id": "zen/big-pickle",
+            "id": "opencode/minimax-m2.5-free",
             "name": "Big Pickle (UNCENSORED)",
             "contextWindow": 200000,
             "maxOutputTokens": 128000,
             "pricing": "free"
           },
           {
-            "id": "zen/uncensored",
+            "id": "opencode/minimax-m2.5-free",
             "name": "Uncensored",
             "contextWindow": 200000,
             "maxOutputTokens": 128000,
             "pricing": "free"
           },
           {
-            "id": "zen/code",
+            "id": "opencode/minimax-m2.5-free",
             "name": "Code",
             "contextWindow": 200000,
             "maxOutputTokens": 128000,

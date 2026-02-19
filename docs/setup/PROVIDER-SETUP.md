@@ -93,7 +93,7 @@ opencode --model nvidia-nim/qwen-3.5-397b "Hello"
         "baseURL": "https://api.opencode.ai/v1"
       },
       "models": {
-        "zen/big-pickle": {
+        "minimax-m2.5-free": {
           "name": "Big Pickle (UNCENSORED)",
           "limit": {
             "context": 200000,

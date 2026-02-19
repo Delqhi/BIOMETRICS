@@ -214,13 +214,6 @@ Add to `~/.config/opencode/opencode.json`:
             "output": 128000
           }
         },
-        "zen/uncensored": {
-          "name": "Uncensored (OpenCode ZEN)",
-          "limit": {
-            "context": 200000,
-            "output": 128000
-          }
-        },
         "grok-code": {
           "name": "Grok Code (VIA OPENROUTER)",
           "limit": {

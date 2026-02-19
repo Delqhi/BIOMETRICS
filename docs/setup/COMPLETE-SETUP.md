@@ -385,13 +385,13 @@ Die Datei sollte folgende Agent-Zuweisungen enthalten:
     "librarian": {
       "model": {
         "providerID": "opencode-zen",
-        "modelID": "zen/big-pickle"
+        "modelID": "opencode/minimax-m2.5-free"
       }
     },
     "explore": {
       "model": {
         "providerID": "opencode-zen",
-        "modelID": "zen/big-pickle"
+        "modelID": "opencode/minimax-m2.5-free"
       }
     }
   }
@@ -400,8 +400,8 @@ Die Datei sollte folgende Agent-Zuweisungen enthalten:
 
 **✅ Checkliste:**
 - [ ] sisyphus → kimi-k2.5
-- [ ] librarian → zen/big-pickle (FREE)
-- [ ] explore → zen/big-pickle (FREE)
+- [ ] librarian → opencode/minimax-m2.5-free (FREE)
+- [ ] explore → opencode/minimax-m2.5-free (FREE)
 
 ---
 

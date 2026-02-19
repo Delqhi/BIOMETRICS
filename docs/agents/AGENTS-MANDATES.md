@@ -5858,15 +5858,278 @@ git commit -m "type: description"
 git push origin main
 
 # Nach JEDEM Task:
-todowrite([...])  # 5 neue Tasks hinzufügen
+todowrite([...]) # 5 neue Tasks hinzufügen
 
 # Parallel delegieren:
-delegate_task(category="X", run_in_background=true)  # Mindestens 3 Agenten
+delegate_task(category="X", run_in_background=true) # Mindestens 3 Agenten
 ```
 
-**EFFECTIVE:** 2026-02-07  
-**MANDATE:** 0.36  
+**EFFECTIVE:** 2026-02-07
+**MANDATE:** 0.36
 **STATUS:** ACTIVE
+
+---
+
+## 🔥 RULE -16: SUBAGENT DELEGATION - MASSIVE PROMPTS & ACTIVE ORCHESTRATION 🚨🚨🚨
+
+**EFFECTIVE:** 2026-02-19
+**SCOPE:** ALL Orchestrator Agents, ALL Subagent Delegations
+**STATUS:** ABSOLUTE PRIORITY - MANDATORY COMPLIANCE
+
+### 🎯 DAS PROBLEM: SUBAGENTEN WISSEN NICHTS!
+
+**Stell dir vor, du arbeitest NICHT mit einem Kollegen, der sich alles merkt, sondern:**
+- ❌ Jeder Subagent ist ein **neu ausgeliehener Freelancer**
+- ❌ Hat **KEINEN Projekt-Kontext** im Kopf
+- ❌ Versteht **NICHT das Ziel** ohne explizite Erklärung
+- ❌ Behält **NICHTS zwischen Sessions** (stateless!)
+- ❌ Braucht **MASSIV mehr Informationen** als du annimmst!
+
+**MERKE:** Ein Subagent ist **NICHT du** - er weiß **NICHTS** außer dem, was du ihm im Prompt schreibst!
+
+---
+
+### 📋 PFLICHT: MASSIVER SUBAGENT-PROMPT (ALLE INFOS!)
+
+**JEDER Subagent-Prompt MUSS enthalten:**
+
+#### 1. 🎯 ZIEL & HINTERGRUND (Warum machen wir das?)
+```
+ZIEL: [Klares, messbares Ziel in 1-2 Sätzen]
+HINTERGRUND: [Warum ist das wichtig? Welches Problem lösen wir?]
+KONTEXT: [Wie passt das in das Gesamtprojekt?]
+```
+
+#### 2. 📁 PFADE & DATEIEN (WO arbeiten?)
+```
+RELEVANTE DATEIEN:
+- /pfad/zu/architecture.md (LESEN BIS ZUR LETZTEN ZEILE!)
+- /pfad/zu/AGENTS-PLAN.md (LESEN BIS ZUR LETZTEN ZEILE!)
+- /pfad/zu/existing-file.ts (NICHT neu erstellen, erweitern!)
+
+PFAD-STRUKTUR:
+- Alle Dateien müssen in /correct/path/ erstellt werden
+- Keine Dateien in /wrong/path/ erstellen!
+```
+
+#### 3. 📖 CODE & BEISPIELE (WIE sieht es aus?)
+```
+EXISTIERENDE MUSTER:
+[Code-Beispiel einfügen, dem gefolgt werden muss]
+
+FORMAT:
+- TypeScript strict mode
+- Go für Backend-Modules
+- Modular: Viele kleine Dateien statt großer Monolithen
+```
+
+#### 4. ✅ AUFGABE (GENAU was tun?)
+```
+SCHRITT 1: [Exakte Anweisung]
+SCHRITT 2: [Exakte Anweisung]
+SCHRITT 3: [Exakte Anweisung]
+
+ACCEPTANCE CRITERIA:
+- [ ] Kriterium 1
+- [ ] Kriterium 2
+- [ ] Kriterium 3
+```
+
+#### 5. 🚫 VERBOTEN (Was NIEMALS tun!)
+```
+ABSOLUT VERBOTEN:
+- ❌ Niemals Duplikate erstellen! Immer erst prüfen ob Datei existiert!
+- ❌ Niemals neue MD-Dateien erstellen! Immer bestehende erweitern!
+- ❌ Niemals lügen über was getan wurde!
+- ❌ Niemals ohne Serena MCP zu aktivieren!
+- ❌ Niemals Dateien erstellen ohne alle Dependencies zu kennen!
+- ❌ Niemals Code schreiben der später umgebaut werden muss!
+```
+
+#### 6. 🔧 PFLICHT-TOOLS (IMMER nutzen!)
+```
+IMMER VERWENDEN:
+- ✅ Serena MCP: `serena activate <project>` VOR jeder Arbeit!
+- ✅ LSP Diagnostics: Nach JEDEM File-Edit ausführen!
+- ✅ Git: Nach jeder Änderung commit + push!
+```
+
+#### 7. 📚 PFLICHT-LEKTÜRE (VOR Start lesen!)
+```
+MUST READ BEFORE START:
+1. /docs/architecture/ARCHITECTURE.md (GESAMT lesen!)
+2. /docs/agents/AGENTS-PLAN.md (GESAMT lesen!)
+3. /docs/UNIVERSAL-BLUEPRINT.md (GESAMT lesen!)
+4. /path/to/related-file.ts (GESAMT lesen!)
+
+NIEMALS anfangen ohne ALLE Dateien vollständig gelesen zu haben!
+```
+
+#### 8. 🎯 GREENBOOK-PRINZIP (PLAN VOR CODE!)
+```
+GREENBOOK-MANDATE:
+- Eine Datei wird NUR erstellt wenn 100% klar ist wie alle anderen Dateien darauf aufbauen!
+- NIEMALS "erstmal anfangen und später umbauen"!
+- NIEMALS "wir sehen schon wie es passt"!
+- IMMER: Kompletter Plan → Dann erst Code!
+- JEDER Pfad, jede Dependency, jede Schnittstelle MUSS vorher bekannt sein!
+
+WORKFLOW:
+1. COMPLETE PLAN (jede Zeile, jeder Pfad, jede Abhängigkeit)
+2. REVIEW (Oracle/Momus prüfen Plan)
+3. BUILD (Erst dann Code schreiben)
+4. VERIFY (Deep Check auf Konsistenz)
+
+NIEMALS Schritt 3 vor Schritt 1+2!
+```
+
+#### 9. 👥 ORCHESTRATOR-ÜBERWACHUNG (NICHT allein lassen!)
+```
+ORCHESTRATOR PFLICHTEN:
+- Subagenten NIEMALS blind warten lassen!
+- IMMER parallel selbst am wichtigsten arbeiten!
+- ALLE 2-3 Minuten Subagent-Sessions lesen!
+- Bei Fehlern/Ratelimits: SOFORT eingreifen, neue Nachricht senden!
+- Subagenten auf dem Laufenden halten über Stand anderer Agenten!
+- Jeder Subagent bekommt eigene ID: A1.1, A1.2, A2.1, A3.4, etc.
+
+BEISPIEL AGENT-ID SYSTEM:
+- A1.1 = Agent 1, Task 1 (Haupttask A1)
+- A1.2 = Agent 2, Task 1 (Haupttask A1)
+- A2.1 = Agent 1, Task 2 (Haupttask A2)
+- A3.4 = Agent 4, Task 3 (Haupttask A3)
+```
+
+#### 10. ✅ VERIFIKATION (NIEMALS blind vertrauen!)
+```
+NACH SUBAGENT COMPLETION:
+1. KOMPLETTE Session lesen (jede Nachricht!)
+2. JEDE erstellte Datei deep-gründlich prüfen auf:
+   - Fehler (LSP Diagnostics)
+   - Lügen (Behauptet vs. Realität)
+   - Inkonsistenzen (Widersprüche im Code)
+   - Inkompatibilität (Passt nicht zu anderen Dateien)
+
+3. "SICHER?"-NACHRICHT an Subagent:
+   "Bist du 100% sicher dass ALLES aus dem Prompt erledigt wurde?
+    Prüfe JEDE Aussage nochmal. Vervollständige FEHLENDES.
+    Bestätige Punkt-für-Punkt Erfüllung."
+
+4. ERST DANN: Als completed markieren!
+```
+
+---
+
+### 🚨 BEISPIEL: KORREKTER SUBAGENT-PROMPT
+
+```typescript
+// ✅ RICHTIG - MASSIVER PROMPT
+task(
+  category="quick",
+  load_skills=["git-master"],
+  run_in_background=true,
+  description="Fix model references in config docs",
+  prompt=`## 🎯 ZIEL
+Ersetze ALLE falschen Modell-Referenzen in den 6 Config-Docs.
+
+## 📖 HINTERGRUND
+Wir haben zen/big-pickle, zen/code, etc. durch opencode/minimax-m2.5-free ersetzt.
+Diese Modelle existieren nicht mehr. User will saubere Config ohne tote Referenzen.
+
+## 📁 RELEVANTE DATEIEN (ALLE LESEN!)
+- /docs/architecture/ARCHITECTURE.md (GESAMT lesen!)
+- /docs/agents/AGENTS-PLAN.md (GESAMT lesen!)
+- /docs/setup/COMPLETE-SETUP.md (erweitern, NICHT neu erstellen!)
+- /docs/setup/PROVIDER-SETUP.md (erweitern, NICHT neu erstellen!)
+
+## ✅ AUFGABE
+1. Suche ALLE "zen/big-pickle" Referenzen in den 6 Dateien
+2. Ersetze durch "opencode/minimax-m2.5-free"
+3. Nutze edit tool mit replaceAll=true
+4. Commit nach JEDEM File
+
+## 🚫 VERBOTEN
+- ❌ KEINE neuen Dateien erstellen!
+- ❌ KEINE Duplikate!
+- ❌ Nicht lügen über was getan wurde!
+
+## 🔧 PFLICHT
+- ✅ Serena MCP aktivieren VOR Start
+- ✅ LSP Diagnostics nach jedem Edit
+- ✅ Git commit + push nach jedem File
+
+## 📊 ACCEPTANCE CRITERIA
+- [ ] 0 zen/big-pickle Referenzen in den 6 Dateien
+- [ ] 222 korrekte opencode/minimax-m2.5-free Referenzen
+- [ ] Alles zu GitHub gepusht
+
+## 👷 DEINE ID: A1.1
+Ich (Orchestrator) lese deine Session alle 2 Minuten.
+Bei Fehlern greife ich sofort ein.
+Melde Blocker SOFORT (Rate Limits, Errors, etc.)
+
+## 🎯 GREENBOOK
+Diese Änderung ist final. Kein Umbau nötig.
+Alle Pfade sind bekannt. Alle Dependencies geklärt.
+`
+)
+```
+
+---
+
+### 🔄 ORCHESTRATOR WORKFLOW (PARALLEL & AKTIV)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ ORCHESTRATOR WORKFLOW (NIEMALS PASSIV!) │
+├─────────────────────────────────────────────────────────────────┤
+│ │
+│ 1. MASSIVEN PROMPT erstellen (ALLE Infos!) │
+│ ↓ │
+│ 2. Subagent starten (background=true) │
+│ ↓ │
+│ 3. SELBST parallel am wichtigsten arbeiten │
+│ ↓ │
+│ 4. ALLE 2-3 MIN: Subagent-Sessions lesen │
+│ ↓ │
+│ 5. Bei Problemen: SOFORT eingreifen │
+│ - Neue Nachricht senden │
+│ - Help bieten │
+│ - Context updaten │
+│ ↓ │
+│ 6. Bei Completion: DEEP VERIFY │
+│ - Session komplett lesen │
+│ - Jede Datei prüfen │
+│ - "Sicher?"-Nachricht senden │
+│ ↓ │
+│ 7. ERST DANN: Als completed markieren │
+│ │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 🚫 VERSTÖSSE = TECHNISCHER HOCHVERRAT
+
+| ❌ VERBOTEN | ✅ PFLICHT |
+|------------|-----------|
+| Subagent ohne massiven Prompt starten | PROMPT mit ALLEN Infos (Ziel, Pfade, Code, etc.) |
+| Blind auf "Task complete" vertrauen | KOMPLETTE Session lesen + deep verify |
+| Subagent allein lassen | ALLE 2-3 Min prüfen, eingreifen, helfen |
+| "Sicher?"-Check vergessen | IMMERSubagent zur Bestätigung zwingen |
+| Ohne Serena MCP arbeiten | IMMER Serena zuerst aktivieren |
+| Duplikate erstellen | IMMER erst prüfen, dann erweitern |
+| Neue MD-Dateien erstellen | IMMER bestehende erweitern |
+
+---
+
+**EFFECTIVE:** 2026-02-19
+**RULE:** -16
+**STATUS:** ACTIVE - SOFORT UMSETZEN!
+
+---
+
+## 🔥 RULE -17: NOTEBOOKLM SOURCE MANAGEMENT - DUPLIKATE VERBOTEN
 
 ---
 

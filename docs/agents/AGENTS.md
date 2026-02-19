@@ -131,15 +131,15 @@ Du musst NotebookLM vollständig über NLM-CLI nutzen, den passenden Vorlagenpro
 
 | Category | Model | Wann verwenden |
 |----------|-------|----------------|
-| **visual-engineering** | `kimi-for-coding/k2p5` | Frontend, UI/UX, Design, Styling, Animation |
-| **ultrabrain** | `kimi-for-coding/k2p5` | ECHT schwere Logik-Aufgaben, nicht Step-by-Step |
-| **deep** | `opencode-zen/kimi-k2.5-free` | Goal-oriented problem-solving, hairy problems |
-| **artistry** | `kimi-for-coding/k2p5` | Unconventional, creative approaches |
-| **quick** | `kimi-for-coding/k2p5` | Triviale Tasks, einzelne Files, Typos, simple fixes |
-| **unspecified-low** | `kimi-for-coding/k2p5` | Low-effort Tasks |
-| **unspecified-high** | `kimi-for-coding/k2p5` | High-effort Tasks |
-| **writing** | `kimi-for-coding/k2p5` | Docs, Prose, technisches Schreiben |
-| **general** | `kimi-for-coding/k2p5` | Allgemeine Tasks |
+| **visual-engineering** | `opencode/kimi-k2.5-free` | Frontend, UI/UX, Design, Styling, Animation |
+| **ultrabrain** | `opencode/kimi-k2.5-free` | ECHT schwere Logik-Aufgaben, nicht Step-by-Step |
+| **deep** | `opencode/kimi-k2.5-free` | Goal-oriented problem-solving, hairy problems |
+| **artistry** | `opencode/kimi-k2.5-free` | Unconventional, creative approaches |
+| **quick** | `opencode/kimi-k2.5-free` | Triviale Tasks, einzelne Files, Typos, simple fixes |
+| **unspecified-low** | `opencode/kimi-k2.5-free` | Low-effort Tasks |
+| **unspecified-high** | `opencode/kimi-k2.5-free` | High-effort Tasks |
+| **writing** | `opencode/kimi-k2.5-free` | Docs, Prose, technisches Schreiben |
+| **general** | `opencode/kimi-k2.5-free` | Allgemeine Tasks |
 
 ### ⚠️ KRITISCHE REGELN:
 
@@ -153,9 +153,9 @@ Du musst NotebookLM vollständig über NLM-CLI nutzen, den passenden Vorlagenpro
    ```
 
 2. **Model-Auswahl:**
-   - `kimi-for-coding/k2p5` = DEFAULT für fast alles
-   - `opencode-zen/kimi-k2.5-free` = NUR für deep reasoning (FREE!)
-   - `moonshotai/kimi-k2.5` = Premium für Sisyphus only
+   - `opencode/kimi-k2.5-free` = DEFAULT für ALLE Categories (100% FREE!)
+   - `nvidia-nim/qwen-3.5-397b` = NUR für Sisyphus (CEO-Qualität)
+   - `moonshotai/kimi-k2.5` = Premium backup wenn NVIDIA failt
 
 3. **Skills hinzufügen wenn relevant:**
    ```typescript

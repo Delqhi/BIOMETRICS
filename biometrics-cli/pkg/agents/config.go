@@ -4,29 +4,29 @@ import "time"
 
 // AgentConfig represents an AI agent configuration
 type AgentConfig struct {
-	ID          string            `yaml:"id" json:"id"`
-	Name        string            `yaml:"name" json:"name"`
-	Provider    string            `yaml:"provider" json:"provider"`
-	Model       string            `yaml:"model" json:"model"`
-	Capabilities []string         `yaml:"capabilities" json:"capabilities"`
-	MaxRetries  int              `yaml:"max_retries" json:"max_retries"`
-	Timeout     time.Duration     `yaml:"timeout" json:"timeout"`
-	Tools       []string          `yaml:"tools" json:"tools"`
-	Variables   map[string]string `yaml:"variables" json:"variables"`
+	ID           string            `yaml:"id" json:"id"`
+	Name         string            `yaml:"name" json:"name"`
+	Provider     string            `yaml:"provider" json:"provider"`
+	Model        string            `yaml:"model" json:"model"`
+	Capabilities []string          `yaml:"capabilities" json:"capabilities"`
+	MaxRetries   int               `yaml:"max_retries" json:"max_retries"`
+	Timeout      time.Duration     `yaml:"timeout" json:"timeout"`
+	Tools        []string          `yaml:"tools" json:"tools"`
+	Variables    map[string]string `yaml:"variables" json:"variables"`
 }
 
 // NewAgentConfig creates a new agent configuration
 func NewAgentConfig(id, name, provider, model string) *AgentConfig {
 	return &AgentConfig{
-		ID:          id,
-		Name:        name,
-		Provider:    provider,
-		Model:       model,
+		ID:           id,
+		Name:         name,
+		Provider:     provider,
+		Model:        model,
 		Capabilities: []string{},
-		MaxRetries:  3,
-		Timeout:     10 * time.Minute,
-		Tools:       []string{},
-		Variables:   map[string]string{},
+		MaxRetries:   3,
+		Timeout:      10 * time.Minute,
+		Tools:        []string{},
+		Variables:    map[string]string{},
 	}
 }
 
@@ -34,54 +34,54 @@ func NewAgentConfig(id, name, provider, model string) *AgentConfig {
 func DefaultAgents() []*AgentConfig {
 	return []*AgentConfig{
 		{
-			ID:          "sisyphus",
-			Name:        "Sisyphus - Main Coder",
-			Provider:    "nvidia",
-			Model:       "qwen/qwen3.5-397b-a17b",
+			ID:           "sisyphus",
+			Name:         "Sisyphus - Main Coder",
+			Provider:     "nvidia",
+			Model:        "qwen/qwen3.5-397b-a17b",
 			Capabilities: []string{"code", "refactor", "debug"},
-			MaxRetries:  3,
-			Timeout:     10 * time.Minute,
-			Tools:       []string{"read", "write", "bash", "grep"},
+			MaxRetries:   3,
+			Timeout:      10 * time.Minute,
+			Tools:        []string{"read", "write", "bash", "grep"},
 		},
 		{
-			ID:          "prometheus",
-			Name:        "Prometheus - Planner",
-			Provider:    "nvidia",
-			Model:       "qwen/qwen3.5-397b-a17b",
+			ID:           "prometheus",
+			Name:         "Prometheus - Planner",
+			Provider:     "nvidia",
+			Model:        "qwen/qwen3.5-397b-a17b",
 			Capabilities: []string{"planning", "architecture", "research"},
-			MaxRetries:  2,
-			Timeout:     15 * time.Minute,
-			Tools:       []string{"read", "write", "glob"},
+			MaxRetries:   2,
+			Timeout:      15 * time.Minute,
+			Tools:        []string{"read", "write", "glob"},
 		},
 		{
-			ID:          "oracle",
-			Name:        "Oracle - Architect",
-			Provider:    "nvidia",
-			Model:       "qwen/qwen3.5-397b-a17b",
+			ID:           "oracle",
+			Name:         "Oracle - Architect",
+			Provider:     "nvidia",
+			Model:        "qwen/qwen3.5-397b-a17b",
 			Capabilities: []string{"architecture", "review", "security"},
-			MaxRetries:  2,
-			Timeout:     20 * time.Minute,
-			Tools:       []string{"read", "grep"},
+			MaxRetries:   2,
+			Timeout:      20 * time.Minute,
+			Tools:        []string{"read", "grep"},
 		},
 		{
-			ID:          "atlas",
-			Name:        "Atlas - Heavy Lifting",
-			Provider:    "moonshot",
-			Model:       "moonshotai/kimi-k2.5",
+			ID:           "atlas",
+			Name:         "Atlas - Heavy Lifting",
+			Provider:     "moonshot",
+			Model:        "moonshotai/kimi-k2.5",
 			Capabilities: []string{"implementation", "testing", "deployment"},
-			MaxRetries:  3,
-			Timeout:     30 * time.Minute,
-			Tools:       []string{"read", "write", "bash", "test"},
+			MaxRetries:   3,
+			Timeout:      30 * time.Minute,
+			Tools:        []string{"read", "write", "bash", "test"},
 		},
 		{
-			ID:          "librarian",
-			Name:        "Librarian - Documentation",
-			Provider:    "opencode-zen",
-			Model:       "zen/big-pickle",
+			ID:           "librarian",
+			Name:         "Librarian - Documentation",
+			Provider:     "opencode-zen",
+			Model:        "opencode/minimax-m2.5-free",
 			Capabilities: []string{"documentation", "research"},
-			MaxRetries:  2,
-			Timeout:     10 * time.Minute,
-			Tools:       []string{"read", "write"},
+			MaxRetries:   2,
+			Timeout:      10 * time.Minute,
+			Tools:        []string{"read", "write"},
 		},
 	}
 }

@@ -76,7 +76,7 @@ steps:
     type: agent
     agent:
       provider: opencode-zen
-      model: zen/big-pickle
+      model: opencode/minimax-m2.5-free
       prompt: |
         Analyze error message: {{inputs.error_message}}
         Identify: error type, source location, triggering conditions

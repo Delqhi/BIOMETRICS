@@ -55,7 +55,7 @@ steps:
     type: agent
     agent:
       provider: opencode-zen
-      model: zen/big-pickle
+      model: opencode/minimax-m2.5-free
       prompt: |
         Analyze the codebase structure in {{inputs.source_path}}.
         Extract: modules, functions, classes, APIs, dependencies
@@ -70,7 +70,7 @@ steps:
     type: agent
     agent:
       provider: opencode-zen
-      model: zen/big-pickle
+      model: opencode/minimax-m2.5-free
       prompt: |
         Extract API documentation from code.
         Document: endpoints, parameters, return types, examples
@@ -158,7 +158,7 @@ steps:
     type: agent
     agent:
       provider: opencode-zen
-      model: zen/big-pickle
+      model: opencode/minimax-m2.5-free
       prompt: |
         Validate documentation coverage.
         Report: undocumented modules, incomplete sections, outdated content

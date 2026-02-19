@@ -106,7 +106,7 @@ steps:
     type: agent
     agent:
       provider: opencode-zen
-      model: zen/big-pickle
+      model: opencode/minimax-m2.5-free
       prompt: |
         Validate code against {{inputs.language}} best practices.
         Check: naming conventions, error handling, documentation, test coverage

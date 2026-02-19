@@ -842,73 +842,73 @@ uvx serena start-mcp-server
     "sisyphus": {
       "model": {
         "provider": "moonshot-ai",
-        "id": "moonshotai/kimi-k2.5"
+        "id": "moonshotai/qwen/qwen3.5-397b-a17b"
       }
     },
     "sisyphus-junior": {
       "model": {
         "provider": "kimi-for-coding",
-        "id": "kimi-for-coding/k2p5"
+        "id": "qwen/qwen3.5-397b-a17b"
       }
     },
     "prometheus": {
       "model": {
         "provider": "kimi-for-coding",
-        "id": "kimi-for-coding/k2p5"
+        "id": "qwen/qwen3.5-397b-a17b"
       }
     },
     "metis": {
       "model": {
         "provider": "kimi-for-coding",
-        "id": "kimi-for-coding/k2p5"
+        "id": "qwen/qwen3.5-397b-a17b"
       }
     },
     "momus": {
       "model": {
         "provider": "kimi-for-coding",
-        "id": "kimi-for-coding/k2p5"
+        "id": "qwen/qwen3.5-397b-a17b"
       }
     },
     "oracle": {
       "model": {
         "provider": "kimi-for-coding",
-        "id": "kimi-for-coding/k2p5"
+        "id": "qwen/qwen3.5-397b-a17b"
       }
     },
     "frontend-ui-ux-engineer": {
       "model": {
         "provider": "kimi-for-coding",
-        "id": "kimi-for-coding/k2p5"
+        "id": "qwen/qwen3.5-397b-a17b"
       }
     },
     "document-writer": {
       "model": {
         "provider": "kimi-for-coding",
-        "id": "kimi-for-coding/k2p5"
+        "id": "qwen/qwen3.5-397b-a17b"
       }
     },
     "multimodal-looker": {
       "model": {
         "provider": "kimi-for-coding",
-        "id": "kimi-for-coding/k2p5"
+        "id": "qwen/qwen3.5-397b-a17b"
       }
     },
     "atlas": {
       "model": {
         "provider": "kimi-for-coding",
-        "id": "kimi-for-coding/k2p5"
+        "id": "qwen/qwen3.5-397b-a17b"
       }
     },
     "librarian": {
       "model": {
         "provider": "opencode-zen",
-        "id": "zen/big-pickle"
+        "id": "opencode/minimax-m2.5-free"
       }
     },
     "explore": {
       "model": {
         "provider": "opencode-zen",
-        "id": "zen/big-pickle"
+        "id": "opencode/minimax-m2.5-free"
       }
     }
   }
@@ -919,7 +919,7 @@ uvx serena start-mcp-server
 
 | Agent | Modell | Provider | Kosten | Purpose |
 |-------|--------|----------|--------|---------|
-| **sisyphus** | kimi-k2.5 | Moonshot AI | 💰 | Haupt-Agent (Orchestrator) |
+| **sisyphus** | qwen/qwen3.5-397b-a17b | Moonshot AI | 💰 | Haupt-Agent (Orchestrator) |
 | **sisyphus-junior** | k2p5 | Kimi For Coding | 💰 | Junior Developer |
 | **prometheus** | k2p5 | Kimi For Coding | 💰 | Planning & Strategy |
 | **metis** | k2p5 | Kimi For Coding | 💰 | Pre-Planning Consultant |
@@ -929,22 +929,22 @@ uvx serena start-mcp-server
 | **document-writer** | k2p5 | Kimi For Coding | 💰 | Technical Writer |
 | **multimodal-looker** | k2p5 | Kimi For Coding | 💰 | Image/PDF Analysis |
 | **atlas** | k2p5 | Kimi For Coding | 💰 | Heavy Lifting |
-| **librarian** | zen/big-pickle | OpenCode ZEN | 🆓 FREE | Research & Documentation |
-| **explore** | zen/big-pickle | OpenCode ZEN | 🆓 FREE | Codebase Exploration |
+| **librarian** | opencode/minimax-m2.5-free | OpenCode ZEN | 🆓 FREE | Research & Documentation |
+| **explore** | opencode/minimax-m2.5-free | OpenCode ZEN | 🆓 FREE | Codebase Exploration |
 
 ### Warum diese Verteilung?
 
-1. **Sisyphus (moonshotai/kimi-k2.5)**
+1. **Sisyphus (moonshotai/qwen/qwen3.5-397b-a17b)**
    - Premium-Modell für Haupt-Agent
    - Beste Code-Qualität
    - Höchste Zuverlässigkeit
 
-2. **Andere Coding-Agenten (kimi-for-coding/k2p5)**
+2. **Andere Coding-Agenten (qwen/qwen3.5-397b-a17b)**
    - Gutes Modell, kosteneffizient
    - Spezialisiert auf Coding-Tasks
    - Balance zwischen Qualität und Kosten
 
-3. **Recherche-Agenten (zen/big-pickle)**
+3. **Recherche-Agenten (opencode/minimax-m2.5-free)**
    - 100% KOSTENLOS
    - Perfekt für Suche und Recherche
    - Uncensored, keine Limits
@@ -975,7 +975,7 @@ opencode models
 ## 📋 15. Vollständige Agenten-Beschreibungen
 
 ### Sisyphus (Haupt-Agent)
-**Modell:** `moonshotai/kimi-k2.5`  
+**Modell:** `moonshotai/qwen/qwen3.5-397b-a17b`  
 **Rolle:** Orchestrator, Haupt-Developer  
 **Aufgaben:**
 - Gesamt-Orchestrierung
@@ -991,7 +991,7 @@ opencode models
 ---
 
 ### Sisyphus-Junior
-**Modell:** `kimi-for-coding/k2p5`  
+**Modell:** `qwen/qwen3.5-397b-a17b`  
 **Rolle:** Junior Developer  
 **Aufgaben:**
 - Einfache Code-Änderungen
@@ -1007,7 +1007,7 @@ opencode models
 ---
 
 ### Prometheus
-**Modell:** `kimi-for-coding/k2p5`  
+**Modell:** `qwen/qwen3.5-397b-a17b`  
 **Rolle:** Planning & Strategy  
 **Aufgaben:**
 - Task-Planning
@@ -1023,7 +1023,7 @@ opencode models
 ---
 
 ### Metis
-**Modell:** `kimi-for-coding/k2p5`  
+**Modell:** `qwen/qwen3.5-397b-a17b`  
 **Rolle:** Pre-Planning Consultant  
 **Aufgaben:**
 - Anforderungs-Analyse
@@ -1039,7 +1039,7 @@ opencode models
 ---
 
 ### Momus
-**Modell:** `kimi-for-coding/k2p5`  
+**Modell:** `qwen/qwen3.5-397b-a17b`  
 **Rolle:** Code Reviewer  
 **Aufgaben:**
 - Code Reviews
@@ -1055,7 +1055,7 @@ opencode models
 ---
 
 ### Oracle
-**Modell:** `kimi-for-coding/k2p5`  
+**Modell:** `qwen/qwen3.5-397b-a17b`  
 **Rolle:** Architecture Consultant  
 **Aufgaben:**
 - Architecture Reviews
@@ -1071,7 +1071,7 @@ opencode models
 ---
 
 ### Frontend-UI-UX-Engineer
-**Modell:** `kimi-for-coding/k2p5`  
+**Modell:** `qwen/qwen3.5-397b-a17b`  
 **Rolle:** Frontend Specialist  
 **Aufgaben:**
 - UI Implementation
@@ -1087,7 +1087,7 @@ opencode models
 ---
 
 ### Document-Writer
-**Modell:** `kimi-for-coding/k2p5`  
+**Modell:** `qwen/qwen3.5-397b-a17b`  
 **Rolle:** Technical Writer  
 **Aufgaben:**
 - API Documentation
@@ -1103,7 +1103,7 @@ opencode models
 ---
 
 ### Multimodal-Looker
-**Modell:** `kimi-for-coding/k2p5`  
+**Modell:** `qwen/qwen3.5-397b-a17b`  
 **Rolle:** Image/PDF Analysis  
 **Aufgaben:**
 - Image Recognition
@@ -1119,7 +1119,7 @@ opencode models
 ---
 
 ### Atlas
-**Modell:** `kimi-for-coding/k2p5`  
+**Modell:** `qwen/qwen3.5-397b-a17b`  
 **Rolle:** Heavy Lifting  
 **Aufgaben:**
 - Large Refactorings
@@ -1135,7 +1135,7 @@ opencode models
 ---
 
 ### Librarian
-**Modell:** `zen/big-pickle` (FREE)  
+**Modell:** `opencode/minimax-m2.5-free` (FREE)  
 **Rolle:** Research & Documentation  
 **Aufgaben:**
 - Web Research
@@ -1151,7 +1151,7 @@ opencode models
 ---
 
 ### Explore
-**Modell:** `zen/big-pickle` (FREE)  
+**Modell:** `opencode/minimax-m2.5-free` (FREE)  
 **Rolle:** Codebase Exploration  
 **Aufgaben:**
 - Code Discovery
@@ -1172,35 +1172,35 @@ opencode models
 ```bash
 opencode run "Implement user authentication with JWT" \
   --agent sisyphus \
-  --model moonshotai/kimi-k2.5
+  --model moonshotai/qwen/qwen3.5-397b-a17b
 ```
 
 ### Librarian für Research (FREE)
 ```bash
 opencode run "Find best practices for React Server Components 2026" \
   --agent librarian \
-  --model zen/big-pickle
+  --model opencode/minimax-m2.5-free
 ```
 
 ### Explore für Codebase Analysis (FREE)
 ```bash
 opencode run "Find all authentication middleware in src/" \
   --agent explore \
-  --model zen/big-pickle
+  --model opencode/minimax-m2.5-free
 ```
 
 ### Oracle für Architecture Review
 ```bash
 opencode run "Review this microservices architecture for scalability issues" \
   --agent oracle \
-  --model kimi-for-coding/k2p5
+  --model qwen/qwen3.5-397b-a17b
 ```
 
 ### Momus für Code Review
 ```bash
 opencode run "Review this pull request for security vulnerabilities" \
   --agent momus \
-  --model kimi-for-coding/k2p5
+  --model qwen/qwen3.5-397b-a17b
 ```
 
 ---
@@ -1211,7 +1211,7 @@ opencode run "Review this pull request for security vulnerabilities" \
 
 | Task Typ | Agent | Modell | Kosten |
 |----------|-------|--------|--------|
-| **Haupt-Development** | sisyphus | kimi-k2.5 | 💰💰 |
+| **Haupt-Development** | sisyphus | qwen/qwen3.5-397b-a17b | 💰💰 |
 | **Einfache Fixes** | sisyphus-junior | k2p5 | 💰 |
 | **Planning** | prometheus | k2p5 | 💰 |
 | **Requirements** | metis | k2p5 | 💰 |
@@ -1221,8 +1221,8 @@ opencode run "Review this pull request for security vulnerabilities" \
 | **Dokumentation** | document-writer | k2p5 | 💰 |
 | **Image Analysis** | multimodal-looker | k2p5 | 💰 |
 | **Große Tasks** | atlas | k2p5 | 💰💰 |
-| **Research** | librarian | zen/big-pickle | 🆓 |
-| **Code Exploration** | explore | zen/big-pickle | 🆓 |
+| **Research** | librarian | opencode/minimax-m2.5-free | 🆓 |
+| **Code Exploration** | explore | opencode/minimax-m2.5-free | 🆓 |
 
 ### Kosten-Optimierung
 
@@ -1513,7 +1513,7 @@ Der OpenCode ZEN Provider bietet kostenlose Modelle.
         "baseURL": "https://api.opencode.ai/v1"
       },
       "models": {
-        "zen/big-pickle": {
+        "opencode/minimax-m2.5-free": {
           "name": "Big Pickle (UNCENSORED)",
           "limit": {
             "context": 200000,
@@ -1575,7 +1575,7 @@ Der OpenCode ZEN Provider bietet kostenlose Modelle.
 
 ```bash
 # Kostenloses Model nutzen
-opencode run "Hello" --model opencode-zen/zen/big-pickle
+opencode run "Hello" --model opencode-zen/opencode/minimax-m2.5-free
 
 # Code-spezifisch
 opencode run "Write a React component" --model opencode-zen/zen/code
@@ -2440,7 +2440,7 @@ opencode config set cache.enabled true
       "primary": "nvidia/qwen/qwen3.5-397b-a17b",
       "fallbacks": [
         "google/antigravity-gemini-3-flash",
-        "opencode-zen/zen/big-pickle"
+        "opencode-zen/opencode/minimax-m2.5-free"
       ]
     }
   }
@@ -2650,8 +2650,8 @@ export OPENCODE_ENV=production
 
 | Task | Empfohlenes Model | Kosten |
 |------|-------------------|-------|
-| Recherche | zen/big-pickle | 🆓 |
-| Exploration | zen/big-pickle | 🆓 |
+| Recherche | opencode/minimax-m2.5-free | 🆓 |
+| Exploration | opencode/minimax-m2.5-free | 🆓 |
 | Einfache Tasks | gemini-3-flash | 💰 |
 | Komplexe Tasks | gemini-3-pro | 💰💰 |
 | Code-Intensive | qwen-3.5-397b | 💰💰 |

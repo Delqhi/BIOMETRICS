@@ -97,7 +97,7 @@ qwen_tests:
   model: qwen/qwen3.5-397b-a17b
   timeout: 120000
   retry_attempts: 3
-  fallback_model: kimi-for-coding/k2p5
+  fallback_model: opencode/minimax-m2.5-free
   test_cases:
     - vision_analysis_quality > 0.85
     - code_generation_syntax_valid: true

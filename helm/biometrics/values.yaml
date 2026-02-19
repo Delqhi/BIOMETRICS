@@ -1,0 +1,219 @@
+# Default values for biometrics.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 3
+
+image:
+  opencodeServer:
+    repository: opencode
+    pullPolicy: Always
+    tag: "latest"
+  openclaw:
+    repository: delqhi/openclaw
+    pullPolicy: Always
+    tag: "latest"
+  serena:
+    repository: serena-mcp
+    pullPolicy: Always
+    tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "biometrics"
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+# PostgreSQL Configuration
+postgresql:
+  enabled: true
+  image:
+    repository: postgres
+    tag: "16-alpine"
+  auth:
+    postgresPassword: "biometrics_secure_2026_k8s"
+    database: biometrics
+    username: postgres
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 10Gi
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 250m
+      limits:
+        memory: 2Gi
+        cpu: 1000m
+
+# Redis Configuration
+redis:
+  enabled: true
+  image:
+    repository: redis
+    tag: "7-alpine"
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 5Gi
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 100m
+      limits:
+        memory: 1Gi
+        cpu: 500m
+
+# OpenCode Server Configuration
+opencodeServer:
+  env:
+    NODE_ENV: production
+    LOG_LEVEL: info
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 500m
+    limits:
+      memory: 4Gi
+      cpu: 2000m
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 20Gi
+  service:
+    type: ClusterIP
+    port: 8080
+  hpa:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+
+# OpenClaw Configuration
+openclaw:
+  enabled: true
+  replicaCount: 2
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+    limits:
+      memory: 2Gi
+      cpu: 1000m
+  service:
+    type: ClusterIP
+    port: 18789
+
+# Serena MCP Configuration
+serena:
+  enabled: true
+  replicaCount: 1
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+    limits:
+      memory: 2Gi
+      cpu: 1000m
+  service:
+    type: ClusterIP
+    port: 8081
+
+# Monitoring Stack
+monitoring:
+  enabled: true
+  prometheus:
+    enabled: true
+    retention: 30d
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 250m
+      limits:
+        memory: 2Gi
+        cpu: 1000m
+  grafana:
+    enabled: true
+    adminPassword: "admin"
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 100m
+      limits:
+        memory: 1Gi
+        cpu: 500m
+    persistence:
+      enabled: true
+      size: 5Gi
+
+# Ingress Configuration
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+  hosts:
+    - host: biometrics.delqhi.com
+      paths:
+        - path: /
+          pathType: Prefix
+          service: opencode-server
+          port: 8080
+    - host: api.biometrics.delqhi.com
+      paths:
+        - path: /
+          pathType: Prefix
+          service: opencode-server
+          port: 8080
+    - host: grafana.biometrics.delqhi.com
+      paths:
+        - path: /
+          pathType: Prefix
+          service: grafana
+          port: 3000
+    - host: prometheus.biometrics.delqhi.com
+      paths:
+        - path: /
+          pathType: Prefix
+          service: prometheus
+          port: 9090
+  tls:
+    - secretName: biometrics-tls-secret
+      hosts:
+        - biometrics.delqhi.com
+        - api.biometrics.delqhi.com
+        - grafana.biometrics.delqhi.com
+        - prometheus.biometrics.delqhi.com
+
+# Secrets Configuration
+secrets:
+  nvidiaApiKey: ""
+  serenaApiKey: ""
+  dbPassword: "biometrics_secure_2026_k8s"
+
+# Network Policy
+networkPolicy:
+  enabled: true
+
+# Pod Disruption Budget
+pdb:
+  enabled: true
+  minAvailable: 2

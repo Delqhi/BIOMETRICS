@@ -86,7 +86,7 @@ opencode models
 
 # Expected output should include:
 # - moonshotai/kimi-k2.5
-# - kimi-for-coding/k2p5
+# - qwen/qwen3.5-397b-a17b
 # - opencode-zen/zen/big-pickle
 ```
 

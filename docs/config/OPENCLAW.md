@@ -3592,7 +3592,7 @@ Kimi for Coding bietet spezialisierte Modelle, die für Programmieraufgaben opti
         "api": "openai-completions",
         "models": [
           {
-            "id": "kimi-for-coding/k2p5",
+            "id": "qwen/qwen3.5-397b-a17b",
             "name": "Kimi K2.5 for Coding",
             "contextWindow": 200000,
             "maxOutputTokens": 32768,

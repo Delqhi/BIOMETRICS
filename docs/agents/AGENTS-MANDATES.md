@@ -3799,7 +3799,7 @@ Custom providers MUST use `@ai-sdk/openai-compatible` with `options.baseURL`:
         "baseURL": "https://api.opencode.ai/v1"
       },
       "models": {
-        "zen/big-pickle": {
+        "opencode/minimax-m2.5-free": {
           "name": "Big Pickle (OpenCode ZEN - UNCENSORED)",
           "limit": { "context": 200000, "output": 128000 }
         },
@@ -3828,7 +3828,7 @@ Custom providers MUST use `@ai-sdk/openai-compatible` with `options.baseURL`:
 **Metadata (Documentation Only):**
 - Pricing: 100% FREE for community use
 - Features: uncensored-generation, explicit-content-safe, production-ready
-- zen/big-pickle: Fallback for Claude censorship detection
+- opencode/minimax-m2.5-free: Fallback for Claude censorship detection
 - All models: $0.00/1M tokens
 
 **Handover Mechanism (External Business Logic):**
@@ -3915,7 +3915,7 @@ Commands:
 **Note:** `fallbackChain` is NOT a valid OpenCode config field. Implement fallback logic externally.
 
 Recommended fallback order:
-1. `zen/big-pickle` - FREE, uncensored
+1. `opencode/minimax-m2.5-free` - FREE, uncensored
 2. `kat-coder-pro-v1` - Streamlake
 3. `mimo-v2-turbo` - XiaoMi
 4. `grok-code` - Via OpenRouter
@@ -3925,7 +3925,7 @@ Recommended fallback order:
 
 1. Primary model fails → Try next in chain
 2. All models fail → Return error with all attempts logged
-3. Censorship detected → Immediate handover to `zen/big-pickle`
+3. Censorship detected → Immediate handover to `opencode/minimax-m2.5-free`
 
 ---
 
@@ -4045,7 +4045,7 @@ chmod 600 ~/.config/opencode/opencode.json
 │    google/antigravity-gemini-3-flash                        │
 │                                                              │
 │  FALLBACK CHAIN:                                             │
-│    zen/big-pickle → kat-coder-pro-v1 → mimo-v2-turbo       │
+│    opencode/minimax-m2.5-free → kat-coder-pro-v1 → mimo-v2-turbo       │
 │                                                              │
 │  26-ROOM NETWORK: 172.20.0.0/16                             │
 │                                                              │
@@ -4375,23 +4375,23 @@ Detaillierte Dokumentation: `~/dev/sin-code/OpenCode/Docs/agent-models-config.md
 | Agent | Modell | Provider | Kosten |
 |-------|--------|----------|--------|
 | **sisyphus** | moonshotai/kimi-k2.5 | Moonshot AI | 💰 |
-| **sisyphus-junior** | kimi-for-coding/k2p5 | Kimi For Coding | 💰 |
-| **prometheus** | kimi-for-coding/k2p5 | Kimi For Coding | 💰 |
-| **metis** | kimi-for-coding/k2p5 | Kimi For Coding | 💰 |
-| **momus** | kimi-for-coding/k2p5 | Kimi For Coding | 💰 |
-| **oracle** | kimi-for-coding/k2p5 | Kimi For Coding | 💰 |
-| **frontend-ui-ux-engineer** | kimi-for-coding/k2p5 | Kimi For Coding | 💰 |
-| **document-writer** | kimi-for-coding/k2p5 | Kimi For Coding | 💰 |
-| **multimodal-looker** | kimi-for-coding/k2p5 | Kimi For Coding | 💰 |
-| **atlas** | kimi-for-coding/k2p5 | Kimi For Coding | 💰 |
-| **librarian** | opencode-zen/zen/big-pickle | OpenCode ZEN | 🆓 FREE |
-| **explore** | opencode-zen/zen/big-pickle | OpenCode ZEN | 🆓 FREE |
+| **sisyphus-junior** | qwen/qwen3.5-397b-a17b | Kimi For Coding | 💰 |
+| **prometheus** | qwen/qwen3.5-397b-a17b | Kimi For Coding | 💰 |
+| **metis** | qwen/qwen3.5-397b-a17b | Kimi For Coding | 💰 |
+| **momus** | qwen/qwen3.5-397b-a17b | Kimi For Coding | 💰 |
+| **oracle** | qwen/qwen3.5-397b-a17b | Kimi For Coding | 💰 |
+| **frontend-ui-ux-engineer** | qwen/qwen3.5-397b-a17b | Kimi For Coding | 💰 |
+| **document-writer** | qwen/qwen3.5-397b-a17b | Kimi For Coding | 💰 |
+| **multimodal-looker** | qwen/qwen3.5-397b-a17b | Kimi For Coding | 💰 |
+| **atlas** | qwen/qwen3.5-397b-a17b | Kimi For Coding | 💰 |
+| **librarian** | opencode-zen/opencode/minimax-m2.5-free | OpenCode ZEN | 🆓 FREE |
+| **explore** | opencode-zen/opencode/minimax-m2.5-free | OpenCode ZEN | 🆓 FREE |
 
 ### Warum diese Verteilung?
 
 1. **Sisyphus (moonshotai/kimi-k2.5)** - Premium-Modell für Haupt-Agent
-2. **Andere Coding-Agenten (kimi-for-coding/k2p5)** - Gutes Modell, kosteneffizient
-3. **Recherche-Agenten (zen/big-pickle)** - 100% KOSTENLOS für Suche und Recherche
+2. **Andere Coding-Agenten (qwen/qwen3.5-397b-a17b)** - Gutes Modell, kosteneffizient
+3. **Recherche-Agenten (opencode/minimax-m2.5-free)** - 100% KOSTENLOS für Suche und Recherche
 
 ### Provider Setup
 

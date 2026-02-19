@@ -175,7 +175,7 @@ opencode models
 
 # Expected output (at minimum):
 # - moonshotai/kimi-k2.5
-# - kimi-for-coding/k2p5
+# - qwen/qwen3.5-397b-a17b
 # - opencode-zen/zen/big-pickle
 # - opencode-zen/zen/uncensored
 # - opencode-zen/zen/code

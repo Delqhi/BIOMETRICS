@@ -131,15 +131,20 @@ Du musst NotebookLM vollständig über NLM-CLI nutzen, den passenden Vorlagenpro
 
 | Category | Model | Wann verwenden |
 |----------|-------|----------------|
-| **visual-engineering** | `opencode/kimi-k2.5-free` | Frontend, UI/UX, Design, Styling, Animation |
-| **ultrabrain** | `opencode/kimi-k2.5-free` | ECHT schwere Logik-Aufgaben, nicht Step-by-Step |
-| **deep** | `opencode/kimi-k2.5-free` | Goal-oriented problem-solving, hairy problems |
-| **artistry** | `opencode/kimi-k2.5-free` | Unconventional, creative approaches |
-| **quick** | `opencode/kimi-k2.5-free` | Triviale Tasks, einzelne Files, Typos, simple fixes |
-| **unspecified-low** | `opencode/kimi-k2.5-free` | Low-effort Tasks |
-| **unspecified-high** | `opencode/kimi-k2.5-free` | High-effort Tasks |
-| **writing** | `opencode/kimi-k2.5-free` | Docs, Prose, technisches Schreiben |
-| **general** | `opencode/kimi-k2.5-free` | Allgemeine Tasks |
+| **build** | `qwen/qwen3.5-397b-a17b` | Code generieren, neue Features |
+| **plan** | `qwen/qwen3.5-397b-a17b` | Planung, Architektur |
+| **ultrabrain** | `qwen/qwen3.5-397b-a17b` | ECHT schwere Logik-Aufgaben |
+| **artistry** | `qwen/qwen3.5-397b-a17b` | Unconventional, creative approaches |
+| **visual-engineering** | `qwen/qwen3.5-397b-a17b` | Frontend, UI/UX, Design |
+| **oracle** | `qwen/qwen3.5-397b-a17b` | Debugging, Architektur |
+| **metis** | `qwen/qwen3.5-397b-a17b` | Pre-planning |
+| **momus** | `qwen/qwen3.5-397b-a17b` | Plan review |
+| **writing** | `qwen/qwen3.5-397b-a17b` | Docs, technisches Schreiben |
+| **deep** | `opencode-zen/kimi-k2.5-free` | Goal-oriented problem-solving |
+| **quick** | `opencode/minimax-m2.5-free` | Triviale Tasks |
+| **explore** | `opencode/minimax-m2.5-free` | Code discovery |
+| **librarian** | `opencode/minimax-m2.5-free` | Recherche, Docs |
+| **general** | `qwen/qwen3.5-397b-a17b` | Allgemeine Tasks |
 
 ### ⚠️ KRITISCHE REGELN:
 
@@ -152,10 +157,10 @@ Du musst NotebookLM vollständig über NLM-CLI nutzen, den passenden Vorlagenpro
    task(load_skills=[], prompt="Fix typo")
    ```
 
-2. **Model-Auswahl:**
-   - `opencode/kimi-k2.5-free` = DEFAULT für ALLE Categories (100% FREE!)
-   - `nvidia-nim/qwen-3.5-397b` = NUR für Sisyphus (CEO-Qualität)
-   - `moonshotai/kimi-k2.5` = Premium backup wenn NVIDIA failt
+2. **Model-Auswahl (GENAU wie unten):**
+   - `qwen/qwen3.5-397b-a17b` = build, plan, ultrabrain, artistry, visual-engineering, oracle, metis, momus, writing, general
+   - `opencode-zen/kimi-k2.5-free` = NUR deep
+   - `opencode/minimax-m2.5-free` = quick, explore, librarian
 
 3. **Skills hinzufügen wenn relevant:**
    ```typescript

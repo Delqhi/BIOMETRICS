@@ -121,6 +121,80 @@ Du musst NotebookLM vollständig über NLM-CLI nutzen, den passenden Vorlagenpro
 - P1: innerhalb der Session
 - P2: in nächsten 20er-Loop einplanen
 
+---
+
+## 🎯 OH-MY-OPENCODE CATEGORIES (DEQLHI-LOOP)
+
+**PFlicht:** Bei JEDER delegate_task() muss die richtige Category verwendet werden!
+
+### Category-Liste (OFFIZIELL):
+
+| Category | Model | Wann verwenden |
+|----------|-------|----------------|
+| **visual-engineering** | `kimi-for-coding/k2p5` | Frontend, UI/UX, Design, Styling, Animation |
+| **ultrabrain** | `kimi-for-coding/k2p5` | ECHT schwere Logik-Aufgaben, nicht Step-by-Step |
+| **deep** | `opencode-zen/kimi-k2.5-free` | Goal-oriented problem-solving, hairy problems |
+| **artistry** | `kimi-for-coding/k2p5` | Unconventional, creative approaches |
+| **quick** | `kimi-for-coding/k2p5` | Triviale Tasks, einzelne Files, Typos, simple fixes |
+| **unspecified-low** | `kimi-for-coding/k2p5` | Low-effort Tasks |
+| **unspecified-high** | `kimi-for-coding/k2p5` | High-effort Tasks |
+| **writing** | `kimi-for-coding/k2p5` | Docs, Prose, technisches Schreiben |
+| **general** | `kimi-for-coding/k2p5` | Allgemeine Tasks |
+
+### ⚠️ KRITISCHE REGELN:
+
+1. **Category IMMER angeben:**
+   ```typescript
+   // ✅ RICHTIG
+   task(category="quick", load_skills=[], prompt="Fix typo")
+   
+   // ❌ FALSCH - Keine Category!
+   task(load_skills=[], prompt="Fix typo")
+   ```
+
+2. **Model-Auswahl:**
+   - `kimi-for-coding/k2p5` = DEFAULT für fast alles
+   - `opencode-zen/kimi-k2.5-free` = NUR für deep reasoning (FREE!)
+   - `moonshotai/kimi-k2.5` = Premium für Sisyphus only
+
+3. **Skills hinzufügen wenn relevant:**
+   ```typescript
+   // Mit Skill
+   task(category="visual-engineering", load_skills=["playwright"], prompt="...")
+   
+   // Ohne Skill (wenn nicht gebraucht)
+   task(category="quick", load_skills=[], prompt="...")
+   ```
+
+### Available Skills:
+
+| Skill | Wann |
+|-------|------|
+| `playwright` | Browser automation, testing, screenshots |
+| `frontend-ui-ux` | Designer-style UI ohne Mockup |
+| `git-master` | Git operations, commits, rebase |
+| `dev-browser` | Navigation, forms, scraping |
+
+### DEQLHI-LOOP Workflow (RICHTIG):
+
+```typescript
+// 1. Research (1-2 Agents) - IMMER parallel!
+task(category="deep", load_skills=[], run_in_background=true, prompt="Research X")
+task(category="writing", load_skills=[], run_in_background=true, prompt="Find docs")
+
+// 2. Plan (1 Agent) - Nach Research
+task(category="ultrabrain", load_skills=[], prompt="Create plan based on research")
+
+// 3. Review (1 Agent)
+task(category="ultrabrain", load_skills=[], prompt="Review plan quality")
+
+// 4. Implement (MAX 3 Agents) - Parallel!
+task(category="quick", load_skills=["git-master"], run_in_background=true, prompt="...")
+task(category="visual-engineering", load_skills=["playwright"], run_in_background=true, prompt="...")
+```
+
+---
+
 ## Qwen 3.5 Skills
 
 Dieses Projekt nutzt Qwen 3.5 (NVIDIA NIM) für spezialisierte KI-Aufgaben. Die folgenden Skills sind verfügbar:

@@ -1,0 +1,190 @@
+# ============================================================================
+# CODEOWNERS - BIOMETRICS REPOSITORY
+# ============================================================================
+# This file defines code owners for different parts of the repository.
+# Code owners are automatically requested for review when someone opens
+# a pull request that modifies code they own.
+#
+# Format: pattern owner1 owner2 ...
+# Documentation: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# DEFAULT OWNERS
+# ----------------------------------------------------------------------------
+# Catch-all for any files not explicitly matched below
+* @biometrics-core
+
+# ----------------------------------------------------------------------------
+# GO CODE - CLI & BACKEND
+# ----------------------------------------------------------------------------
+# All Go source code and related files
+/biometrics-cli/ @biometrics-go @go-reviewers
+/BIOMETRICS/biometrics/ @biometrics-go @go-reviewers
+**.go @biometrics-go @go-reviewers
+go.mod @biometrics-go @go-reviewers
+go.sum @biometrics-go @go-reviewers
+
+# ----------------------------------------------------------------------------
+# TYPESCRIPT/JAVASCRIPT CODE
+# ----------------------------------------------------------------------------
+# Frontend and Node.js code
+**.ts @biometrics-frontend @biometrics-core
+**.tsx @biometrics-frontend @biometrics-core
+**.js @biometrics-frontend @biometrics-core
+**.jsx @biometrics-frontend @biometrics-core
+**/package.json @biometrics-frontend @biometrics-devops
+**/tsconfig.json @biometrics-frontend @biometrics-devops
+
+# ----------------------------------------------------------------------------
+# DOCUMENTATION
+# ----------------------------------------------------------------------------
+# All markdown documentation
+/docs/ @biometrics-docs @biometrics-core
+**.md @biometrics-docs @biometrics-core
+*.md @biometrics-docs @biometrics-core
+
+# Specific documentation directories
+/docs/advanced/ @biometrics-docs @biometrics-architecture
+/docs/architecture/ @biometrics-architecture @biometrics-docs
+/docs/best-practices/ @biometrics-docs @biometrics-core
+/docs/setup/ @biometrics-docs @biometrics-devops
+/docs/tutorials/ @biometrics-docs @biometrics-frontend
+/docs/features/ @biometrics-docs @biometrics-product
+/docs/agents/ @biometrics-docs @biometrics-ai
+/docs/config/ @biometrics-docs @biometrics-devops
+/docs/data/ @biometrics-docs @biometrics-data
+/docs/devops/ @biometrics-docs @biometrics-devops
+/docs/examples/ @biometrics-docs @biometrics-core
+
+# ----------------------------------------------------------------------------
+# GITHUB ACTIONS & CI/CD
+# ----------------------------------------------------------------------------
+# GitHub Actions workflows and configuration
+/.github/ @biometrics-devops @biometrics-core
+/.github/workflows/ @biometrics-devops
+/.github/ISSUE_TEMPLATE/ @biometrics-product @biometrics-devops
+**/.github/ @biometrics-devops
+
+# ----------------------------------------------------------------------------
+# ASSETS & DESIGN
+# ----------------------------------------------------------------------------
+# Images, logos, icons, diagrams
+/assets/ @biometrics-design @biometrics-core
+/assets/logos/ @biometrics-design
+/assets/icons/ @biometrics-design
+/assets/diagrams/ @biometrics-design @biometrics-architecture
+**.svg @biometrics-design
+**.png @biometrics-design
+**.jpg @biometrics-design
+**.jpeg @biometrics-design
+**.gif @biometrics-design
+**.webp @biometrics-design
+
+# ----------------------------------------------------------------------------
+# CONFIGURATION FILES
+# ----------------------------------------------------------------------------
+# TOML configuration files
+**.toml @biometrics-devops @biometrics-core
+
+# YAML configuration files
+**.yaml @biometrics-devops @biometrics-core
+**.yml @biometrics-devops @biometrics-core
+
+# JSON configuration files
+**/vercel.json @biometrics-devops @biometrics-frontend
+**/tsconfig.json @biometrics-devops @biometrics-frontend
+**.json @biometrics-devops
+
+# Environment and secrets
+**.env @biometrics-devops
+**.env.example @biometrics-devops @biometrics-core
+.gitignore @biometrics-devops
+
+# Docker files
+**/Dockerfile @biometrics-devops @biometrics-core
+**/docker-compose.yml @biometrics-devops
+**/docker-compose.yaml @biometrics-devops
+.dockerignore @biometrics-devops
+
+# ----------------------------------------------------------------------------
+# DATABASE & MIGRATIONS
+# ----------------------------------------------------------------------------
+# Database schemas and migrations
+**/migrations/ @biometrics-data @biometrics-devops
+**.sql @biometrics-data @biometrics-devops
+**/schema.sql @biometrics-data @biometrics-devops
+
+# ----------------------------------------------------------------------------
+# TESTS
+# ----------------------------------------------------------------------------
+# Test files
+**/test/ @biometrics-core @biometrics-devops
+**/tests/ @biometrics-core @biometrics-devops
+**/__tests__/ @biometrics-core @biometrics-devops
+**.test.ts @biometrics-core @biometrics-devops
+**.test.tsx @biometrics-core @biometrics-devops
+**.test.js @biometrics-core @biometrics-devops
+**.spec.ts @biometrics-core @biometrics-devops
+**.spec.tsx @biometrics-core @biometrics-devops
+**/*_test.go @biometrics-go @biometrics-devops
+
+# ----------------------------------------------------------------------------
+# SCRIPTS
+# ----------------------------------------------------------------------------
+# Build and development scripts
+**/scripts/ @biometrics-devops @biometrics-core
+**/Makefile @biometrics-devops @biometrics-core
+**/makefile @biometrics-devops @biometrics-core
+**.sh @biometrics-devops @biometrics-core
+
+# ----------------------------------------------------------------------------
+# BACKUPS & ARCHIVES
+# ----------------------------------------------------------------------------
+# Backup files (review required before merging)
+/backups/ @biometrics-devops @biometrics-core
+**.bak @biometrics-devops
+**.backup @biometrics-devops
+
+# ----------------------------------------------------------------------------
+# NLM ASSETS
+# ----------------------------------------------------------------------------
+# NotebookLM assets and resources
+/NLM-ASSETS/ @biometrics-docs @biometrics-design
+
+# ----------------------------------------------------------------------------
+# TEAM DEFINITIONS
+# ----------------------------------------------------------------------------
+# @biometrics-core - Core development team (default reviewers)
+# @biometrics-go - Go backend developers
+# @biometrics-frontend - Frontend/TypeScript developers
+# @biometrics-docs - Documentation writers and maintainers
+# @biometrics-devops - DevOps and infrastructure team
+# @biometrics-design - Design and assets team
+# @biometrics-architecture - System architects
+# @biometrics-data - Data engineers and DBAs
+# @biometrics-ai - AI/ML engineers
+# @biometrics-product - Product managers
+# @go-reviewers - Go code reviewers (senior Go developers)
+#
+# Note: Team definitions must be created in GitHub Organization Settings
+# URL: https://github.com/organizations/BIOMETRICS/settings/teams
+# ----------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------
+# CRITICAL FILES (REQUIRE MULTIPLE APPROVALS)
+# ----------------------------------------------------------------------------
+# These files require review from multiple teams due to their impact
+/security/ @biometrics-core @biometrics-devops @biometrics-architecture
+**/auth/ @biometrics-core @biometrics-devops
+**/crypto/ @biometrics-core @biometrics-security
+config/prod/** @biometrics-devops @biometrics-core
+**/secrets/** @biometrics-devops @biometrics-core
+
+# ----------------------------------------------------------------------------
+# MERGE STRATEGY HINTS
+# ----------------------------------------------------------------------------
+# For guidance on merge strategies, see:
+# .github/BRANCH_PROTECTION_CONFIG.md
+# docs/BRANCH-PROTECTION.md
+# ----------------------------------------------------------------------------

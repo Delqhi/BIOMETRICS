@@ -35,6 +35,86 @@ nlm source add <notebook-id> --file "file.md" --wait
 
 ---
 
+## 🔍 BIOMETRICS CLI COMMANDS
+
+### CMD.BIOMETRICS.CHECK
+
+**Zweck:**
+Prüft BIOMETRICS Repository auf Konsistenz und Vollständigkeit.
+
+**Rolle:**
+User, Dev, Admin, Agent
+
+**Input-Schema:**
+- Keine Parameter (automatische Prüfung)
+
+**Output-Schema:**
+- status_summary (Bestanden/Durchgefallen)
+- directory_checks (global, local, biometrics-cli, docs)
+- config_checks (oh-my-opencode.json)
+- model_consistency (qwen/qwen3.5-397b-a17b)
+- readme_checks (README.md in allen Verzeichnissen)
+- agent_mapping (AGENT-MODEL-MAPPING.md)
+- loop_config (∞Best∞Practices∞Loop.md)
+- error_count (Anzahl gefundener Fehler)
+
+**Fehlerfälle:**
+- directory_missing (Verzeichnis fehlt)
+- config_missing (Konfiguration fehlt)
+- model_inconsistent (Modell-Namen inkonsistent)
+- readme_missing (README fehlt)
+- mapping_missing (Agent-Mapping fehlt)
+- loop_config_missing (Loop-Konfiguration fehlt)
+
+**Nebenwirkungen:**
+- Keine (read-only Prüfung)
+
+**Verifikation:**
+- Alle Verzeichnisse existieren
+- Alle Konfigurationen vorhanden
+- Modell-Namen konsistent
+- READMEs in Hauptverzeichnissen
+- Agent-Mapping dokumentiert
+- Loop-Konfiguration korrekt
+
+**Endpoint-Referenz:**
+- `biometrics-cli/bin/biometrics-check` (Bash Script)
+
+**Usage:**
+```bash
+cd /Users/jeremy/dev/BIOMETRICS
+./biometrics-cli/bin/biometrics-check
+```
+
+**Example Output:**
+```
+🔍 BIOMETRICS REPO CHECK
+========================
+
+📁 Step 1: Hauptverzeichnisse
+─────────────────────────────
+  ✓ global/ existiert
+  ✓ local/ existiert
+  ✓ biometrics-cli/ existiert
+  ✓ docs/ existiert
+
+⚙️  Step 3: Konfigurationsdateien
+──────────────────────────────────
+  ✓ oh-my-opencode.json existiert
+  📊 Agents:
+    - cosmos-video-edit
+    - cosmos-video-gen
+    - flux1-image
+    ...
+
+✅ CHECK COMPLETE
+🎉 ALLE CHECKS BESTANDEN!
+```
+
+---
+
+---
+
 ## 🔄 DEQLHI-LOOP (INFINITE WORK MODE)
 
 - After each completed task → Add 5 new tasks immediately

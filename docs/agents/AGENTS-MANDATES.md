@@ -5740,10 +5740,135 @@ Ich habe alle 44 Training-Captchas gegen die Mistral Pixtral API validiert.
 
 ## 🔄 DELQHI-LOOP: DER NIEMALS ENDENDE PRODUKTIONSMODUS (MANDATE 0.36)
 
-**EFFECTIVE:** 2026-02-07  
-**SCOPE:** ALL AI Coders, ALL Sessions, ALL Projects  
-**STATUS:** ABSOLUTE PRIORITY - MANDATORY COMPLIANCE  
+**EFFECTIVE:** 2026-02-07
+**SCOPE:** ALL AI Coders, ALL Sessions, ALL Projects
+**STATUS:** ABSOLUTE PRIORITY - MANDATORY COMPLIANCE
 **MANDATE:** 0.36 - The Infinite Work Loop
+
+---
+
+## 🚀 DELQHI-OMEGA-LOOP v2.0 - PARALLEL AGENT EXECUTION (CORRECTED)
+
+**EFFECTIVE:** 2026-02-19
+**CRITICAL:** NIEMALS 2 Agents mit gleichem Modell parallel!
+
+### ❌ FALSCH (BLOCKING):
+```typescript
+// ALLE Agents mit Qwen 3.5 - BLOCKED!
+for (let i = 0; i < 100; i++) {
+  task(category="build", prompt="...") // Alle Qwen 3.5 = BLOCKED!
+}
+```
+
+### ✅ RICHTIG (3 Agents parallel, verschiedene Modelle):
+```typescript
+// DELQHI-OMEGA-LOOP v2.0
+const modelRotation = [
+  { category: "visual-engineering", model: "qwen/qwen3.5-397b-a17b" }, // Qwen
+  { category: "deep", model: "opencode/kimi-k2.5-free" }, // Kimi
+  { category: "quick", model: "opencode/minimax-m2.5-free" } // MiniMax
+];
+
+// Immer 3 parallel mit verschiedenen Modellen
+task(modelRotation[0].category, { model: modelRotation[0].model }, prompt1);
+task(modelRotation[1].category, { model: modelRotation[1].model }, prompt2);
+task(modelRotation[2].category, { model: modelRotation[2].model }, prompt3);
+
+// Warte auf Completion, dann nächste 3
+```
+
+### 📊 MODELL-ROTATION (MANDATORY):
+
+| Welle | Agent 1 | Agent 2 | Agent 3 |
+|-------|---------|---------|---------|
+| **Wave 1** | Qwen 3.5 (build) | Kimi K2.5 (deep) | MiniMax (quick) |
+| **Wave 2** | Qwen 3.5 (visual-eng) | Kimi K2.5 (deep) | MiniMax (explore) |
+| **Wave 3+** | Recycle nach Completion | Recycle nach Completion | Recycle nach Completion |
+
+### 🔄 WORKFLOW:
+
+```
+START
+  │
+  ▼
+┌─────────────────────────┐
+│ WAVE N: 3 Agents Start  │ ← Verschiedene Modelle!
+│ - Qwen 3.5 (1x max)     │
+│ - Kimi K2.5 (1x max)    │
+│ - MiniMax (1x max)      │
+└────────┬────────────────┘
+         │
+         ▼
+┌─────────────────────────┐
+│ Parallel Execution      │
+│ Alle 3 arbeiten gleich- │
+│ zeitig im Hintergrund   │
+└────────┬────────────────┘
+         │
+         ▼
+┌─────────────────────────┐
+│ Wait for ALL Complete   │
+│ - Session lesen         │
+│ - "Sicher?"-Check       │
+│ - Evidence prüfen       │
+└────────┬────────────────┘
+         │
+         ▼
+┌─────────────────────────┐
+│ Git Commit + Push       │
+│ - Alle Änderungen       │
+│ - Documentation         │
+└────────┬────────────────┘
+         │
+         ▼
+┌─────────────────────────┐
+│ Add 5 New Tasks         │
+│ TodoWrite               │
+└────────┬────────────────┘
+         │
+         ▼
+┌─────────────────────────┐
+│ Next WAVE N+1           │ ← Modelle recyclen!
+└─────────────────────────┘
+```
+
+### 🎯 ORCHESTRATOR CHECKLISTE (VOR JEDER WAVE):
+
+```markdown
+## MODEL-MAPPING CHECK (PFLICHT!)
+
+**Laufende Agents:**
+- [ ] Agent A: [Name] → [Modell]
+- [ ] Agent B: [Name] → [Modell]
+- [ ] Agent C: [Name] → [Modell]
+
+**Neuer Agent:**
+- [ ] Benötigtes Modell: [Qwen 3.5 / Kimi K2.5 / MiniMax M2.5]
+- [ ] Modell bereits vergeben? JA/NEIN
+- [ ] Wenn JA → Warte oder anderes Modell wählen!
+
+**Entscheidung:**
+- [ ] Agent starten (Modell frei)
+- [ ] Warten bis Agent fertig (Modell belegt)
+- [ ] Anderes Modell wählen
+```
+
+### 🚨 HÄUFIGE FEHLER:
+
+1. **Alle Agents Qwen 3.5** → BLOCKING!
+2. **Model nicht explizit angegeben** → Default (Qwen) wird genutzt
+3. **Falsche Category für Modell** → deep braucht Kimi, nicht Qwen!
+4. **Nicht auf Completion warten** → Modell-Conflict!
+
+### ✅ BEST PRACTICES:
+
+1. **Immer Modell explizit angeben** bei deep, quick, explore, librarian
+2. **Max 3 Agents parallel** (je 1 pro Modell)
+3. **Sessions laufend lesen** während Agents arbeiten
+4. **"Sicher?"-Check** nach jeder Completion
+5. **Modell recyclen** nach Completion
+
+---
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐

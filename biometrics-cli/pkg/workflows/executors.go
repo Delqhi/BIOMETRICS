@@ -15,7 +15,6 @@ func (e *AgentExecutor) Type() string {
 }
 
 func (e *AgentExecutor) Execute(ctx context.Context, step *Step, inputs map[string]any) (map[string]any, error) {
-	// Simulate agent execution
 	result := map[string]any{
 		"agent":    step.Agent.Provider,
 		"model":    step.Agent.Model,
@@ -40,7 +39,7 @@ func (e *ConditionExecutor) Execute(ctx context.Context, step *Step, inputs map[
 
 	result := map[string]any{
 		"condition": step.Condition.Expression,
-		"evaluated": true,
+		"evaluated":  true,
 	}
 
 	return result, nil
@@ -48,7 +47,7 @@ func (e *ConditionExecutor) Execute(ctx context.Context, step *Step, inputs map[
 
 // ParallelExecutor executes parallel workflow steps
 type ParallelExecutor struct {
-	engine *Engine
+	engine *WorkflowEngine
 }
 
 func (e *ParallelExecutor) Type() string {
@@ -62,7 +61,7 @@ func (e *ParallelExecutor) Execute(ctx context.Context, step *Step, inputs map[s
 
 	result := map[string]any{
 		"parallel_steps": step.Parallel.Steps,
-		"executed":      true,
+		"executed":       true,
 	}
 
 	return result, nil
@@ -70,7 +69,7 @@ func (e *ParallelExecutor) Execute(ctx context.Context, step *Step, inputs map[s
 
 // LoopExecutor executes loop-based workflow steps
 type LoopExecutor struct {
-	engine *Engine
+	engine *WorkflowEngine
 }
 
 func (e *LoopExecutor) Type() string {
@@ -83,8 +82,8 @@ func (e *LoopExecutor) Execute(ctx context.Context, step *Step, inputs map[strin
 	}
 
 	result := map[string]any{
-		"iterations":   step.Loop.MaxIterations,
-		"executed":     true,
+		"iterations": step.Loop.MaxIterations,
+		"executed":   true,
 	}
 
 	return result, nil
@@ -103,8 +102,8 @@ func (e *TransformExecutor) Execute(ctx context.Context, step *Step, inputs map[
 	}
 
 	result := map[string]any{
-		"input":   step.Transform.Input,
-		"output":  step.Transform.Output,
+		"input":    step.Transform.Input,
+		"output":   step.Transform.Output,
 		"executed": true,
 	}
 

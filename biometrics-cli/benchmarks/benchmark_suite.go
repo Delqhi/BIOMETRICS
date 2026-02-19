@@ -76,8 +76,7 @@ func BenchmarkTaskCreation(b *testing.B) {
 		_ = task
 	}
 }
-		_ = task
-	}
+	_ = task
 }
 
 // BenchmarkTaskSerialization benchmarks JSON serialization
@@ -86,16 +85,6 @@ func BenchmarkTaskSerialization(b *testing.B) {
 	task.SetContext("key1", "value1")
 	task.SetContext("key2", 123)
 	task.SetContext("key3", true)
-
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		data, err := json.Marshal(task)
-		if err != nil {
-			b.Fatal(err)
-		}
-		_ = data
-	}
-}
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {

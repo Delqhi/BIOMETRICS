@@ -1,0 +1,189 @@
+name: bug-fix
+version: 1.0.0
+description: Automated bug diagnosis, root cause analysis, and fix generation
+author: BIOMETRICS Team
+category: development
+
+trigger:
+  type: event
+  events:
+    - bug-report
+    - test-failure
+    - error-log
+
+inputs:
+  bug_description:
+    type: string
+    description: Description of the bug
+    required: true
+  error_message:
+    type: string
+    description: Error message or stack trace
+    required: false
+  reproduction_steps:
+    type: array
+    description: Steps to reproduce the bug
+    required: false
+  affected_files:
+    type: array
+    description: Files potentially affected
+    required: false
+  environment:
+    type: object
+    description: Environment details
+    required: false
+    default:
+      os: unknown
+      node_version: unknown
+      browser: unknown
+
+outputs:
+  root_cause:
+    type: string
+    description: Identified root cause
+  fix_proposal:
+    type: object
+    description: Proposed fix with code changes
+  test_case:
+    type: string
+    description: Test case to verify fix
+  confidence_score:
+    type: number
+    description: Confidence in the fix (0-100)
+
+steps:
+  - id: reproduce-bug
+    name: Attempt to Reproduce Bug
+    type: agent
+    agent:
+      provider: nvidia-nim
+      model: qwen/qwen3.5-397b-a17b
+      prompt: |
+        Attempt to reproduce the bug with these steps: {{inputs.reproduction_steps}}
+        Environment: {{inputs.environment}}
+        Document exact behavior and any additional observations
+      tools:
+        - test-runner
+        - browser-automation
+        - log-collector
+    timeout: 5m
+    retry:
+      max_attempts: 3
+      delay: 1m
+
+  - id: analyze-logs
+    name: Analyze Error Logs
+    type: agent
+    agent:
+      provider: opencode-zen
+      model: zen/big-pickle
+      prompt: |
+        Analyze error message: {{inputs.error_message}}
+        Identify: error type, source location, triggering conditions
+      tools:
+        - log-parser
+        - stack-trace-analyzer
+    timeout: 2m
+    depends_on:
+      - reproduce-bug
+
+  - id: identify-root-cause
+    name: Root Cause Analysis
+    type: agent
+    agent:
+      provider: nvidia-nim
+      model: qwen/qwen3.5-397b-a17b
+      prompt: |
+        Perform root cause analysis for: {{inputs.bug_description}}
+        Error: {{inputs.error_message}}
+        Use 5 Whys technique to find root cause
+      tools:
+        - code-analyzer
+        - git-blame
+        - dependency-checker
+    timeout: 5m
+    depends_on:
+      - analyze-logs
+
+  - id: generate-fix
+    name: Generate Fix
+    type: agent
+    agent:
+      provider: nvidia-nim
+      model: qwen/qwen3.5-397b-a17b
+      prompt: |
+        Generate fix for root cause: {{root_cause}}
+        Ensure fix is minimal, safe, and follows best practices
+        Include error handling and edge cases
+      tools:
+        - code-generator
+        - lsp-refactor
+        - test-generator
+    timeout: 5m
+    depends_on:
+      - identify-root-cause
+
+  - id: create-test-case
+    name: Create Test Case
+    type: agent
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Create test case that:
+        1. Reproduces the original bug
+        2. Verifies the fix resolves it
+        3. Prevents regression
+      tools:
+        - test-generator
+        - coverage-analyzer
+    timeout: 3m
+    depends_on:
+      - generate-fix
+
+  - id: validate-fix
+    name: Validate Fix
+    type: agent
+    agent:
+      provider: nvidia-nim
+      model: qwen/qwen3.5-397b-a17b
+      prompt: |
+        Validate the fix:
+        1. Run all tests
+        2. Check for regressions
+        3. Verify edge cases
+        4. Ensure no new issues introduced
+      tools:
+        - test-runner
+        - linter
+        - security-scanner
+    timeout: 5m
+    depends_on:
+      - create-test-case
+
+  - id: generate-report
+    name: Generate Bug Fix Report
+    type: transform
+    transform:
+      input: all
+      output: fix_report
+      script: |
+        Compile complete bug fix report including:
+        - Root cause analysis
+        - Fix description
+        - Test results
+        - Confidence score
+    timeout: 1m
+    depends_on:
+      - validate-fix
+
+options:
+  concurrency: 1
+  timeout: 30m
+  debug: true
+
+tags:
+  - bug-fix
+  - debugging
+  - root-cause-analysis
+  - automated-fix

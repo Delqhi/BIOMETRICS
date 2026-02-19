@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"gopkg.in/yaml.v3"
 )
 
 // TemplateRegistry manages workflow templates
@@ -35,12 +37,12 @@ func (r *TemplateRegistry) LoadTemplates() error {
 		templatePath := filepath.Join(r.basePath, entry.Name(), "template.yaml")
 		data, err := os.ReadFile(templatePath)
 		if err != nil {
-			continue // Skip templates without yaml files
+			continue
 		}
 
 		workflow, err := LoadWorkflow(data)
 		if err != nil {
-			continue // Skip invalid templates
+			continue
 		}
 
 		r.templates[workflow.Name] = workflow
@@ -69,7 +71,7 @@ func (r *TemplateRegistry) AddTemplate(workflow *Workflow) {
 	r.templates[workflow.Name] = workflow
 }
 
-// LoadWorkflow parses YAML into Workflow (standalone function)
+// LoadWorkflow parses YAML into Workflow
 func LoadWorkflow(data []byte) (*Workflow, error) {
 	var workflow Workflow
 	err := yaml.Unmarshal(data, &workflow)

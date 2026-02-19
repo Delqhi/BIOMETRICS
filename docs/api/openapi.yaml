@@ -457,7 +457,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: NVIDIA API Key (format: nvapi-xxx)
+      description: "NVIDIA API Key (format: nvapi-xxx)"
 
   schemas:
     HealthResponse:

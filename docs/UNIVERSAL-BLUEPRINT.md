@@ -207,7 +207,7 @@ Add to `~/.config/opencode/opencode.json`:
         "baseURL": "https://api.opencode.ai/v1"
       },
       "models": {
-        "zen/big-pickle": {
+        "opencode/minimax-m2.5-free": {
           "name": "Big Pickle (OpenCode ZEN - UNCENSORED)",
           "limit": {
             "context": 200000,

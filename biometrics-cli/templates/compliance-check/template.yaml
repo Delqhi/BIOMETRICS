@@ -24,7 +24,7 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Check code compliance against {{.inputs.standards}}
     depends_on: []
 
@@ -34,6 +34,6 @@ steps:
     timeout: 10m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Generate detailed compliance report
     depends_on: [scan-code]

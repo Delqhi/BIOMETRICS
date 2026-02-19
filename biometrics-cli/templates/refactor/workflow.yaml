@@ -43,7 +43,7 @@ steps:
     type: agent
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Analyze code at {{inputs.code_path}} for code smells.
         Detect: long methods, duplicated code, complex conditions, poor naming
@@ -88,7 +88,7 @@ steps:
     type: agent
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Run all tests to ensure refactoring didn't break anything
       tools:

@@ -25,7 +25,7 @@ steps:
     timeout: 10m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Analyze services for monitoring needs
     depends_on: []
 
@@ -35,7 +35,7 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Configure metrics collection
     depends_on: [analyze-services]
 
@@ -45,7 +45,7 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Create monitoring dashboards
     depends_on: [setup-metrics]
 
@@ -55,6 +55,6 @@ steps:
     timeout: 20m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Configure alert rules
     depends_on: [create-dashboards]

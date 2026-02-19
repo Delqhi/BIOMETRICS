@@ -29,7 +29,7 @@ steps:
     timeout: 10m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Fetch logs from {{.inputs.log_source}}
     depends_on: []
 
@@ -39,7 +39,7 @@ steps:
     timeout: 15m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Analyze logs for errors and patterns
     depends_on: [fetch-logs]
 
@@ -49,6 +49,6 @@ steps:
     timeout: 5m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Generate actionable insights
     depends_on: [analyze-logs]

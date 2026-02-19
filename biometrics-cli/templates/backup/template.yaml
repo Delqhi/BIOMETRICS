@@ -29,7 +29,7 @@ steps:
     timeout: 60m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Create backup of {{.inputs.source_path}}
     depends_on: []
 
@@ -39,7 +39,7 @@ steps:
     timeout: 10m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Verify backup integrity
     depends_on: [create-backup]
 
@@ -49,6 +49,6 @@ steps:
     timeout: 10m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Delete backups older than {{.inputs.retention_days}} days
     depends_on: [verify-backup]

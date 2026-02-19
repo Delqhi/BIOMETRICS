@@ -128,7 +128,7 @@ steps:
     type: agent
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Create test case that:
         1. Reproduces the original bug

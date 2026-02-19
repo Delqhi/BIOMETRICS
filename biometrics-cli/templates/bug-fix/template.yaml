@@ -55,7 +55,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Analyze the bug report:
         {{.inputs.issue_description}}
@@ -79,7 +79,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Try to reproduce the bug in {{.inputs.environment}}:
         1. Clone repository
@@ -99,7 +99,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Implement the fix based on analysis:
         - Write the fix code
@@ -118,7 +118,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Verify the fix:
         1. Run tests

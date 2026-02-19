@@ -25,7 +25,7 @@ steps:
     timeout: 20m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Analyze code structure
     depends_on: []
 
@@ -35,7 +35,7 @@ steps:
     timeout: 15m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Create refactoring plan
     depends_on: [analyze-code]
 
@@ -45,7 +45,7 @@ steps:
     timeout: 60m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Execute refactoring safely
     depends_on: [plan-refactor]
 
@@ -55,6 +55,6 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Verify refactoring success
     depends_on: [execute-refactor]

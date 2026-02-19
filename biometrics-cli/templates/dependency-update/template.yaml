@@ -26,7 +26,7 @@ steps:
     timeout: 15m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Check available package updates
     depends_on: []
 
@@ -36,7 +36,7 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Test updates in CI
     depends_on: [check-updates]
 
@@ -46,6 +46,6 @@ steps:
     timeout: 15m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Apply tested updates
     depends_on: [test-update]

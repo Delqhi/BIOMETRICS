@@ -43,7 +43,7 @@ steps:
     type: agent
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Analyze all functions in {{inputs.source_path}}.
         Extract: signatures, inputs, outputs, side effects
@@ -85,7 +85,7 @@ steps:
     type: agent
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Run tests and measure coverage. Target: {{inputs.coverage_target}}%
       tools:

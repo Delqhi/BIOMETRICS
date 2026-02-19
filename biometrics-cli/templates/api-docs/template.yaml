@@ -29,7 +29,7 @@ steps:
     timeout: 15m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Parse all API endpoints from the codebase
     depends_on: []
 
@@ -39,6 +39,6 @@ steps:
     timeout: 10m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Generate OpenAPI 3.0 specification
     depends_on: [parse-api]

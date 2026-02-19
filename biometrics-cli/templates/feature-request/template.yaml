@@ -28,7 +28,7 @@ steps:
     timeout: 15m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Analyze feature request: {{.inputs.description}}
     depends_on: []
 
@@ -38,7 +38,7 @@ steps:
     timeout: 20m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Design solution architecture
     depends_on: [analyze-feature]
 
@@ -48,7 +48,7 @@ steps:
     timeout: 60m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Implement the feature
     depends_on: [design-solution]
 
@@ -58,6 +58,6 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Write and run tests
     depends_on: [implement-feature]

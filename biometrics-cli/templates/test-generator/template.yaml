@@ -26,7 +26,7 @@ steps:
     timeout: 15m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Analyze code for testability
     depends_on: []
 
@@ -36,7 +36,7 @@ steps:
     timeout: 45m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Generate unit tests
     depends_on: [analyze-code]
 
@@ -46,7 +46,7 @@ steps:
     timeout: 45m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Generate integration tests
     depends_on: [analyze-code]
 
@@ -56,6 +56,6 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Execute generated tests
     depends_on: [generate-unit-tests, generate-integration-tests]

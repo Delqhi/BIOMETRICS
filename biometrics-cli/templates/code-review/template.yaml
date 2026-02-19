@@ -47,7 +47,7 @@ outputs:
 
 env:
   LLM_PROVIDER: opencode-zen
-  LLM_MODEL: zen/code
+  LLM_MODEL: opencode/minimax-m2.5-free
 
 options:
   concurrency: 3
@@ -65,7 +65,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Fetch the code changes from repository {{.inputs.repository}} 
         branch {{.inputs.branch}}. Get diff for files: {{.inputs.files}}
@@ -84,7 +84,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Analyze the code structure and architecture. Identify:
         - File organization
@@ -104,7 +104,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Perform security analysis on the code:
         - Check for SQL injection vulnerabilities
@@ -130,7 +130,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Analyze performance characteristics:
         - Check for N+1 queries
@@ -155,7 +155,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Check code style and conventions:
         - Naming conventions
@@ -175,7 +175,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Compile all analysis results into a comprehensive review report.
         Include:
@@ -200,7 +200,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Send review notification with report summary to team channels.
     depends_on:

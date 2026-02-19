@@ -115,7 +115,7 @@ BIOMETRICS/
     "model": "qwen/qwen3.5-397b-a17b"
   },
   "opencode-zen": {
-    "models": ["zen/big-pickle", "kimi-k2.5-free"]
+    "models": ["opencode/minimax-m2.5-free", "opencode/kimi-k2.5-free"]
   }
 }
 ```

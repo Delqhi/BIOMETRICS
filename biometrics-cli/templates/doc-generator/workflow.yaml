@@ -124,7 +124,7 @@ steps:
     type: agent
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Generate practical code examples for all documented APIs.
         Ensure examples are complete, runnable, and well-commented

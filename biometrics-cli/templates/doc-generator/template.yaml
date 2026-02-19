@@ -59,7 +59,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Analyze the codebase structure in {{.inputs.repository}}.
         Identify:
@@ -80,7 +80,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Extract detailed API documentation:
         - Function signatures with parameters
@@ -101,7 +101,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: |
         Generate comprehensive user guides:
         - Getting started guide
@@ -122,7 +122,7 @@ steps:
       backoff: exponential
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
     depends_on:
       - extract-apis
       - generate-guides

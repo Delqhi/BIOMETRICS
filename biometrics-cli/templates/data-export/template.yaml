@@ -31,7 +31,7 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Export data with query {{.inputs.query}}
     depends_on: []
 
@@ -41,7 +41,7 @@ steps:
     timeout: 10m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Transform to {{.inputs.format}} format
     depends_on: [export-data]
 
@@ -51,6 +51,6 @@ steps:
     timeout: 10m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Upload to {{.inputs.destination}}
     depends_on: [transform-data]

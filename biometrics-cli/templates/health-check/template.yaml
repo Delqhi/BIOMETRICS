@@ -28,7 +28,7 @@ steps:
       steps: [check-api, check-db, check-cache]
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Check health of all services
     depends_on: []
 
@@ -38,7 +38,7 @@ steps:
     timeout: 2m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Check API endpoints
     depends_on: []
 
@@ -48,7 +48,7 @@ steps:
     timeout: 2m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Check database connections
     depends_on: []
 
@@ -58,7 +58,7 @@ steps:
     timeout: 2m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Check cache availability
     depends_on: []
 
@@ -72,6 +72,6 @@ steps:
       false_steps: []
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Send health alert notifications
     depends_on: [check-services]

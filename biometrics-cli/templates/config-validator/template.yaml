@@ -26,7 +26,7 @@ steps:
     timeout: 10m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Validate config files against schemas
     depends_on: []
 
@@ -36,6 +36,6 @@ steps:
     timeout: 5m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Check for hardcoded secrets
     depends_on: [validate-config]

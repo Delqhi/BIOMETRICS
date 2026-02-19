@@ -28,7 +28,7 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Prepare and clean training data
     depends_on: []
 
@@ -38,7 +38,7 @@ steps:
     timeout: 120m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Train chatbot model with {{.inputs.iterations}} iterations
     depends_on: [prepare-data]
 
@@ -48,6 +48,6 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Evaluate model accuracy and performance
     depends_on: [train-model]

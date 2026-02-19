@@ -28,7 +28,7 @@ steps:
     timeout: 20m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Analyze source system
     depends_on: []
 
@@ -38,7 +38,7 @@ steps:
     timeout: 15m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Create detailed migration plan
     depends_on: [analyze-source]
 
@@ -48,7 +48,7 @@ steps:
     timeout: 120m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Execute migration
     depends_on: [create-plan]
 
@@ -58,6 +58,6 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Verify migrated data
     depends_on: [execute-migration]

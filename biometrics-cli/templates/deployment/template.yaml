@@ -26,7 +26,7 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Build application for {{.inputs.environment}}
     depends_on: []
 
@@ -36,7 +36,7 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Run test suite
     depends_on: [build]
 
@@ -46,7 +46,7 @@ steps:
     timeout: 20m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Deploy to {{.inputs.environment}}
     depends_on: [test]
 
@@ -56,6 +56,6 @@ steps:
     timeout: 10m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Verify deployment success
     depends_on: [deploy]

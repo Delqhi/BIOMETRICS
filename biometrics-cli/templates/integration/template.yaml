@@ -26,7 +26,7 @@ steps:
     timeout: 15m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Set up integration test environment
     depends_on: []
 
@@ -36,7 +36,7 @@ steps:
     timeout: 60m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Run {{.inputs.test_suite}} integration tests
     depends_on: [setup-env]
 
@@ -46,6 +46,6 @@ steps:
     timeout: 5m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Generate test results report
     depends_on: [run-tests]

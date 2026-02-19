@@ -25,7 +25,7 @@ steps:
     timeout: 15m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Analyze code for cleanup opportunities
     depends_on: []
 
@@ -35,7 +35,7 @@ steps:
     timeout: 30m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Apply code cleanup fixes
     depends_on: [analyze-code]
 
@@ -45,6 +45,6 @@ steps:
     timeout: 10m
     agent:
       provider: opencode-zen
-      model: zen/code
+      model: opencode/minimax-m2.5-free
       prompt: Verify all changes work correctly
     depends_on: [apply-fixes]

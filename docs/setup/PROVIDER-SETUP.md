@@ -129,10 +129,10 @@ opencode --model nvidia-nim/qwen-3.5-397b "Hello"
 ### Usage
 ```bash
 # Use FREE model
-opencode --model opencode-zen/kimi-k2.5-free "Hello"
+opencode --model opencode/kimi-k2.5-free "Hello"
 
 # Use uncensored model
-opencode --model opencode-zen/zen/big-pickle "Hello"
+opencode --model opencode/minimax-m2.5-free "Hello"
 ```
 
 ---
@@ -260,8 +260,8 @@ opencode auth add kimi-for-coding
 
 ### Recommended Order
 1. **Primary:** `nvidia-nim/qwen-3.5-397b` (smartest)
-2. **Fallback 1:** `opencode-zen/kimi-k2.5-free` (FREE)
-3. **Fallback 2:** `opencode-zen/zen/big-pickle` (uncensored)
+2. **Fallback 1:** `opencode/kimi-k2.5-free` (FREE)
+3. **Fallback 2:** `opencode/minimax-m2.5-free` (uncensored)
 4. **Fallback 3:** `moonshot-ai/kimi-k2.5` (backup)
 
 ### Implementation
@@ -269,8 +269,8 @@ opencode auth add kimi-for-coding
 // External fallback logic (not in opencode.json)
 const fallbackChain = [
   'nvidia-nim/qwen-3.5-397b',
-  'opencode-zen/kimi-k2.5-free',
-  'opencode-zen/zen/big-pickle',
+  'opencode/kimi-k2.5-free',
+  'opencode/minimax-m2.5-free',
   'moonshot-ai/kimi-k2.5'
 ];
 

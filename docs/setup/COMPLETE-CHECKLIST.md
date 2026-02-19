@@ -162,8 +162,8 @@ npm install oh-my-opencode@latest
         "baseURL": "https://api.opencode.ai/v1"
       },
       "models": {
-        "zen/big-pickle": {
-          "name": "Big Pickle (OpenCode ZEN - UNCENSORED)",
+        "minimax-m2.5-free": {
+          "name": "MiniMax M2.5 Free (OpenCode ZEN - UNCENSORED)",
           "limit": { "context": 200000, "output": 128000 }
         },
         "kimi-k2.5-free": {

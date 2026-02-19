@@ -338,9 +338,9 @@ opencode models
 # Erwartete Ausgabe (mindestens):
 # - moonshotai/kimi-k2.5
 # - qwen/qwen3.5-397b-a17b
-# - opencode-zen/zen/big-pickle
-# - opencode-zen/zen/uncensored
-# - opencode-zen/zen/code
+# - opencode/minimax-m2.5-free
+# - opencode/minimax-m2.5-free
+# - opencode/minimax-m2.5-free
 ```
 
 **✅ Checkliste:**

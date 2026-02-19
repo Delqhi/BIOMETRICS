@@ -1521,21 +1521,21 @@ Der OpenCode ZEN Provider bietet kostenlose Modelle.
           },
           "description": "Uncensored model for unrestricted generation"
         },
-        "zen/uncensored": {
+        "opencode/minimax-m2.5-free": {
           "name": "Uncensored",
           "limit": {
             "context": 200000,
             "output": 128000
           }
         },
-        "zen/advanced": {
+        "opencode/minimax-m2.5-free": {
           "name": "Advanced",
           "limit": {
             "context": 200000,
             "output": 128000
           }
         },
-        "zen/code": {
+        "opencode/minimax-m2.5-free": {
           "name": "Code",
           "limit": {
             "context": 200000,
@@ -1543,7 +1543,7 @@ Der OpenCode ZEN Provider bietet kostenlose Modelle.
           },
           "description": "Optimized for code generation"
         },
-        "zen/reasoning": {
+        "opencode/minimax-m2.5-free": {
           "name": "Reasoning",
           "limit": {
             "context": 200000,
@@ -1575,10 +1575,10 @@ Der OpenCode ZEN Provider bietet kostenlose Modelle.
 
 ```bash
 # Kostenloses Model nutzen
-opencode run "Hello" --model opencode-zen/opencode/minimax-m2.5-free
+opencode run "Hello" --model opencode/minimax-m2.5-free
 
 # Code-spezifisch
-opencode run "Write a React component" --model opencode-zen/zen/code
+opencode run "Write a React component" --model opencode/minimax-m2.5-free
 ```
 
 ---
@@ -1890,7 +1890,7 @@ Generiert Dokumentation.
 opencode docs
 
 # Für spezifisches Model
-opencode docs --model opencode-zen/zen/advanced
+opencode docs --model opencode/minimax-m2.5-free
 ```
 
 ---
@@ -2440,7 +2440,7 @@ opencode config set cache.enabled true
       "primary": "nvidia/qwen/qwen3.5-397b-a17b",
       "fallbacks": [
         "google/antigravity-gemini-3-flash",
-        "opencode-zen/opencode/minimax-m2.5-free"
+        "opencode/minimax-m2.5-free"
       ]
     }
   }

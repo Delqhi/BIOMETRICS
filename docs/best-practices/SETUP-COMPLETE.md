@@ -176,9 +176,9 @@ opencode models
 # Expected output (at minimum):
 # - moonshotai/kimi-k2.5
 # - qwen/qwen3.5-397b-a17b
-# - opencode-zen/zen/big-pickle
-# - opencode-zen/zen/uncensored
-# - opencode-zen/zen/code
+# - opencode/minimax-m2.5-free
+# - opencode/minimax-m2.5-free
+# - opencode/minimax-m2.5-free
 ```
 
 - [ ] At least 5 models visible
@@ -279,8 +279,8 @@ cat ~/.config/opencode/oh-my-opencode.json | python3 -m json.tool
 
 # Check that agents have models assigned:
 # - sisyphus: moonshotai/kimi-k2.5
-# - librarian: opencode-zen/zen/big-pickle
-# - explore: opencode-zen/zen/big-pickle
+# - librarian: opencode/minimax-m2.5-free
+# - explore: opencode/minimax-m2.5-free
 ```
 
 - [ ] Agent models configured correctly

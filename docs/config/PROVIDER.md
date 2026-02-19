@@ -87,7 +87,7 @@ opencode models
 # Expected output should include:
 # - moonshotai/kimi-k2.5
 # - qwen/qwen3.5-397b-a17b
-# - opencode-zen/zen/big-pickle
+# - opencode/minimax-m2.5-free
 ```
 
 ### Phase 4: Config File Verification

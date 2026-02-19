@@ -140,7 +140,7 @@ Du musst NotebookLM vollständig über NLM-CLI nutzen, den passenden Vorlagenpro
 | **metis** | `qwen/qwen3.5-397b-a17b` | Pre-planning |
 | **momus** | `qwen/qwen3.5-397b-a17b` | Plan review |
 | **writing** | `qwen/qwen3.5-397b-a17b` | Docs, technisches Schreiben |
-| **deep** | `opencode-zen/kimi-k2.5-free` | Goal-oriented problem-solving |
+| **deep** | `opencode/kimi-k2.5-free` | Goal-oriented problem-solving |
 | **quick** | `opencode/minimax-m2.5-free` | Triviale Tasks |
 | **explore** | `opencode/minimax-m2.5-free` | Code discovery |
 | **librarian** | `opencode/minimax-m2.5-free` | Recherche, Docs |
@@ -159,7 +159,7 @@ Du musst NotebookLM vollständig über NLM-CLI nutzen, den passenden Vorlagenpro
 
 2. **Model-Auswahl (GENAU wie unten):**
    - `qwen/qwen3.5-397b-a17b` = build, plan, ultrabrain, artistry, visual-engineering, oracle, metis, momus, writing, general
-   - `opencode-zen/kimi-k2.5-free` = NUR deep
+   - `opencode/kimi-k2.5-free` = NUR deep
    - `opencode/minimax-m2.5-free` = quick, explore, librarian
 
 3. **Skills hinzufügen wenn relevant:**

@@ -1,0 +1,109 @@
+name: refactor
+version: 1.0.0
+description: Intelligent code refactoring with pattern detection and automated improvements
+author: BIOMETRICS Team
+category: development
+
+trigger:
+  type: manual
+  events:
+    - code-smell-detected
+    - tech-debt-review
+
+inputs:
+  code_path:
+    type: string
+    description: Path to code to refactor
+    required: true
+  refactor_type:
+    type: string
+    description: Type of refactoring
+    required: false
+    enum: [extract-method, rename, move-class, simplify-condition, remove-duplication, improve-naming]
+  preserve_behavior:
+    type: boolean
+    description: Ensure behavior remains unchanged
+    required: false
+    default: true
+
+outputs:
+  refactored_code:
+    type: string
+    description: Refactored code
+  changes_summary:
+    type: object
+    description: Summary of changes made
+  test_results:
+    type: object
+    description: Test results after refactoring
+
+steps:
+  - id: analyze-code-smells
+    name: Detect Code Smells
+    type: agent
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Analyze code at {{inputs.code_path}} for code smells.
+        Detect: long methods, duplicated code, complex conditions, poor naming
+      tools:
+        - code-analyzer
+        - smell-detector
+    timeout: 3m
+
+  - id: suggest-refactorings
+    name: Suggest Refactoring Opportunities
+    type: agent
+    agent:
+      provider: nvidia-nim
+      model: qwen/qwen3.5-397b-a17b
+      prompt: |
+        Suggest refactoring based on detected smells.
+        Prioritize by impact and effort
+      tools:
+        - pattern-matcher
+    timeout: 2m
+    depends_on:
+      - analyze-code-smells
+
+  - id: apply-refactoring
+    name: Apply Refactoring
+    type: agent
+    agent:
+      provider: nvidia-nim
+      model: qwen/qwen3.5-397b-a17b
+      prompt: |
+        Apply refactoring: {{inputs.refactor_type}}
+        Ensure: preserve behavior, improve readability, maintain tests
+      tools:
+        - lsp-refactor
+        - code-transformer
+    timeout: 5m
+    depends_on:
+      - suggest-refactorings
+
+  - id: run-tests
+    name: Run Tests
+    type: agent
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Run all tests to ensure refactoring didn't break anything
+      tools:
+        - test-runner
+        - coverage-analyzer
+    timeout: 5m
+    depends_on:
+      - apply-refactoring
+
+options:
+  concurrency: 1
+  timeout: 20m
+  debug: true
+
+tags:
+  - refactoring
+  - code-quality
+  - automation

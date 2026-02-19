@@ -1,0 +1,105 @@
+name: test-generator
+version: 1.0.0
+description: Automatic test generation with high coverage and edge case detection
+author: BIOMETRICS Team
+category: testing
+
+trigger:
+  type: event
+  events:
+    - new-code
+    - code-change
+
+inputs:
+  source_path:
+    type: string
+    description: Path to source code
+    required: true
+  test_framework:
+    type: string
+    description: Testing framework
+    required: false
+    default: jest
+  coverage_target:
+    type: number
+    description: Target coverage percentage
+    required: false
+    default: 90
+
+outputs:
+  test_files:
+    type: array
+    description: Generated test files
+  coverage_report:
+    type: object
+    description: Coverage report
+  edge_cases:
+    type: array
+    description: Discovered edge cases
+
+steps:
+  - id: analyze-functions
+    name: Analyze Functions
+    type: agent
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Analyze all functions in {{inputs.source_path}}.
+        Extract: signatures, inputs, outputs, side effects
+      tools:
+        - ast-parser
+    timeout: 3m
+
+  - id: generate-unit-tests
+    name: Generate Unit Tests
+    type: agent
+    agent:
+      provider: nvidia-nim
+      model: qwen/qwen3.5-397b-a17b
+      prompt: |
+        Generate unit tests using {{inputs.test_framework}}.
+        Cover: happy paths, edge cases, error handling
+      tools:
+        - test-generator
+    timeout: 5m
+    depends_on:
+      - analyze-functions
+
+  - id: generate-integration-tests
+    name: Generate Integration Tests
+    type: agent
+    agent:
+      provider: nvidia-nim
+      model: qwen/qwen3.5-397b-a17b
+      prompt: |
+        Generate integration tests for component interactions
+      tools:
+        - integration-test-gen
+    timeout: 5m
+    depends_on:
+      - generate-unit-tests
+
+  - id: run-coverage
+    name: Measure Coverage
+    type: agent
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Run tests and measure coverage. Target: {{inputs.coverage_target}}%
+      tools:
+        - coverage-runner
+    timeout: 5m
+    depends_on:
+      - generate-integration-tests
+
+options:
+  concurrency: 2
+  timeout: 25m
+  debug: true
+
+tags:
+  - testing
+  - coverage
+  - automation

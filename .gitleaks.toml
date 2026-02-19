@@ -1,0 +1,40 @@
+title = "BIOMETRICS Gitleaks Configuration"
+
+[allowlist]
+description = "Global allowlist for known false positives"
+
+# Allow documentation and example files
+paths = [
+  '''\.env\.example$''',
+  '''docs/api/.*\.md$''',
+  '''docs/agents/.*\.md$''',
+  '''BIOMETRICS/.*\.md$''',
+  '''backups/.*\.json$''',
+  '''examples/.*$''',
+  '''templates/.*$'''
+]
+
+# Allow placeholder patterns
+regexes = [
+  '''YOUR_KEY''',
+  '''YOUR_API_KEY''',
+  '''YOUR_SECRET''',
+  '''YOUR_PASSWORD''',
+  '''secret_xyz''',
+  '''nvapi-YOUR''',
+  '''Bearer YOUR''',
+  '''placeholder''',
+  '''example''',
+  '''xxx''',
+  '''YYY''',
+  '''ZZZ'''
+]
+
+# Allow test and mock files
+paths = [
+  '''test/.*$''',
+  '''tests/.*$''',
+  '''__tests__/.*$''',
+  '''mock/.*$''',
+  '''mocks/.*$'''
+]

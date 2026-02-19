@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIOMETRICS - Agent Status Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1 class="dashboard-title">BIOMETRICS</h1>
+                    <p class="dashboard-subtitle">AI Agent Orchestration Platform</p>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="total-agents">0</span>
+                        <span class="stat-label">Active Agents</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="tasks-completed">0</span>
+                        <span class="stat-label">Tasks Completed</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="success-rate">0%</span>
+                        <span class="stat-label">Success Rate</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div id="alert-banner" class="alert-banner hidden"></div>
+        <main class="dashboard-main">
+            <section class="metrics-section">
+                <div class="section-header">
+                    <h2 class="section-title">Real-Time Metrics</h2>
+                    <div class="live-indicator"><span class="pulse-dot"></span><span>LIVE</span></div>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-header"><span class="metric-icon">⚡</span><span class="metric-title">Request Rate</span></div>
+                        <div class="metric-value" id="request-rate">0</div>
+                        <div class="metric-unit">req/s</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header"><span class="metric-icon">🎯</span><span class="metric-title">Avg Response</span></div>
+                        <div class="metric-value" id="avg-response">0</div>
+                        <div class="metric-unit">ms</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header"><span class="metric-icon">⚠️</span><span class="metric-title">Error Rate</span></div>
+                        <div class="metric-value" id="error-rate">0%</div>
+                        <div class="metric-unit">last 5min</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header"><span class="metric-icon">📊</span><span class="metric-title">Queue Size</span></div>
+                        <div class="metric-value" id="queue-size">0</div>
+                        <div class="metric-unit">pending tasks</div>
+                    </div>
+                </div>
+            </section>
+            <section class="agents-section">
+                <div class="section-header">
+                    <h2 class="section-title">Agent Status</h2>
+                    <div class="agent-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="active">Active</button>
+                        <button class="filter-btn" data-filter="idle">Idle</button>
+                        <button class="filter-btn" data-filter="error">Error</button>
+                    </div>
+                </div>
+                <div id="agents-grid" class="agents-grid"></div>
+            </section>
+        </main>
+        <footer class="dashboard-footer">
+            <div class="footer-content">
+                <div class="system-status">
+                    <span class="status-indicator online"></span>
+                    <span>System Online</span>
+                    <span class="separator">•</span>
+                    <span>Uptime: <span id="uptime">00:00:00</span></span>
+                    <span class="separator">•</span>
+                    <span>Last Update: <span id="last-update">--:--:--</span></span>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <template id="agent-card-template">
+        <div class="agent-card" data-agent-id="">
+            <div class="agent-card-header">
+                <div class="agent-info">
+                    <div class="agent-avatar"><span class="agent-icon">🤖</span></div>
+                    <div class="agent-details">
+                        <h3 class="agent-name"></h3>
+                        <span class="agent-role"></span>
+                    </div>
+                </div>
+                <div class="agent-status-badge"></div>
+            </div>
+            <div class="agent-card-body">
+                <div class="agent-metrics">
+                    <div class="agent-metric"><span class="metric-label">Tasks</span><span class="metric-value"></span></div>
+                    <div class="agent-metric"><span class="metric-label">Avg Time</span><span class="metric-value"></span></div>
+                    <div class="agent-metric"><span class="metric-label">Errors</span><span class="metric-value"></span></div>
+                </div>
+                <div class="agent-progress">
+                    <div class="progress-bar"><div class="progress-fill"></div></div>
+                    <span class="progress-text"></span>
+                </div>
+                <div class="agent-last-task">
+                    <span class="label">Current Task:</span>
+                    <span class="task-name"></span>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -254,40 +254,21 @@
     },
     "opencode-zen": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "OpenCode ZEN (FREE)",
+      "name": "OpenCode ZEN (FREE) - DEPRECATED",
       "options": {
         "baseURL": "https://api.opencode.ai/v1"
       },
       "models": {
-        "zen/big-pickle": {
-          "name": "Big Pickle (OpenCode ZEN - UNCENSORED)",
-          "limit": { "context": 200000, "output": 128000 }
-        },
-        "zen/uncensored": {
-          "name": "Uncensored (OpenCode ZEN)",
-          "limit": { "context": 200000, "output": 128000 }
-        },
-        "zen/advanced": {
-          "name": "Advanced (OpenCode ZEN)",
-          "limit": { "context": 200000, "output": 128000 }
-        },
-        "zen/code": {
-          "name": "Code (OpenCode ZEN)",
-          "limit": { "context": 200000, "output": 128000 }
-        },
-        "zen/reasoning": {
-          "name": "Reasoning (OpenCode ZEN)",
-          "limit": { "context": 200000, "output": 128000 }
-        },
         "grok-code": {
-          "name": "Grok Code (OpenCode ZEN - VIA OPENROUTER)",
+          "name": "Grok Code (VIA OPENROUTER)",
           "limit": { "context": 2000000, "output": 131072 }
         },
         "glm-4.7-free": {
-          "name": "GLM 4.7 Free (OpenCode ZEN - VIA OPENROUTER)",
+          "name": "GLM 4.7 Free (VIA OPENROUTER)",
           "limit": { "context": 1000000, "output": 65536 }
         }
-      }
+      },
+      "_deprecated": "zen/big-pickle, zen/uncensored, zen/advanced, zen/code, zen/reasoning removed - these models do not exist. Use opencode/minimax-m2.5-free instead."
     },
     "modal": {
       "npm": "@ai-sdk/openai-compatible",
@@ -307,7 +288,7 @@
       "npm": "@ai-sdk/openai-compatible",
       "name": "NVIDIA NIM (Qwen 3.5)",
       "options": {
-        "baseURL": "https://integrate.api.nvidia.com/v1",
+        "baseURL": "https://integrate.api.nvidia.com/v1"
       },
       "models": {
         "qwen-3.5-397b": {

@@ -1,0 +1,50 @@
+# Code Cleanup Workflow Template
+name: code-cleanup
+version: 1.0.0
+description: Automated code cleanup and refactoring
+
+trigger:
+  type: manual
+
+inputs:
+  repository:
+    type: string
+    required: true
+  cleanup_level:
+    type: string
+    default: standard
+
+outputs:
+  files_changed: {type: number}
+  issues_fixed: {type: number}
+
+steps:
+  - id: analyze-code
+    name: Analyze Codebase
+    type: agent
+    timeout: 15m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Analyze code for cleanup opportunities
+    depends_on: []
+
+  - id: apply-fixes
+    name: Apply Fixes
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Apply code cleanup fixes
+    depends_on: [analyze-code]
+
+  - id: verify-changes
+    name: Verify Changes
+    type: agent
+    timeout: 10m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Verify all changes work correctly
+    depends_on: [apply-fixes]

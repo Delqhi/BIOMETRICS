@@ -1,0 +1,51 @@
+# Security Audit Workflow Template
+name: security-audit
+version: 1.0.0
+description: Comprehensive security vulnerability scanning
+
+trigger:
+  type: schedule
+  cron: "0 3 * * 0"
+
+inputs:
+  repository:
+    type: string
+    required: true
+  scan_level:
+    type: string
+    default: standard
+
+outputs:
+  vulnerabilities: {type: array}
+  risk_score: {type: number}
+
+steps:
+  - id: scan-dependencies
+    name: Scan Dependencies
+    type: agent
+    timeout: 20m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Scan for vulnerable dependencies
+    depends_on: []
+
+  - id: scan-code
+    name: Scan Code
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Scan for security issues in code
+    depends_on: [scan-dependencies]
+
+  - id: generate-report
+    name: Generate Security Report
+    type: agent
+    timeout: 10m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Generate comprehensive security report
+    depends_on: [scan-code]

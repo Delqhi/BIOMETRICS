@@ -1,0 +1,60 @@
+# Code Refactor Workflow Template
+name: refactor
+version: 1.0.0
+description: Systematic code refactoring with safety checks
+
+trigger:
+  type: manual
+
+inputs:
+  target:
+    type: string
+    required: true
+  refactor_type:
+    type: string
+    required: true
+
+outputs:
+  changes: {type: array}
+  test_results: {type: object}
+
+steps:
+  - id: analyze-code
+    name: Analyze Code for Refactoring
+    type: agent
+    timeout: 20m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Analyze code structure
+    depends_on: []
+
+  - id: plan-refactor
+    name: Plan Refactoring
+    type: agent
+    timeout: 15m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Create refactoring plan
+    depends_on: [analyze-code]
+
+  - id: execute-refactor
+    name: Execute Refactoring
+    type: agent
+    timeout: 60m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Execute refactoring safely
+    depends_on: [plan-refactor]
+
+  - id: verify-refactor
+    name: Verify Refactoring
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Verify refactoring success
+    depends_on: [execute-refactor]

@@ -1,0 +1,54 @@
+# Backup Workflow Template
+name: backup
+version: 1.0.0
+description: Automated backup workflow for databases and files
+
+trigger:
+  type: schedule
+  cron: "0 2 * * *"
+
+inputs:
+  source_path:
+    type: string
+    required: true
+  destination:
+    type: string
+    required: true
+  retention_days:
+    type: number
+    default: 30
+
+outputs:
+  backup_id: {type: string}
+  size_mb: {type: number}
+
+steps:
+  - id: create-backup
+    name: Create Backup
+    type: agent
+    timeout: 60m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Create backup of {{.inputs.source_path}}
+    depends_on: []
+
+  - id: verify-backup
+    name: Verify Backup
+    type: agent
+    timeout: 10m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Verify backup integrity
+    depends_on: [create-backup]
+
+  - id: cleanup-old
+    name: Cleanup Old Backups
+    type: agent
+    timeout: 10m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Delete backups older than {{.inputs.retention_days}} days
+    depends_on: [verify-backup]

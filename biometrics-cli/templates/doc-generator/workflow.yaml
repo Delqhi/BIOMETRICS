@@ -1,0 +1,180 @@
+name: doc-generator
+version: 1.0.0
+description: Automatic documentation generation from code, APIs, and architecture
+author: BIOMETRICS Team
+category: documentation
+
+trigger:
+  type: event
+  events:
+    - code-commit
+    - api-change
+    - manual
+
+inputs:
+  source_path:
+    type: string
+    description: Path to source code or API specs
+    required: true
+  output_path:
+    type: string
+    description: Output directory for documentation
+    required: false
+    default: ./docs
+  doc_type:
+    type: string
+    description: Type of documentation
+    required: false
+    default: api
+    enum: [api, architecture, user-guide, developer-guide, readme]
+  language:
+    type: string
+    description: Documentation language
+    required: false
+    default: en
+  include_examples:
+    type: boolean
+    description: Include code examples
+    required: false
+    default: true
+
+outputs:
+  documentation:
+    type: object
+    description: Generated documentation files
+  coverage:
+    type: number
+    description: Documentation coverage percentage
+  changelog:
+    type: string
+    description: What changed in documentation
+
+steps:
+  - id: analyze-codebase
+    name: Analyze Codebase Structure
+    type: agent
+    agent:
+      provider: opencode-zen
+      model: zen/big-pickle
+      prompt: |
+        Analyze the codebase structure in {{inputs.source_path}}.
+        Extract: modules, functions, classes, APIs, dependencies
+      tools:
+        - ast-parser
+        - code-analyzer
+        - dependency-graph
+    timeout: 5m
+
+  - id: extract-apis
+    name: Extract API Documentation
+    type: agent
+    agent:
+      provider: opencode-zen
+      model: zen/big-pickle
+      prompt: |
+        Extract API documentation from code.
+        Document: endpoints, parameters, return types, examples
+      tools:
+        - openapi-parser
+        - comment-extractor
+    timeout: 3m
+    depends_on:
+      - analyze-codebase
+    condition:
+      expression: inputs.doc_type == 'api'
+
+  - id: generate-architecture-docs
+    name: Generate Architecture Documentation
+    type: agent
+    agent:
+      provider: nvidia-nim
+      model: qwen/qwen3.5-397b-a17b
+      prompt: |
+        Create architecture documentation with diagrams.
+        Include: system context, containers, components, data flows
+      tools:
+        - diagram-generator
+        - c4-model
+    timeout: 5m
+    depends_on:
+      - analyze-codebase
+    condition:
+      expression: inputs.doc_type == 'architecture'
+
+  - id: write-user-guide
+    name: Write User Guide
+    type: agent
+    agent:
+      provider: nvidia-nim
+      model: qwen/qwen3.5-397b-a17b
+      prompt: |
+        Write comprehensive user guide in {{inputs.language}}.
+        Include: getting started, tutorials, FAQs, troubleshooting
+      tools:
+        - template-engine
+        - screenshot-capture
+    timeout: 10m
+    depends_on:
+      - analyze-codebase
+    condition:
+      expression: inputs.doc_type == 'user-guide'
+
+  - id: generate-examples
+    name: Generate Code Examples
+    type: agent
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Generate practical code examples for all documented APIs.
+        Ensure examples are complete, runnable, and well-commented
+      tools:
+        - code-generator
+        - test-runner
+    timeout: 5m
+    depends_on:
+      - extract-apis
+    condition:
+      expression: inputs.include_examples == true
+
+  - id: compile-documentation
+    name: Compile Documentation
+    type: transform
+    transform:
+      input: all
+      output: documentation
+      script: |
+        Compile all documentation into {{inputs.output_path}}
+        Generate: markdown files, index, search index
+    timeout: 2m
+    depends_on:
+      - extract-apis
+      - generate-architecture-docs
+      - write-user-guide
+      - generate-examples
+
+  - id: validate-coverage
+    name: Validate Documentation Coverage
+    type: agent
+    agent:
+      provider: opencode-zen
+      model: zen/big-pickle
+      prompt: |
+        Validate documentation coverage.
+        Report: undocumented modules, incomplete sections, outdated content
+      tools:
+        - coverage-analyzer
+    timeout: 2m
+    depends_on:
+      - compile-documentation
+
+options:
+  concurrency: 2
+  timeout: 30m
+  debug: true
+
+tags:
+  - documentation
+  - api-docs
+  - architecture
+  - auto-generation

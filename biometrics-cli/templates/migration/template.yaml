@@ -1,0 +1,63 @@
+# Migration Workflow Template
+name: migration
+version: 1.0.0
+description: Database and system migration automation
+
+trigger:
+  type: manual
+
+inputs:
+  source:
+    type: string
+    required: true
+  target:
+    type: string
+    required: true
+  migration_type:
+    type: string
+    required: true
+
+outputs:
+  success: {type: boolean}
+  migrated_count: {type: number}
+
+steps:
+  - id: analyze-source
+    name: Analyze Source
+    type: agent
+    timeout: 20m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Analyze source system
+    depends_on: []
+
+  - id: create-plan
+    name: Create Migration Plan
+    type: agent
+    timeout: 15m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Create detailed migration plan
+    depends_on: [analyze-source]
+
+  - id: execute-migration
+    name: Execute Migration
+    type: agent
+    timeout: 120m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Execute migration
+    depends_on: [create-plan]
+
+  - id: verify-migration
+    name: Verify Migration
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Verify migrated data
+    depends_on: [execute-migration]

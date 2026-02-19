@@ -1,0 +1,144 @@
+name: code-review
+version: 1.0.0
+description: Automated code review with quality checks, best practices validation, and improvement suggestions
+author: BIOMETRICS Team
+category: development
+
+trigger:
+  type: manual
+  events:
+    - pull_request
+    - code_submission
+
+inputs:
+  repository:
+    type: string
+    description: Git repository URL or path
+    required: true
+  branch:
+    type: string
+    description: Branch to review
+    required: true
+  base_branch:
+    type: string
+    description: Base branch for comparison
+    required: false
+    default: main
+  language:
+    type: string
+    description: Programming language
+    required: false
+    default: typescript
+  focus_areas:
+    type: array
+    description: Specific areas to focus on
+    required: false
+    default: ["security", "performance", "best-practices"]
+
+outputs:
+  review_report:
+    type: object
+    description: Complete code review report
+  issues:
+    type: array
+    description: List of identified issues
+  suggestions:
+    type: array
+    description: Improvement suggestions
+  quality_score:
+    type: number
+    description: Overall code quality score (0-100)
+
+steps:
+  - id: analyze-changes
+    name: Analyze Code Changes
+    type: agent
+    agent:
+      provider: nvidia-nim
+      model: qwen/qwen3.5-397b-a17b
+      prompt: |
+        Analyze the code changes in {{inputs.repository}} branch {{inputs.branch}}.
+        Focus on: {{inputs.focus_areas}}
+        Identify all issues, improvements, and best practice violations.
+      tools:
+        - git-diff
+        - code-analyzer
+        - lsp-diagnostics
+    timeout: 5m
+    retry:
+      max_attempts: 2
+      delay: 30s
+
+  - id: security-scan
+    name: Security Vulnerability Scan
+    type: agent
+    agent:
+      provider: nvidia-nim
+      model: qwen/qwen3.5-397b-a17b
+      prompt: |
+        Perform security scan on the code changes.
+        Check for: SQL injection, XSS, CSRF, authentication issues, secret leaks
+      tools:
+        - security-scanner
+        - secret-detector
+    timeout: 3m
+    depends_on:
+      - analyze-changes
+
+  - id: performance-review
+    name: Performance Analysis
+    type: agent
+    agent:
+      provider: nvidia-nim
+      model: qwen/qwen3.5-397b-a17b
+      prompt: |
+        Review code for performance issues.
+        Identify: N+1 queries, inefficient algorithms, memory leaks, bottlenecks
+      tools:
+        - performance-profiler
+        - benchmark-runner
+    timeout: 3m
+    depends_on:
+      - analyze-changes
+
+  - id: best-practices-check
+    name: Best Practices Validation
+    type: agent
+    agent:
+      provider: opencode-zen
+      model: zen/big-pickle
+      prompt: |
+        Validate code against {{inputs.language}} best practices.
+        Check: naming conventions, error handling, documentation, test coverage
+      tools:
+        - linter
+        - style-checker
+    timeout: 2m
+    depends_on:
+      - analyze-changes
+
+  - id: generate-report
+    name: Generate Review Report
+    type: transform
+    transform:
+      input: all
+      output: review_report
+      script: |
+        Compile all findings into comprehensive report
+        Include: summary, issues by severity, suggestions, quality score
+    timeout: 1m
+    depends_on:
+      - security-scan
+      - performance-review
+      - best-practices-check
+
+options:
+  concurrency: 3
+  timeout: 15m
+  debug: true
+
+tags:
+  - code-review
+  - quality
+  - security
+  - performance

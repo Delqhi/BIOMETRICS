@@ -1,0 +1,61 @@
+# Test Generator Workflow Template
+name: test-generator
+version: 1.0.0
+description: AI-powered test generation from code
+
+trigger:
+  type: event
+  events: [push, pull_request]
+
+inputs:
+  repository:
+    type: string
+    required: true
+  coverage_target:
+    type: number
+    default: 80
+
+outputs:
+  tests_generated: {type: number}
+  coverage: {type: number}
+
+steps:
+  - id: analyze-code
+    name: Analyze Code
+    type: agent
+    timeout: 15m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Analyze code for testability
+    depends_on: []
+
+  - id: generate-unit-tests
+    name: Generate Unit Tests
+    type: agent
+    timeout: 45m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Generate unit tests
+    depends_on: [analyze-code]
+
+  - id: generate-integration-tests
+    name: Generate Integration Tests
+    type: agent
+    timeout: 45m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Generate integration tests
+    depends_on: [analyze-code]
+
+  - id: run-tests
+    name: Run Tests
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Execute generated tests
+    depends_on: [generate-unit-tests, generate-integration-tests]

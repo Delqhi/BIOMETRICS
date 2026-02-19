@@ -1,0 +1,207 @@
+# Code Review Workflow Template
+# Version: 1.0.0
+# Description: Automated code review with AI analysis
+
+name: code-review
+version: 1.0.0
+description: Automated code review workflow analyzing code quality, security, and best practices
+
+trigger:
+  type: manual
+  events:
+    - pull_request
+    - push
+
+inputs:
+  repository:
+    type: string
+    description: Git repository URL
+    required: true
+  branch:
+    type: string
+    description: Branch to review
+    required: true
+  files:
+    type: array
+    description: Files to review
+    required: false
+  focus_areas:
+    type: array
+    description: Focus areas (security, performance, style, etc.)
+    required: false
+    default:
+      - security
+      - performance
+      - best-practices
+
+outputs:
+  report:
+    type: object
+    description: Review report with findings
+  score:
+    type: number
+    description: Overall code quality score
+  issues:
+    type: array
+    description: List of identified issues
+
+env:
+  LLM_PROVIDER: opencode-zen
+  LLM_MODEL: zen/code
+
+options:
+  concurrency: 3
+  timeout: 30m
+  debug: false
+
+steps:
+  - id: fetch-code
+    name: Fetch Code Changes
+    type: agent
+    timeout: 5m
+    retry:
+      max_attempts: 2
+      delay: 30s
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Fetch the code changes from repository {{.inputs.repository}} 
+        branch {{.inputs.branch}}. Get diff for files: {{.inputs.files}}
+      tools:
+        - git_clone
+        - git_diff
+    depends_on: []
+
+  - id: analyze-structure
+    name: Analyze Code Structure
+    type: agent
+    timeout: 10m
+    retry:
+      max_attempts: 3
+      delay: 1m
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Analyze the code structure and architecture. Identify:
+        - File organization
+        - Dependencies
+        - Design patterns used
+        - Potential architectural issues
+    depends_on:
+      - fetch-code
+
+  - id: security-scan
+    name: Security Analysis
+    type: agent
+    timeout: 10m
+    retry:
+      max_attempts: 3
+      delay: 1m
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Perform security analysis on the code:
+        - Check for SQL injection vulnerabilities
+        - Check for XSS vulnerabilities  
+        - Check for authentication issues
+        - Check for sensitive data exposure
+        - Check for insecure dependencies
+    depends_on:
+      - fetch-code
+    condition:
+      expression: "'security' in .inputs.focus_areas"
+      true_steps:
+        - security-scan
+      false_steps: []
+
+  - id: performance-analysis
+    name: Performance Analysis
+    type: agent
+    timeout: 10m
+    retry:
+      max_attempts: 3
+      delay: 1m
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Analyze performance characteristics:
+        - Check for N+1 queries
+        - Identify inefficient algorithms
+        - Check for missing caching
+        - Analyze complexity (Cyclomatic, Cognitive)
+    depends_on:
+      - fetch-code
+    condition:
+      expression: "'performance' in .inputs.focus_areas"
+      true_steps:
+        - performance-analysis
+      false_steps: []
+
+  - id: style-check
+    name: Code Style Check
+    type: agent
+    timeout: 5m
+    retry:
+      max_attempts: 2
+      delay: 30s
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Check code style and conventions:
+        - Naming conventions
+        - Code formatting
+        - Comment quality
+        - Documentation completeness
+    depends_on:
+      - fetch-code
+
+  - id: generate-report
+    name: Generate Review Report
+    type: agent
+    timeout: 5m
+    retry:
+      max_attempts: 2
+      delay: 30s
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Compile all analysis results into a comprehensive review report.
+        Include:
+        - Summary score (0-100)
+        - Critical issues
+        - Warnings
+        - Suggestions for improvement
+        - Best practices recommendations
+    depends_on:
+      - analyze-structure
+      - security-scan
+      - performance-analysis
+      - style-check
+
+  - id: notify
+    name: Send Notifications
+    type: agent
+    timeout: 2m
+    retry:
+      max_attempts: 3
+      delay: 10s
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Send review notification with report summary to team channels.
+    depends_on:
+      - generate-report

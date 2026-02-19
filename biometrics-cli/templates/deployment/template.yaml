@@ -1,0 +1,61 @@
+# Deployment Workflow Template
+name: deployment
+version: 1.0.0
+description: Automated deployment to various environments
+
+trigger:
+  type: event
+  events: [push, tag]
+
+inputs:
+  environment:
+    type: string
+    required: true
+  repository:
+    type: string
+    required: true
+
+outputs:
+  deployed: {type: boolean}
+  url: {type: string}
+
+steps:
+  - id: build
+    name: Build Application
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Build application for {{.inputs.environment}}
+    depends_on: []
+
+  - id: test
+    name: Run Tests
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Run test suite
+    depends_on: [build]
+
+  - id: deploy
+    name: Deploy
+    type: agent
+    timeout: 20m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Deploy to {{.inputs.environment}}
+    depends_on: [test]
+
+  - id: verify
+    name: Verify Deployment
+    type: agent
+    timeout: 10m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Verify deployment success
+    depends_on: [deploy]

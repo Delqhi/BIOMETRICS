@@ -1,0 +1,60 @@
+# Monitoring Setup Workflow Template
+name: monitoring
+version: 1.0.0
+description: Setup comprehensive monitoring and alerting
+
+trigger:
+  type: manual
+
+inputs:
+  services:
+    type: array
+    required: true
+  alert_channels:
+    type: array
+    required: true
+
+outputs:
+  dashboards: {type: array}
+  alerts_configured: {type: number}
+
+steps:
+  - id: analyze-services
+    name: Analyze Services
+    type: agent
+    timeout: 10m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Analyze services for monitoring needs
+    depends_on: []
+
+  - id: setup-metrics
+    name: Setup Metrics Collection
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Configure metrics collection
+    depends_on: [analyze-services]
+
+  - id: create-dashboards
+    name: Create Dashboards
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Create monitoring dashboards
+    depends_on: [setup-metrics]
+
+  - id: configure-alerts
+    name: Configure Alerts
+    type: agent
+    timeout: 20m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Configure alert rules
+    depends_on: [create-dashboards]

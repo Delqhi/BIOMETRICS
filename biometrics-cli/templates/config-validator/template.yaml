@@ -1,0 +1,41 @@
+# Configuration Validator Template
+name: config-validator
+version: 1.0.0
+description: Validate configuration files and environment
+
+trigger:
+  type: event
+  events: [push, pull_request]
+
+inputs:
+  config_files:
+    type: array
+    required: true
+  schema_files:
+    type: array
+    required: false
+
+outputs:
+  valid: {type: boolean}
+  errors: {type: array}
+
+steps:
+  - id: validate-config
+    name: Validate Configuration
+    type: agent
+    timeout: 10m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Validate config files against schemas
+    depends_on: []
+
+  - id: check-secrets
+    name: Check for Secrets
+    type: agent
+    timeout: 5m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Check for hardcoded secrets
+    depends_on: [validate-config]

@@ -1,0 +1,51 @@
+# Integration Test Workflow Template
+name: integration
+version: 1.0.0
+description: Run integration tests across services
+
+trigger:
+  type: event
+  events: [push, pull_request]
+
+inputs:
+  services:
+    type: array
+    required: true
+  test_suite:
+    type: string
+    default: full
+
+outputs:
+  passed: {type: boolean}
+  results: {type: object}
+
+steps:
+  - id: setup-env
+    name: Setup Test Environment
+    type: agent
+    timeout: 15m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Set up integration test environment
+    depends_on: []
+
+  - id: run-tests
+    name: Run Integration Tests
+    type: agent
+    timeout: 60m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Run {{.inputs.test_suite}} integration tests
+    depends_on: [setup-env]
+
+  - id: generate-report
+    name: Generate Test Report
+    type: agent
+    timeout: 5m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Generate test results report
+    depends_on: [run-tests]

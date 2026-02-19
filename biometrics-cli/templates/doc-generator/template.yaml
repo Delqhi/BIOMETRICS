@@ -1,0 +1,128 @@
+# Documentation Generator Workflow Template
+# Version: 1.0.0
+# Description: AI-powered documentation generation from code
+
+name: doc-generator
+version: 1.0.0
+description: Generate comprehensive documentation from codebases using AI analysis
+
+trigger:
+  type: event
+  events:
+    - push
+    - pull_request
+
+inputs:
+  repository:
+    type: string
+    description: Git repository URL
+    required: true
+  module:
+    type: string
+    description: Module or package to document
+    required: false
+  doc_type:
+    type: string
+    description: Type of documentation
+    required: false
+    default: api-reference
+  output_format:
+    type: string
+    description: Output format (markdown, html, pdf)
+    required: false
+    default: markdown
+
+outputs:
+  documentation:
+    type: object
+    description: Generated documentation
+  files:
+    type: array
+    description: List of generated files
+
+env:
+  LLM_PROVIDER: opencode-zen
+
+options:
+  concurrency: 2
+  timeout: 45m
+  debug: false
+
+steps:
+  - id: analyze-codebase
+    name: Analyze Codebase Structure
+    type: agent
+    timeout: 10m
+    retry:
+      max_attempts: 3
+      delay: 1m
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Analyze the codebase structure in {{.inputs.repository}}.
+        Identify:
+        - Module structure
+        - Public APIs
+        - Data models
+        - Configuration options
+        - Dependencies
+    depends_on: []
+
+  - id: extract-apis
+    name: Extract API Documentation
+    type: agent
+    timeout: 15m
+    retry:
+      max_attempts: 3
+      delay: 1m
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Extract detailed API documentation:
+        - Function signatures with parameters
+        - Return types
+        - Error handling
+        - Usage examples
+        - Type definitions
+    depends_on:
+      - analyze-codebase
+
+  - id: generate-guides
+    name: Generate User Guides
+    type: agent
+    timeout: 15m
+    retry:
+      max_attempts: 3
+      delay: 1m
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Generate comprehensive user guides:
+        - Getting started guide
+        - Configuration reference
+        - Troubleshooting guide
+        - Best practices
+        - FAQ section
+    depends_on:
+      - analyze-codebase
+
+  - id: compile-docs
+    name: Compile Documentation
+    type: agent
+    timeout: 5m
+    retry:
+      max_attempts: 2
+      delay: 30s
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+    depends_on:
+      - extract-apis
+      - generate-guides

@@ -1,0 +1,39 @@
+# Compliance Check Workflow Template
+name: compliance-check
+version: 1.0.0
+description: Check code and infrastructure for compliance
+
+trigger:
+  type: schedule
+  cron: "0 0 * * 0"
+
+inputs:
+  standards:
+    type: array
+    required: true
+    default: [gdpr, SOC2, HIPAA]
+
+outputs:
+  report: {type: object}
+  passed: {type: boolean}
+
+steps:
+  - id: scan-code
+    name: Scan Code Compliance
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Check code compliance against {{.inputs.standards}}
+    depends_on: []
+
+  - id: generate-report
+    name: Generate Compliance Report
+    type: agent
+    timeout: 10m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Generate detailed compliance report
+    depends_on: [scan-code]

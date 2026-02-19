@@ -1,0 +1,50 @@
+# Performance Review Workflow Template
+name: performance-review
+version: 1.0.0
+description: Comprehensive performance analysis and optimization
+
+trigger:
+  type: manual
+
+inputs:
+  repository:
+    type: string
+    required: true
+  baseline:
+    type: string
+    required: false
+
+outputs:
+  report: {type: object}
+  recommendations: {type: array}
+
+steps:
+  - id: collect-metrics
+    name: Collect Performance Metrics
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Collect performance metrics
+    depends_on: []
+
+  - id: analyze-code
+    name: Analyze Code Performance
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Analyze code for performance issues
+    depends_on: [collect-metrics]
+
+  - id: generate-report
+    name: Generate Performance Report
+    type: agent
+    timeout: 15m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Generate comprehensive report
+    depends_on: [analyze-code]

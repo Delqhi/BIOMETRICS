@@ -1,0 +1,56 @@
+# Data Export Workflow Template
+name: data-export
+version: 1.0.0
+description: Export data from databases to various formats
+
+trigger:
+  type: manual
+
+inputs:
+  source:
+    type: string
+    required: true
+  query:
+    type: string
+    required: true
+  format:
+    type: string
+    default: csv
+  destination:
+    type: string
+    required: true
+
+outputs:
+  file_path: {type: string}
+  row_count: {type: number}
+
+steps:
+  - id: export-data
+    name: Export Data
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Export data with query {{.inputs.query}}
+    depends_on: []
+
+  - id: transform-data
+    name: Transform Data
+    type: agent
+    timeout: 10m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Transform to {{.inputs.format}} format
+    depends_on: [export-data]
+
+  - id: upload-data
+    name: Upload to Destination
+    type: agent
+    timeout: 10m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Upload to {{.inputs.destination}}
+    depends_on: [transform-data]

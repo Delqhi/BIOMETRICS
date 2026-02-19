@@ -1,0 +1,44 @@
+# API Documentation Generator Template
+name: api-docs
+version: 1.0.0
+description: Generate OpenAPI/Swagger documentation from code
+
+trigger:
+  type: event
+  events: [push, pull_request]
+
+inputs:
+  repository:
+    type: string
+    required: true
+  framework:
+    type: string
+    default: express
+  output_file:
+    type: string
+    default: openapi.yaml
+
+outputs:
+  spec: {type: object}
+  html_docs: {type: string}
+
+steps:
+  - id: parse-api
+    name: Parse API Endpoints
+    type: agent
+    timeout: 15m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Parse all API endpoints from the codebase
+    depends_on: []
+
+  - id: generate-spec
+    name: Generate OpenAPI Spec
+    type: agent
+    timeout: 10m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Generate OpenAPI 3.0 specification
+    depends_on: [parse-api]

@@ -1,0 +1,51 @@
+# Dependency Update Workflow Template
+name: dependency-update
+version: 1.0.0
+description: Automated dependency updates and security patches
+
+trigger:
+  type: schedule
+  cron: "0 6 * * 1"
+
+inputs:
+  package_manager:
+    type: string
+    default: npm
+  major_updates:
+    type: boolean
+    default: false
+
+outputs:
+  updated: {type: array}
+  breaking: {type: array}
+
+steps:
+  - id: check-updates
+    name: Check for Updates
+    type: agent
+    timeout: 15m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Check available package updates
+    depends_on: []
+
+  - id: test-update
+    name: Test Updates
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Test updates in CI
+    depends_on: [check-updates]
+
+  - id: apply-update
+    name: Apply Updates
+    type: agent
+    timeout: 15m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Apply tested updates
+    depends_on: [test-update]

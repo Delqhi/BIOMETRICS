@@ -1,0 +1,77 @@
+# Health Check Workflow Template
+name: health-check
+version: 1.0.0
+description: Comprehensive system health monitoring
+
+trigger:
+  type: schedule
+  cron: "*/15 * * * *"
+
+inputs:
+  services:
+    type: array
+    required: true
+  notify_on_failure:
+    type: boolean
+    default: true
+
+outputs:
+  status: {type: object}
+  alerts: {type: array}
+
+steps:
+  - id: check-services
+    name: Check Services
+    type: agent
+    timeout: 5m
+    parallel:
+      steps: [check-api, check-db, check-cache]
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Check health of all services
+    depends_on: []
+
+  - id: check-api
+    name: Check API Health
+    type: agent
+    timeout: 2m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Check API endpoints
+    depends_on: []
+
+  - id: check-db
+    name: Check Database
+    type: agent
+    timeout: 2m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Check database connections
+    depends_on: []
+
+  - id: check-cache
+    name: Check Cache
+    type: agent
+    timeout: 2m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Check cache availability
+    depends_on: []
+
+  - id: notify
+    name: Send Alerts
+    type: agent
+    timeout: 2m
+    condition:
+      expression: ".alerts | length > 0"
+      true_steps: [notify]
+      false_steps: []
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Send health alert notifications
+    depends_on: [check-services]

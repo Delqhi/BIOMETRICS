@@ -1,0 +1,128 @@
+# Bug Fix Workflow Template
+# Version: 1.0.0
+# Description: Automated bug diagnosis and fixing workflow
+
+name: bug-fix
+version: 1.0.0
+description: AI-powered bug diagnosis, reproduction, and fixing workflow
+
+trigger:
+  type: manual
+
+inputs:
+  repository:
+    type: string
+    description: Git repository URL
+    required: true
+  issue_description:
+    type: string
+    description: Detailed bug description
+    required: true
+  error_logs:
+    type: string
+    description: Error logs or stack traces
+    required: false
+  environment:
+    type: string
+    description: Environment where bug occurs
+    required: false
+    default: development
+
+outputs:
+  fix:
+    type: object
+    description: Applied fix details
+  tests:
+    type: array
+    description: Tests verifying the fix
+
+env:
+  LLM_PROVIDER: opencode-zen
+
+options:
+  concurrency: 2
+  timeout: 60m
+  debug: true
+
+steps:
+  - id: analyze-bug
+    name: Analyze Bug Report
+    type: agent
+    timeout: 10m
+    retry:
+      max_attempts: 3
+      delay: 1m
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Analyze the bug report:
+        {{.inputs.issue_description}}
+        
+        Error logs:
+        {{.inputs.error_logs}}
+        
+        Identify:
+        - Root cause hypothesis
+        - Affected components
+        - Potential fix approaches
+    depends_on: []
+
+  - id: reproduce-bug
+    name: Reproduce Bug
+    type: agent
+    timeout: 15m
+    retry:
+      max_attempts: 3
+      delay: 2m
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Try to reproduce the bug in {{.inputs.environment}}:
+        1. Clone repository
+        2. Set up environment
+        3. Execute steps to reproduce
+        4. Capture evidence
+    depends_on:
+      - analyze-bug
+
+  - id: implement-fix
+    name: Implement Fix
+    type: agent
+    timeout: 20m
+    retry:
+      max_attempts: 3
+      delay: 2m
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Implement the fix based on analysis:
+        - Write the fix code
+        - Follow best practices
+        - Add necessary tests
+    depends_on:
+      - reproduce-bug
+
+  - id: verify-fix
+    name: Verify Fix
+    type: agent
+    timeout: 10m
+    retry:
+      max_attempts: 3
+      delay: 1m
+      backoff: exponential
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: |
+        Verify the fix:
+        1. Run tests
+        2. Verify bug is fixed
+        3. Check for regressions
+    depends_on:
+      - implement-fix

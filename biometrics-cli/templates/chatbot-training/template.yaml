@@ -1,0 +1,53 @@
+# Chatbot Training Workflow Template
+name: chatbot-training
+version: 1.0.0
+description: Train and update chatbot models with custom data
+
+trigger:
+  type: manual
+
+inputs:
+  training_data:
+    type: string
+    required: true
+  model_type:
+    type: string
+    default: gpt
+  iterations:
+    type: number
+    default: 100
+
+outputs:
+  model_id: {type: string}
+  accuracy: {type: number}
+
+steps:
+  - id: prepare-data
+    name: Prepare Training Data
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Prepare and clean training data
+    depends_on: []
+
+  - id: train-model
+    name: Train Model
+    type: agent
+    timeout: 120m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Train chatbot model with {{.inputs.iterations}} iterations
+    depends_on: [prepare-data]
+
+  - id: evaluate-model
+    name: Evaluate Model
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Evaluate model accuracy and performance
+    depends_on: [train-model]

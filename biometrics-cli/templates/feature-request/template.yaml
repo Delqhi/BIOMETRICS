@@ -1,0 +1,63 @@
+# Feature Request Workflow Template
+name: feature-request
+version: 1.0.0
+description: Process and implement feature requests
+
+trigger:
+  type: manual
+
+inputs:
+  title:
+    type: string
+    required: true
+  description:
+    type: string
+    required: true
+  priority:
+    type: string
+    default: medium
+
+outputs:
+  implementation: {type: object}
+  tests: {type: array}
+
+steps:
+  - id: analyze-feature
+    name: Analyze Feature Request
+    type: agent
+    timeout: 15m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Analyze feature request: {{.inputs.description}}
+    depends_on: []
+
+  - id: design-solution
+    name: Design Solution
+    type: agent
+    timeout: 20m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Design solution architecture
+    depends_on: [analyze-feature]
+
+  - id: implement-feature
+    name: Implement Feature
+    type: agent
+    timeout: 60m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Implement the feature
+    depends_on: [design-solution]
+
+  - id: test-feature
+    name: Test Feature
+    type: agent
+    timeout: 30m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Write and run tests
+    depends_on: [implement-feature]

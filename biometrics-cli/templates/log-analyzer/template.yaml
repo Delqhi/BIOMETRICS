@@ -1,0 +1,54 @@
+# Log Analyzer Workflow Template
+name: log-analyzer
+version: 1.0.0
+description: Analyze application logs for issues and patterns
+
+trigger:
+  type: schedule
+  cron: "0 * * * *"
+
+inputs:
+  log_source:
+    type: string
+    required: true
+  time_range:
+    type: string
+    default: 1h
+  pattern:
+    type: string
+    required: false
+
+outputs:
+  issues: {type: array}
+  metrics: {type: object}
+
+steps:
+  - id: fetch-logs
+    name: Fetch Logs
+    type: agent
+    timeout: 10m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Fetch logs from {{.inputs.log_source}}
+    depends_on: []
+
+  - id: analyze-logs
+    name: Analyze Logs
+    type: agent
+    timeout: 15m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Analyze logs for errors and patterns
+    depends_on: [fetch-logs]
+
+  - id: generate-insights
+    name: Generate Insights
+    type: agent
+    timeout: 5m
+    agent:
+      provider: opencode-zen
+      model: zen/code
+      prompt: Generate actionable insights
+    depends_on: [analyze-logs]

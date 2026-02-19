@@ -6129,7 +6129,437 @@ Alle Pfade sind bekannt. Alle Dependencies geklärt.
 
 ---
 
-## 🔥 RULE -17: NOTEBOOKLM SOURCE MANAGEMENT - DUPLIKATE VERBOTEN
+## 🚨🚨🚨 RULE -17: GITHUB IS THE ONLY BACKUP - KEINE LOKALEN BACKUPS! 🚨🚨🚨
+
+**EFFECTIVE:** 2026-02-19
+**SCOPE:** ALL AI Coders, ALL Sessions, ALL Projects
+**STATUS:** ABSOLUTE PRIORITY - MANDATORY COMPLIANCE
+
+### 🎯 DAS PRINZIP: GITHUB = SINGLE SOURCE OF TRUTH
+
+**MERKE:** 
+- ✅ **GitHub IST das Backup** - Jede Änderung ist sofort gesichert
+- ✅ **Vollständige Historie** - Jeder Commit ist für immer gespeichert
+- ✅ **Jederzeit wiederherstellbar** - `git revert`, `git checkout`, `git reflog`
+- ✅ **Keine lokalen Backups nötig** - Verschwendete Zeit und Speicher!
+
+### ❌ ABSOLUT VERBOTEN: LOKALE BACKUP-DATEIEN
+
+```
+🚫 VERBOTENE AKTIONEN:
+- ❌ "Ich erstelle mal ein Backup von der Datei..." → NEIN!
+- ❌ "Ich kopiere die Config bevor ich ändere..." → NEIN!
+- ❌ "Ich speichere den alten Stand als backup-xyz.json..." → NEIN!
+- ❌ "Ich erstelle backups/ Verzeichnis für alte Versionen..." → NEIN!
+- ❌ "Ich mache ein lokales Git-Backup..." → NEIN!
+
+💡 WARUM VERBOTEN:
+- GitHub hat JEDE Version ever committed
+- Git History ist UNVERÄNDERLICH und PERMANENT
+- Lokale Backups sind REDUNDANT und ZEITVERSCHWENDUNG
+- Einziges Risiko: Nicht committen BEFORE ändern!
+```
+
+### ✅ PFLICHT: NACH JEDER ÄNDERUNG SOFORT COMMIT + PUSH
+
+```bash
+# NACH JEDER ÄNDERUNG (OHNE AUSNAHMEN):
+git add -A
+git commit -m "type: description"
+git push origin main
+
+# DAS IST DEIN BACKUP!
+# Mehr brauchst du NICHT!
+```
+
+### 🔄 KORREKTER WORKFLOW (IMMER!)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ GITHUB-BACKUP WORKFLOW (NACH JEDE ÄNDERUNG) │
+├─────────────────────────────────────────────────────────────────┤
+│ │
+│ 1. Änderung machen (File edit, new file, delete, etc.) │
+│ ↓ │
+│ 2. SOFORT: git add -A │
+│ ↓ │
+│ 3. SOFORT: git commit -m "type: description" │
+│ ↓ │
+│ 4. SOFORT: git push origin main │
+│ ↓ │
+│ 5. ✅ FERTIG - Alles in GitHub gesichert! │
+│ │
+│ NIE: Lokales Backup erstellen! │
+│ NIE: Dateien kopieren "zur Sicherheit"! │
+│ NIE: backups/ Verzeichnis anlegen! │
+│ │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 📊 WARUM GITHUB BESSER IST ALS LOKALE BACKUPS
+
+| Feature | Lokales Backup | GitHub |
+|---------|---------------|--------|
+| **Permanent** | ❌ Kann gelöscht werden | ✅ Für immer gespeichert |
+| **Versioniert** | ❌ Chaos aus Dateien | ✅ Saubere History |
+| **Wiederherstellbar** | ❌ Manuell suchen | ✅ `git revert`, `git checkout` |
+| **Zugriff** | ❌ Nur lokal | ✅ Von überall |
+| **Geteilt** | ❌ Nur du hast es | ✅ Ganzes Team hat Zugriff |
+| **Automatisch** | ❌ Manuell machen | ✅ Bei jedem Push |
+| **Platz** | ❌ Doppelte Dateien | ✅ Effizient (Git delta) |
+| **Audit Trail** | ❌ Keine Infos | ✅ Wer, wann, warum |
+
+### 🚫 BEISPIELE: FALSCH VS. RICHTIG
+
+#### ❌ FALSCH (VERBOTEN):
+```bash
+# Niemals so!
+cp config.json config.json.backup
+mkdir -p backups/
+cp -r docs/ backups/docs-2026-02-19/
+git add config.json
+# ... vergisst zu committen ...
+```
+
+#### ✅ RICHTIG (PFLICHT):
+```bash
+# IMMER so!
+# 1. Änderung machen
+edit config.json
+
+# 2. SOFORT commit + push
+git add config.json
+git commit -m "fix: update config"
+git push origin main
+
+# ✅ Fertig! GitHub ist dein Backup!
+```
+
+### 🔧 WENN DU ETWAS WIEDERHERSTELLEN MUSST
+
+```bash
+# Letzten Commit rückgängig machen:
+git revert HEAD
+
+# Zu alter Version zurückkehren:
+git checkout <commit-hash> -- path/to/file
+
+# Gelöschte Datei wiederherstellen:
+git checkout HEAD~1 -- path/to/deleted-file.md
+
+# Alle Änderungen verwerfen:
+git reset --hard HEAD
+
+# Verlorenen Commit finden:
+git reflog
+
+# Alte Version anschauen:
+git log -- path/to/file
+git show <commit-hash>:path/to/file
+```
+
+### 📝 AUSNAHMEN (EINZIGE ERlaubTE "BACKUPS")
+
+**Einzige erlaubte "Backup"-Szenarien:**
+
+1. **Git Tags für Releases:**
+   ```bash
+   git tag -a v1.0.0 -m "Release 1.0.0"
+   git push origin v1.0.0
+   ```
+   → Aber das ist KEIN lokales Backup, sondern GitHub Tag!
+
+2. **Git Branches für Features:**
+   ```bash
+   git checkout -b feature/new-feature
+   git push origin feature/new-feature
+   ```
+   → Aber das ist KEIN lokales Backup, sondern GitHub Branch!
+
+3. **User verlangt explizit Backup:**
+   ```
+   NUR wenn User explizit sagt: "Erstelle Backup von X"
+   → Dann kurz erstellen, nach Aufgabe SOFORT löschen!
+   ```
+
+### 🚫 VERSTÖSSE = TECHNISCHER HOCHVERRAT
+
+| ❌ VERBOTEN | ✅ PFLICHT |
+|------------|-----------|
+| Lokale Backup-Dateien erstellen | NACH JEDE Änderung commit + push |
+| backups/ Verzeichnis anlegen | GitHub ist das einzige Backup |
+| Dateien kopieren "zur Sicherheit" | Git History nutzen |
+| Config kopieren vor Änderung | Erst ändern, dann SOFORT committen |
+| "Sicherheitshalber" backup machen | Vertrauen auf GitHub |
+
+### 💡 MERKSATZ
+
+```
+"Github ist mein Backup - jeden Tag, jeden Commit, für immer!"
+
+❌ Lokale Backups = Verschwendete Zeit
+✅ GitHub Push = Einziges Backup das zählt!
+```
+
+---
+
+**EFFECTIVE:** 2026-02-19
+**RULE:** -17
+**STATUS:** ACTIVE - SOFORT UMSETZEN!
+
+---
+
+## 🚀 RULE -18: DEQLHI OMEGA LOOP - ENTERPRISE GOD-MODE DEVELOPMENT 🚨🚨🚨
+
+**EFFECTIVE:** 2026-02-19
+**SCOPE:** ALL AI Coders, ALL Sessions, ALL Projects
+**STATUS:** ABSOLUTE PRIORITY - MANDATORY COMPLIANCE
+
+### 🎯 DAS PRINZIP: VON DUMMER PROMPT ZUR ENTERPRISE PERFEKTION
+
+**USER gibt dumme Idee → DEQLHI OMEGA LOOP rastet AUS!**
+
+```
+User Prompt: "Bau mir eine Website"
+     ↓
+DEQLHI OMEGA LOOP:
+├─ 26 PHASEN (nicht 3-4!)
+├─ 50+ parallele Agenten-Schwärme
+├─ Media-Generation (Bilder, Videos, 3D)
+├─ Qwen 3.5 VLM Quality Check
+├─ Auto-Edit & Refinement
+├─ GitHub + GitLab Integration
+└─ PRODUCTION-READY BESSER ALS GOOGLE/NVIDIA!
+```
+
+---
+
+### 🧬 DEQLHI OMEGA LOOP - 26 PHASEN
+
+#### PHASE 0: PRE-FLIGHT INTELLIGENCE (5 Sub-Phasen)
+- **0.1 User Intent Analysis** - Was will user WIRKLICH?
+- **0.2 Market/Competitor Analysis** - Was gibt's schon?
+- **0.3 Technology Radar** - Best Tools 2026?
+- **0.4 Risk Assessment** - Was kann schiefgehen?
+- **0.5 Resource Planning** - Welche Agents?
+
+#### PHASE 1: PROMETHEUS MASTER PLAN (NUR `.sisyphus/plans/`)
+```bash
+# PROMETHEUS erstellt PLAN:
+.sisyphus/plans/
+├── plan-001-website.md (VOLLSTÄNDIG!)
+├── plan-002-media-assets.md
+├── plan-003-deployment.md
+└── boulder.json (TRACKING)
+
+# MERKE: Prometheus erstellt NUR .md in .sisyphus/plans/
+# KEIN CODE! NUR PLÄNE!
+```
+
+#### PHASE 2-4: REVIEWS (METIS + MOMUS)
+- **2.1** Plan prüfen (Architektur)
+- **2.2** Plan optimieren (Best Practices)
+- **2.3** Second Review (Red Team)
+
+#### PHASE 5: ATLAS /START-WORK
+```bash
+# NACHDEM alle Planungsphasen ABGESCHLOSSEN:
+# Atlas führt AUS:
+/start-work
+
+# JETZT erst beginnt UMSETZUNG!
+# NICHT VORHER!
+```
+
+#### PHASE 6-10: MEDIA GENERATION SCHWARM
+**NEUE AGENTS für Bilder, Videos, 3D:**
+
+```json
+{
+  "agents": {
+    "flux1-image": {
+      "model": "nvidia/flux_1-dev",
+      "category": "artistry",
+      "purpose": "High-Quality Image Generation"
+    },
+    "flux1-image-edit": {
+      "model": "nvidia/flux_1-kontext-dev",
+      "category": "artistry",
+      "purpose": "In-Context Image Editing"
+    },
+    "stable-diffusion-35": {
+      "model": "nvidia/stable-diffusion-3_5-large",
+      "category": "artistry",
+      "purpose": "Professional Image Gen"
+    },
+    "cosmos-video-gen": {
+      "model": "nvidia/cosmos-transfer1-7b",
+      "category": "visual-engineering",
+      "purpose": "Physics-Aware Video Generation"
+    },
+    "cosmos-video-edit": {
+      "model": "nvidia/cosmos-predict1-5b",
+      "category": "visual-engineering",
+      "purpose": "Video Continuation & Refinement"
+    },
+    "trellis-3d": {
+      "model": "microsoft/trellis",
+      "category": "visual-engineering",
+      "purpose": "3D Asset Generation"
+    },
+    "magpie-voice": {
+      "model": "nvidia/magpie-tts-multilingual",
+      "category": "artistry",
+      "purpose": "Brand Voice Generation"
+    }
+  }
+}
+```
+
+#### PHASE 11-15: QWEN 3.5 VLM QUALITY CHECK
+**JEDES Ergebnis wird geprüft:**
+
+```typescript
+// SISYPHUS + QWEN 3.5 VLM prüfen:
+task(
+  category="ultrabrain",
+  model="qwen/qwen3.5-397b-a17b",
+  prompt=`
+## 🎯 QUALITY CHECK: MEDIA ASSETS
+
+PRÜFE JEDES DETAIL:
+1. Bilder: 
+   - Stil konsistent?
+   - Keine Artefakte?
+   - Text korrekt?
+   - Farben einheitlich?
+
+2. Videos:
+   - Physikalisch korrekt?
+   - Keine Glitches?
+   - Audio synchron?
+   - Brand Voice konsistent?
+
+3. 3D Assets:
+   - Topologie sauber?
+   - Texturen korrekt?
+   - USD validiert?
+
+WENN FEHLER:
+→ FLUX1-IMG-Edit zum Optimieren
+→ Cosmos-Video-Edit zum Verfeinern
+→ TRELLIS für 3D-Korrektur
+
+NICHT ABNEHMEN bevor PERFEKT!
+`
+)
+```
+
+#### PHASE 16-20: CORE DEVELOPMENT
+- **Team Alpha**: Backend (Go, Rust)
+- **Team Beta**: Frontend (Next.js)
+- **Team Gamma**: Database (Postgres)
+- **Team Delta**: API (REST/GraphQL)
+- **Team Epsilon**: Auth (OAuth/JWT)
+
+#### PHASE 21-25: GITHUB + GITLAB INTEGRATION
+```bash
+# GITHUB = CODE STORAGE
+git add -A
+git commit -m "feat: add feature"
+git push origin main
+
+# GITLAB = MEDIA STORAGE
+# ALLE Media > 1MB zu GitLab:
+curl -X POST \
+  -H "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  -F "file=@video.mp4" \
+  "https://gitlab.com/api/v4/projects/$ID/uploads"
+
+# URLs in Code verwenden (NICHT lokale Pfade!)
+```
+
+#### PHASE 26: FINAL VERIFICATION
+- ✅ 0 Fehler in LSP Diagnostics
+- ✅ 100% Test Coverage
+- ✅ ALLE GitLab URLs funktionieren
+- ✅ Qwen 3.5 VLM: "PERFEKT"
+- ✅ GitHub + GitLab synced
+
+---
+
+### 🎯 MEDIA AGENT WORKFLOW (BEISPIEL)
+
+```
+1. FLUX1-IMAGE generiert Bild
+   ↓
+2. Qwen 3.5 VLM prüft: "Stil nicht konsistent!"
+   ↓
+3. FLUX1-IMAGE-EDIT optimiert (In-Context)
+   ↓
+4. Qwen 3.5 VLM prüft: "PERFEKT!"
+   ↓
+5. Upload zu GitLab (NICHT GitHub!)
+   ↓
+6. URL in Code verwenden
+```
+
+### 🚫 VERSTÖSSE = TECHNISCHER HOCHVERRAT
+
+| ❌ VERBOTEN | ✅ PFLICHT |
+|------------|-----------|
+| Code vor Plan | ERST Prometheus Plan in .sisyphus/plans/ |
+| /start-work vor Plan-Completion | NACH allen Reviews (Phase 5) |
+| Media > 1MB in GitHub | IMMER GitLab verwenden |
+| Ohne VLM Quality Check | Qwen 3.5 prüFT ALLES |
+| Fehlerhafte Assets abnehmen | Edit-Agents optimieren bis PERFEKT |
+
+---
+
+### 📊 OH-MY-OPENCODE.JSON UPDATE
+
+**Füge hinzu in `~/.config/opencode/oh-my-opencode.json`:**
+
+```json
+{
+  "agents": {
+    "flux1-image": {
+      "model": "nvidia/flux_1-dev",
+      "category": "artistry"
+    },
+    "flux1-image-edit": {
+      "model": "nvidia/flux_1-kontext-dev",
+      "category": "artistry"
+    },
+    "cosmos-video-gen": {
+      "model": "nvidia/cosmos-transfer1-7b",
+      "category": "visual-engineering"
+    },
+    "cosmos-video-edit": {
+      "model": "nvidia/cosmos-predict1-5b",
+      "category": "visual-engineering"
+    },
+    "trellis-3d": {
+      "model": "microsoft/trellis",
+      "category": "visual-engineering"
+    },
+    "magpie-voice": {
+      "model": "nvidia/magpie-tts-multilingual",
+      "category": "artistry"
+    }
+  }
+}
+```
+
+---
+
+**EFFECTIVE:** 2026-02-19
+**RULE:** -18
+**STATUS:** ACTIVE - SOFORT UMSETZEN!
+
+---
+
+## 🔥 RULE -19: NOTEBOOKLM SOURCE MANAGEMENT - DUPLIKATE VERBOTEN
 
 ---
 

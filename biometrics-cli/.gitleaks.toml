@@ -1,0 +1,27 @@
+[general]
+maxThreads = 4
+verbose = true
+exitOnLeak = true
+failOnLeak = true
+reportFormat = "json"
+scanCommits = true
+scanUncommitted = true
+
+# Allowlist for documentation placeholders only
+[allowlist]
+regexes = [
+    "YOUR_API_KEY",           # Documentation placeholder
+    "YOUR_KEY",               # Generic placeholder
+    "nvapi-YOUR_KEY",        # NVIDIA API placeholder
+    "secret_xyz789",         # Example secret
+    "DECRYPTION_KEY"         # Example key name
+]
+
+# Exclude paths that shouldn't be scanned
+[exclude]
+paths = [
+    "vendor",
+    "node_modules", 
+    ".git",
+    "backups"
+]

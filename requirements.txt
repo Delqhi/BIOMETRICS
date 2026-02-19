@@ -1,0 +1,33 @@
+# NVIDIA NIM Media Generation Pipeline
+# Best Practices 2026 - Enterprise God-Mode
+
+# API Communication
+requests>=2.31.0
+python-dotenv>=1.0.0
+
+# Video Processing
+ffmpeg-python>=0.2.0
+opencv-python>=4.8.0
+
+# Image Processing
+Pillow>=10.0.0
+numpy>=1.24.0
+
+# 3D Asset Handling
+trimesh>=4.0.0
+pygltflib>=1.16.0
+
+# Audio Processing
+pydub>=0.25.1
+librosa>=0.10.0
+
+# Database Integration
+supabase>=2.0.0
+psycopg2-binary>=2.9.9
+
+# Development & Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0

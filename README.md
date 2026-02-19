@@ -63,6 +63,68 @@ opencode "Build a REST API" --agent sisyphus
 
 ---
 
+## 🚨 START HERE - ULTIMATE ORCHESTRATOR MANDATE
+
+**⚠️ ACHTUNG: JEDER AGENT MUSS DIESEN ABSCHNITT LESEN BEVOR ER ARBEITET!**
+
+### 🎯 DEINE ROLLE: ORCHESTRATOR FÜR BIOMETRICS
+
+**KRITISCHE REGELN (NIEMALS BRECHEN!):**
+
+1. ❌ **NIEMALS 2 Agents mit gleichem Modell parallel!**
+   - Qwen 3.5: MAX 1 Agent
+   - Kimi K2.5: MAX 1 Agent
+   - MiniMax M2.5: MAX 1 Agent
+   - **MAXIMAL 3 Agents parallel (je 1 pro Modell)**
+
+2. ❌ **NIEMALS Dateien erstellen ohne zu lesen!**
+   - IMMER zuerst `glob()` oder `ls`
+   - IMMER komplett lesen (bis letzte Zeile!)
+   - NIEMALS Duplikate!
+
+3. ❌ **NIEMALS "fertig" ohne Evidenz!**
+   - IMMER Dateiinhalt zeigen
+   - IMMER Tests machen
+   - IMMER "Sicher?"-Check!
+
+4. ❌ **NIEMALS User-Onboarding überspringen!**
+   - IMMER mit User Config erstellen
+   - IMMER API Keys erklären
+   - IMMER gemeinsam testen!
+
+### 📊 MODELL-ZUWEISUNG (PFLICHT!)
+
+| Modell | Category | Max Parallel |
+|--------|----------|--------------|
+| `qwen/qwen3.5-397b-a17b` | build, visual-engineering, writing | **1** |
+| `opencode/kimi-k2.5-free` | deep | **1** |
+| `opencode/minimax-m2.5-free` | quick, explore | **1** |
+
+### ✅ RICHTIGE PARALLEL-ARBEIT:
+```typescript
+// ✅ KORREKT (3 verschiedene Modelle):
+task(category="visual-engineering", prompt="...") // Qwen 3.5
+task(category="deep", model="opencode/kimi-k2.5-free", prompt="...") // Kimi K2.5
+task(category="quick", model="opencode/minimax-m2.5-free", prompt="...") // MiniMax
+```
+
+### 📖 PFLICHT-DATEIEN ZUM LESEN:
+1. `docs/ORCHESTRATOR-MANDATE.md` - **VOLLSTÄNDIG LESEN!**
+2. `docs/agents/AGENT-MODEL-MAPPING.md` - Modell-Zuweisung
+3. `docs/architecture/ARCHITECTURE.md` - Architektur
+4. `SETUP-CHECKLISTE.md` - Setup Checkliste
+
+### 🎯 WORKFLOW:
+1. **Lies** `docs/ORCHESTRATOR-MANDATE.md` (komplett!)
+2. **Prüfe** Setup-Status mit `SETUP-CHECKLISTE.md`
+3. **Starte** Max 3 Agents (verschiedene Modelle!)
+4. **Überwache** Sessions laufend
+5. **Mache** "Sicher?"-Check bei jedem Agent
+
+**📚 Vollständige Anleitung:** [docs/ORCHESTRATOR-MANDATE.md](docs/ORCHESTRATOR-MANDATE.md)
+
+---
+
 ## 🏗️ Architecture
 
 ```mermaid

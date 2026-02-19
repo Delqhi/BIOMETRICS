@@ -1,12 +1,12 @@
-# BIOMETRICS CLI
+# Documentation
 
 ## Purpose
 
-Command-line interface and automation
+Complete documentation for BIOMETRICS
 
 ## Structure
 
-biometrics-cli/
+docs/
 ├── README.md
 └── ...
 

@@ -32,9 +32,44 @@ task(category="quick", model="opencode/minimax-m2.5-free", prompt="...") // Mini
 
 | Modell | Provider | Category | Use Case | Max Parallel |
 |--------|----------|----------|----------|--------------|
-| **qwen/qwen3.5-397b-a17b** | NVIDIA NIM | build, visual-engineering, ultrabrain, artistry, writing, general | Haupt-Code, Complex Tasks | **1** |
-| **opencode/kimi-k2.5-free** | OpenCode ZEN | deep | Heavy Lifting, Setup, Research | **1** |
-| **opencode/minimax-m2.5-free** | OpenCode ZEN | quick, explore, librarian | Quick Tasks, Recherche | **1** |
+| **qwen/qwen3.5-397b-a17b** | NVIDIA NIM | build, visual-engineering, ultrabrain, artistry, writing, general | Haupt-Code, Complex Tasks, Planung | **1** |
+| **opencode/kimi-k2.5-free** | OpenCode ZEN | deep | Heavy Lifting, Setup, Deep Research | **1** |
+| **opencode/minimax-m2.5-free** | OpenCode ZEN | quick, explore, librarian, writing | **SUCHE, LESEN, MD-DATEIEN ERSTELLEN** - Schnell! | **10** |
+
+---
+
+## 🎯 NEUE REGEL: MD-DATEIEN ERSTELLEN
+
+**WICHTIG:** Alle MD-Dateien sollen mit **MiniMax M2.5** erstellt werden!
+
+### Warum?
+- MiniMax ist SCHNELL
+- MiniMax kann 10x parallel laufen
+- MiniMax ist KOSTENLOS
+- Qwen 3.5 ist zu langsam für Dokumentation
+
+### Workflow:
+1. **MiniMax** → Suchen, Lesen, MD-Dateien erstellen
+2. **Qwen 3.5** → Code-Umsetzung, Planung
+3. **Kimi K2.5** → Deep Analysis (wenn nötig)
+
+### Beispiel:
+```typescript
+// Phase 1: MiniMax erstellt MD
+task(
+  category="writing", 
+  model="opencode/minimax-m2.5-free", 
+  run_in_background=true,
+  prompt="Create VIDEO-GEN.md with 500+ lines"
+)
+
+// Phase 2: Qwen 3.5 setzt um
+task(
+  category="build", 
+  model="qwen/qwen3.5-397b-a17b", 
+  prompt="Implement video generation based on VIDEO-GEN.md"
+)
+```
 
 ---
 

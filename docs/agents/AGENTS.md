@@ -22,6 +22,18 @@ Die Regeln gelten explizit universell für Website, Webshop, Webapp, Engine und 
 5. NLM immer vollumfänglich über NLM-CLI nutzen.
 6. Promptvorlagen aus `../∞Best∞Practices∞Loop.md` verpflichtend nutzen.
 7. Jede Änderung in `MEETING.md` und `CHANGELOG.md` dokumentieren.
+8. **JEDER Subagent MUSS IMMER zuerst AGENTS.md und ARCHITECTURE.md komplett lesen bevor er arbeitet!**
+
+## Pflichtlektüre für Subagenten
+**JEDER Subagent MUSS vor Arbeitsbeginn folgende Dateien KOMPLETT (bis zur letzten Zeile) lesen:**
+1. `docs/agents/AGENTS.md` - Alle Agentenregeln und Mandate
+2. `docs/architecture/ARCHITECTURE.md` - Architektur und Projektstruktur
+3. `SETUP-CHECKLISTE.md` - Setup-Status und Voraussetzungen
+4. `docs/ORCHESTRATOR-MANDATE.md` - Orchestrator-Anweisungen
+
+**Warum?** Subagenten wissen nichts über das Projekt und müssen den Kontext komplett haben.
+**Wie?** Mit `read()` Tool die Dateien bis zur letzten Zeile lesen.
+**Wann?** VOR jeder Task-Ausführung!
 
 ---
 

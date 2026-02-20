@@ -156,13 +156,12 @@ func TestExchange(t *testing.T) {
 
 // TestGetUserInfo tests user info retrieval
 func TestGetUserInfo(t *testing.T) {
+	userInfoJSON := `{"id":"123456","email":"test@example.com","name":"Test User"}`
+
 	mockServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		userInfo := UserInfo{
-			ID:    "123456",
-			Email: "test@example.com",
-			Name:  "Test User",
-		}
-		json.NewEncoder(w).Encode(userInfo)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(userInfoJSON))
 	}))
 	defer mockServer.Close()
 
@@ -181,8 +180,16 @@ func TestGetUserInfo(t *testing.T) {
 		t.Fatalf("Failed to create client: %v", err)
 	}
 
-	// Override HTTP client to use mock server
-	client.httpClient = mockServer.Client()
+	// Create custom transport that redirects all requests to mock server
+	type roundTripFunc func(req *http.Request) *http.Response
+	rtFunc := roundTripFunc(func(req *http.Request) *http.Response {
+		req.URL, _ = url.Parse(mockServer.URL)
+		return mockServer.Client().Transport.RoundTrip(req)
+	})
+
+	client.httpClient = &http.Client{
+		Transport: rtFunc,
+	}
 
 	token := &oauth2.Token{
 		AccessToken: "test-access-token",
@@ -196,6 +203,12 @@ func TestGetUserInfo(t *testing.T) {
 
 	if userInfo.ID != "123456" {
 		t.Errorf("Expected ID 123456, got %s", userInfo.ID)
+	}
+	if userInfo.Email != "test@example.com" {
+		t.Errorf("Expected email test@example.com, got %s", userInfo.Email)
+	}
+	if userInfo.Name != "Test User" {
+		t.Errorf("Expected name Test User, got %s", userInfo.Name)
 	}
 }
 

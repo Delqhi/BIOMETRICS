@@ -7,6 +7,13 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
+)
+
+var (
+	version   = "1.0.0"
+	commit    = "dev"
+	buildDate = "unknown"
 )
 
 func main() {
@@ -28,6 +35,8 @@ func main() {
 		runBiometricsCheck()
 	case "find-keys":
 		findAPIKeys()
+	case "version":
+		printVersion()
 	default:
 		fmt.Printf("Unknown command: %s\n", command)
 		printUsage()
@@ -47,7 +56,17 @@ Commands:
   auto          Automatic AI-powered setup
   check         Check BIOMETRICS compliance
   find-keys     Find existing API keys on system
-`)
+  version       Show version information
+ `)
+}
+
+func printVersion() {
+	buildTime := buildDate
+	if buildDate == "unknown" {
+		buildTime = time.Now().Format("2006-01-02")
+	}
+
+	fmt.Printf("biometrics-cli v%s (commit: %s, built: %s)\n", version, commit, buildTime)
 }
 
 func runInit() {

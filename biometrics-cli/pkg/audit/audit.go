@@ -49,6 +49,16 @@ func NewAuditor(config *AuditConfig) (*Auditor, error) {
 		config = DefaultAuditConfig()
 	}
 
+	// Ensure FlushInterval is not zero to prevent ticker panic
+	if config.FlushInterval <= 0 {
+		config.FlushInterval = 5 * time.Second
+	}
+
+	// Ensure QueueSize has a reasonable minimum
+	if config.QueueSize <= 0 {
+		config.QueueSize = 1000
+	}
+
 	storage, err := NewAuditStorage(config)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create audit storage: %w", err)

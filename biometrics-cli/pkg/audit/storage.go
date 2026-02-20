@@ -97,8 +97,8 @@ func NewMemoryStorage(config *AuditConfig) (*MemoryStorage, error) {
 }
 
 func (s *FileStorage) Store(event *AuditEvent) error {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
+	s.mu.Lock()
+	defer s.mu.Unlock()
 
 	if s.closed {
 		return fmt.Errorf("storage is closed")
@@ -117,7 +117,7 @@ func (s *FileStorage) Store(event *AuditEvent) error {
 	s.totalSize += int64(len(data)) + 1
 
 	if s.totalSize >= s.config.MaxSize {
-		if err := s.Rotate(); err != nil {
+		if err := s.rotateLocked(); err != nil {
 			return fmt.Errorf("failed to rotate log: %w", err)
 		}
 	}
@@ -244,7 +244,10 @@ func (s *FileStorage) Flush() error {
 func (s *FileStorage) Rotate() error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+	return s.rotateLocked()
+}
 
+func (s *FileStorage) rotateLocked() error {
 	if s.closed {
 		return fmt.Errorf("storage is closed")
 	}

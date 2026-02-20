@@ -1,7 +1,11 @@
 package validation
 
 import (
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"regexp"
+	"strings"
 	"testing"
 )
 
@@ -386,5 +390,510 @@ func TestValidator_InitPatterns(t *testing.T) {
 
 	if len(v.xssPatterns) == 0 {
 		t.Error("Expected XSS patterns to be initialized")
+	}
+}
+
+// TestDefaultSanitizeConfig tests default sanitization configuration
+func TestDefaultSanitizeConfig(t *testing.T) {
+	config := DefaultSanitizeConfig()
+
+	if !config.StripHTML {
+		t.Error("Expected StripHTML to be true")
+	}
+	if !config.StripScripts {
+		t.Error("Expected StripScripts to be true")
+	}
+	if config.StripSQLKeywords {
+		t.Error("Expected StripSQLKeywords to be false")
+	}
+	if !config.NormalizePaths {
+		t.Error("Expected NormalizePaths to be true")
+	}
+	if !config.NormalizeWhitespace {
+		t.Error("Expected NormalizeWhitespace to be true")
+	}
+	if !config.RemoveControlChars {
+		t.Error("Expected RemoveControlChars to be true")
+	}
+	if config.MaxRecursionDepth != 3 {
+		t.Errorf("Expected MaxRecursionDepth 3, got %d", config.MaxRecursionDepth)
+	}
+}
+
+// TestNewSanitizer tests sanitizer creation
+func TestNewSanitizer(t *testing.T) {
+	s := NewSanitizer()
+	if s == nil {
+		t.Fatal("Expected sanitizer, got nil")
+	}
+
+	config := DefaultSanitizeConfig()
+	s2 := NewSanitizerWithConfig(config)
+	if s2 == nil {
+		t.Fatal("Expected sanitizer with config, got nil")
+	}
+}
+
+// TestSanitizeString tests string sanitization
+func TestSanitizeString(t *testing.T) {
+	s := NewSanitizer()
+
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{"Remove HTML tags", "<script>alert(1)</script>", ""},
+		{"Remove control chars", "hello\x00world", "helloworld"},
+		{"Normalize whitespace", "hello   world", "hello world"},
+		{"Normal text", "Hello World", "Hello World"},
+		{"Path traversal", "../../../etc/passwd", "../../../etc/passwd"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := s.SanitizeString(tt.input)
+			if result != tt.expected {
+				t.Errorf("Expected %q, got %q", tt.expected, result)
+			}
+		})
+	}
+}
+
+// TestSanitizeHTML tests HTML sanitization
+func TestSanitizeHTML(t *testing.T) {
+	s := NewSanitizer()
+
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{"Script tags", "<script>alert(1)</script>", ""},
+		{"Event handlers", "<img onerror=alert(1)>", "&lt;img onerror=alert(1)&gt;"},
+		{"Safe HTML", "<p>Hello</p>", "&lt;p&gt;Hello&lt;/p&gt;"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := s.SanitizeHTML(tt.input)
+			if result != tt.expected {
+				t.Errorf("Expected %q, got %q", tt.expected, result)
+			}
+		})
+	}
+}
+
+// TestSanitizeURL tests URL sanitization
+func TestSanitizeURL(t *testing.T) {
+	s := NewSanitizer()
+
+	tests := []struct {
+		name    string
+		input   string
+		wantErr bool
+	}{
+		{"Valid HTTPS", "https://example.com", false},
+		{"Valid HTTP", "http://example.com/path", false},
+		{"Invalid URL", "not-a-url", true},
+		{"JavaScript URL", "javascript:alert(1)", true},
+		{"FTP URL", "ftp://example.com", true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := s.SanitizeURL(tt.input)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Expected error=%v, got %v", tt.wantErr, err)
+			}
+			if !tt.wantErr && result == "" {
+				t.Error("Expected non-empty result")
+			}
+		})
+	}
+}
+
+// TestSanitizeFilePath tests file path sanitization
+func TestSanitizeFilePath(t *testing.T) {
+	s := NewSanitizer()
+
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{"Path traversal", "../../../etc/passwd", "/etc/passwd"},
+		{"Normal path", "/home/user/file.txt", "/home/user/file.txt"},
+		{"Windows path", "..\\..\\windows\\system32", "\\windows\\system32"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := s.SanitizeFilePath(tt.input)
+			if result != tt.expected {
+				t.Errorf("Expected %q, got %q", tt.expected, result)
+			}
+		})
+	}
+}
+
+// TestDefaultMiddlewareConfig tests default middleware configuration
+func TestDefaultMiddlewareConfig(t *testing.T) {
+	config := DefaultMiddlewareConfig()
+
+	if !config.CSRFEnabled {
+		t.Error("Expected CSRFEnabled to be true")
+	}
+	if config.CSRFCookieName != "csrf_token" {
+		t.Errorf("Expected CSRFCookieName 'csrf_token', got %s", config.CSRFCookieName)
+	}
+	if config.MaxBodySize != 1<<20 {
+		t.Errorf("Expected MaxBodySize 1MB, got %d", config.MaxBodySize)
+	}
+	if len(config.SkipPaths) != 2 {
+		t.Errorf("Expected 2 skip paths, got %d", len(config.SkipPaths))
+	}
+}
+
+// TestNewMiddleware tests middleware creation
+func TestNewMiddleware(t *testing.T) {
+	m := NewMiddleware(nil)
+	if m == nil {
+		t.Fatal("Expected middleware, got nil")
+	}
+
+	config := DefaultMiddlewareConfig()
+	m2 := NewMiddleware(config)
+	if m2 == nil {
+		t.Fatal("Expected middleware with config, got nil")
+	}
+}
+
+// TestResponseWriter tests response writer wrapper
+func TestResponseWriter(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	rw := NewResponseWriter(recorder)
+
+	if rw.statusCode != http.StatusOK {
+		t.Errorf("Expected status 200, got %d", rw.statusCode)
+	}
+
+	rw.WriteHeader(http.StatusCreated)
+	if rw.statusCode != http.StatusCreated {
+		t.Errorf("Expected status 201, got %d", rw.statusCode)
+	}
+}
+
+// TestMiddlewareValidateRequest tests request validation
+func TestMiddlewareValidateRequest(t *testing.T) {
+	m := NewMiddleware(nil)
+
+	handler := m.ValidateRequest(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
+	req := httptest.NewRequest("GET", "/health", nil)
+	recorder := httptest.NewRecorder()
+
+	handler(recorder, req)
+
+	if recorder.Code != http.StatusOK {
+		t.Errorf("Expected status 200, got %d", recorder.Code)
+	}
+}
+
+// TestMiddlewareCORSMiddleware tests CORS middleware
+func TestMiddlewareCORSMiddleware(t *testing.T) {
+	config := DefaultMiddlewareConfig()
+	config.AllowedOrigins = []string{"https://example.com"}
+	config.AllowedMethods = []string{"GET", "POST"}
+	config.AllowedHeaders = []string{"Content-Type"}
+
+	m := NewMiddleware(config)
+
+	handler := m.CORSMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
+
+	req := httptest.NewRequest("GET", "/api/test", nil)
+	req.Header.Set("Origin", "https://example.com")
+	recorder := httptest.NewRecorder()
+
+	handler(recorder, req)
+
+	if recorder.Header().Get("Access-Control-Allow-Origin") != "https://example.com" {
+		t.Error("Expected CORS header")
+	}
+}
+
+// TestMiddlewareSecurityHeaders tests security headers middleware
+func TestMiddlewareSecurityHeaders(t *testing.T) {
+	m := NewMiddleware(nil)
+
+	handler := m.SecurityHeaders(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
+
+	req := httptest.NewRequest("GET", "/api/test", nil)
+	recorder := httptest.NewRecorder()
+
+	handler(recorder, req)
+
+	headers := recorder.Header()
+	if headers.Get("X-Content-Type-Options") != "nosniff" {
+		t.Error("Expected X-Content-Type-Options header")
+	}
+	if headers.Get("X-Frame-Options") != "DENY" {
+		t.Error("Expected X-Frame-Options header")
+	}
+	if headers.Get("X-XSS-Protection") != "1; mode=block" {
+		t.Error("Expected X-XSS-Protection header")
+	}
+}
+
+// TestMiddlewareCSRFProtect tests CSRF protection
+func TestMiddlewareCSRFProtect(t *testing.T) {
+	m := NewMiddleware(nil)
+
+	handler := m.CSRFProtect(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
+
+	// Test GET request (should pass)
+	req := httptest.NewRequest("GET", "/api/test", nil)
+	recorder := httptest.NewRecorder()
+	handler(recorder, req)
+	if recorder.Code != http.StatusOK {
+		t.Errorf("Expected status 200 for GET, got %d", recorder.Code)
+	}
+
+	// Test POST without CSRF token (should fail)
+	req = httptest.NewRequest("POST", "/api/test", nil)
+	recorder = httptest.NewRecorder()
+	handler(recorder, req)
+	if recorder.Code != http.StatusBadRequest {
+		t.Errorf("Expected status 400 for POST without CSRF, got %d", recorder.Code)
+	}
+}
+
+// TestMiddlewareValidateJSONBody tests JSON body validation middleware
+func TestMiddlewareValidateJSONBody(t *testing.T) {
+	m := NewMiddleware(nil)
+
+	schema := map[string]string{
+		"name":  "required",
+		"email": "required,email",
+	}
+
+	handler := m.ValidateJSONBody(schema)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
+
+	body := `{"name": "test", "email": "test@example.com"}`
+	req := httptest.NewRequest("POST", "/api/test", strings.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	recorder := httptest.NewRecorder()
+
+	handler(recorder, req)
+
+	if recorder.Code != http.StatusOK {
+		t.Errorf("Expected status 200, got %d", recorder.Code)
+	}
+}
+
+// TestMiddlewareErrorResponse tests error response
+func TestMiddlewareErrorResponse(t *testing.T) {
+	recorder := httptest.NewRecorder()
+
+	ErrorResponse(recorder, "Test error", http.StatusBadRequest)
+
+	if recorder.Code != http.StatusBadRequest {
+		t.Errorf("Expected status 400, got %d", recorder.Code)
+	}
+
+	var response map[string]interface{}
+	json.NewDecoder(recorder.Body).Decode(&response)
+
+	if response["error"] != "Test error" {
+		t.Errorf("Expected error message 'Test error', got %v", response["error"])
+	}
+}
+
+// TestMiddlewareSuccessResponse tests success response
+func TestMiddlewareSuccessResponse(t *testing.T) {
+	recorder := httptest.NewRecorder()
+
+	SuccessResponse(recorder, map[string]string{"status": "ok"})
+
+	if recorder.Code != http.StatusOK {
+		t.Errorf("Expected status 200, got %d", recorder.Code)
+	}
+
+	var response map[string]interface{}
+	json.NewDecoder(recorder.Body).Decode(&response)
+
+	if response["status"] != "ok" {
+		t.Errorf("Expected status 'ok', got %v", response["status"])
+	}
+}
+
+// TestMiddlewareChainMiddleware tests middleware chaining
+func TestMiddlewareChainMiddleware(t *testing.T) {
+	m := NewMiddleware(nil)
+
+	var executed bool
+	handler := ChainMiddleware(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			executed = true
+			w.WriteHeader(http.StatusOK)
+		}),
+		m.SecurityHeaders,
+		m.LoggingMiddleware,
+	)
+
+	req := httptest.NewRequest("GET", "/api/test", nil)
+	recorder := httptest.NewRecorder()
+
+	handler(recorder, req)
+
+	if !executed {
+		t.Error("Expected handler to be executed")
+	}
+}
+
+// TestMiddlewareRecoverMiddleware tests panic recovery
+func TestMiddlewareRecoverMiddleware(t *testing.T) {
+	m := NewMiddleware(nil)
+
+	handler := m.RecoverMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		panic("test panic")
+	}))
+
+	req := httptest.NewRequest("GET", "/api/test", nil)
+	recorder := httptest.NewRecorder()
+
+	// Should not panic
+	handler(recorder, req)
+
+	if recorder.Code != http.StatusInternalServerError {
+		t.Errorf("Expected status 500, got %d", recorder.Code)
+	}
+}
+
+// TestMiddlewareRequestIDMiddleware tests request ID generation
+func TestMiddlewareRequestIDMiddleware(t *testing.T) {
+	m := NewMiddleware(nil)
+
+	handler := m.RequestIDMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestID := GetRequestID(r)
+		if requestID == "" {
+			t.Error("Expected request ID")
+		}
+		w.WriteHeader(http.StatusOK)
+	}))
+
+	req := httptest.NewRequest("GET", "/api/test", nil)
+	recorder := httptest.NewRecorder()
+
+	handler(recorder, req)
+
+	if recorder.Code != http.StatusOK {
+		t.Errorf("Expected status 200, got %d", recorder.Code)
+	}
+}
+
+// TestMiddlewareLoggingMiddleware tests request logging
+func TestMiddlewareLoggingMiddleware(t *testing.T) {
+	m := NewMiddleware(nil)
+
+	handler := m.LoggingMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
+
+	req := httptest.NewRequest("GET", "/api/test", nil)
+	recorder := httptest.NewRecorder()
+
+	handler(recorder, req)
+
+	if recorder.Code != http.StatusOK {
+		t.Errorf("Expected status 200, got %d", recorder.Code)
+	}
+}
+
+// TestSanitizeStringWithConfig tests sanitization with custom config
+func TestSanitizeStringWithConfig(t *testing.T) {
+	s := NewSanitizer()
+
+	config := DefaultSanitizeConfig()
+	config.StripHTML = false
+
+	result := s.SanitizeStringWithConfig("<p>Hello</p>", config)
+	if result != "<p>Hello</p>" {
+		t.Errorf("Expected '<p>Hello</p>', got %q", result)
+	}
+}
+
+// TestMiddlewareGetAuthToken tests auth token extraction
+func TestMiddlewareGetAuthToken(t *testing.T) {
+	req := httptest.NewRequest("GET", "/api/test", nil)
+	req.Header.Set("Authorization", "test-token-123")
+
+	token := GetAuthToken(req)
+	if token != "test-token-123" {
+		t.Errorf("Expected 'test-token-123', got %s", token)
+	}
+}
+
+// TestMiddlewareGenerateCSRFCookie tests CSRF cookie generation
+func TestMiddlewareGenerateCSRFCookie(t *testing.T) {
+	m := NewMiddleware(nil)
+
+	cookie, err := m.GenerateCSRFCookie()
+	if err != nil {
+		t.Fatalf("GenerateCSRFCookie failed: %v", err)
+	}
+
+	if cookie == nil {
+		t.Error("Expected non-nil CSRF cookie")
+	}
+
+	if cookie.Value == "" {
+		t.Error("Expected non-empty CSRF cookie value")
+	}
+}
+
+// TestMiddlewareSetCSRFCookie tests CSRF cookie setting
+func TestMiddlewareSetCSRFCookie(t *testing.T) {
+	m := NewMiddleware(nil)
+
+	recorder := httptest.NewRecorder()
+
+	err := m.SetCSRFCookie(recorder)
+	if err != nil {
+		t.Fatalf("SetCSRFCookie failed: %v", err)
+	}
+
+	cookies := recorder.Result().Cookies()
+	if len(cookies) == 0 {
+		t.Error("Expected CSRF cookie to be set")
+	}
+}
+
+// TestMiddlewareValidateRequestWithSkipPaths tests skip paths
+func TestMiddlewareValidateRequestWithSkipPaths(t *testing.T) {
+	m := NewMiddleware(nil)
+
+	handler := m.ValidateRequest(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
+	req := httptest.NewRequest("GET", "/metrics", nil)
+	recorder := httptest.NewRecorder()
+
+	handler(recorder, req)
+
+	// Should skip validation for /metrics
+	if recorder.Code != http.StatusOK {
+		t.Errorf("Expected status 200, got %d", recorder.Code)
 	}
 }

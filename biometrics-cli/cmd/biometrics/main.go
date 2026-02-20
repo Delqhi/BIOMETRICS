@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"biometrics-cli/commands"
 	"biometrics-cli/pkg/shutdown"
 )
 
@@ -47,6 +48,8 @@ func main() {
 		printVersion()
 	case "config":
 		runConfig()
+	case "audit":
+		runAudit()
 	default:
 		fmt.Printf("Unknown command: %s\n", command)
 		printUsage()
@@ -67,6 +70,7 @@ Commands:
   check         Check BIOMETRICS compliance
   find-keys     Find existing API keys on system
   config        Manage configuration (init, validate, show)
+  audit         Query and manage audit logs
   version       Show version information
 `)
 }
@@ -783,4 +787,163 @@ func installOpenCodeSkills() {
 	}
 
 	fmt.Println("OpenCode skills installed")
+}
+
+func runAudit() {
+	if len(os.Args) < 3 {
+		commands.PrintAuditHelp()
+		os.Exit(1)
+	}
+
+	subCommand := os.Args[2]
+
+	switch subCommand {
+	case "query":
+		flags := parseAuditQueryFlags()
+		if err := commands.RunAuditQuery(flags); err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
+		}
+	case "export":
+		flags := parseAuditExportFlags()
+		if err := commands.RunAuditExport(flags); err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
+		}
+	case "stats":
+		if err := commands.RunAuditStats(); err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
+		}
+	case "cleanup":
+		retentionDays := parseRetentionDays()
+		if err := commands.RunAuditCleanup(retentionDays); err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
+		}
+	case "rotate":
+		if err := commands.RunAuditRotate(); err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
+		}
+	case "help":
+		commands.PrintAuditHelp()
+	default:
+		fmt.Printf("Unknown audit subcommand: %s\n", subCommand)
+		commands.PrintAuditHelp()
+		os.Exit(1)
+	}
+}
+
+func parseAuditQueryFlags() *commands.AuditQueryFlags {
+	flags := &commands.AuditQueryFlags{
+		Limit: 100,
+	}
+
+	args := os.Args[3:]
+	for i := 0; i < len(args); i++ {
+		switch args[i] {
+		case "--start-time":
+			if i+1 < len(args) {
+				flags.StartTime = args[i+1]
+				i++
+			}
+		case "--end-time":
+			if i+1 < len(args) {
+				flags.EndTime = args[i+1]
+				i++
+			}
+		case "--event-types":
+			if i+1 < len(args) {
+				flags.EventTypes = args[i+1]
+				i++
+			}
+		case "--actors":
+			if i+1 < len(args) {
+				flags.Actors = args[i+1]
+				i++
+			}
+		case "--resources":
+			if i+1 < len(args) {
+				flags.Resources = args[i+1]
+				i++
+			}
+		case "--limit":
+			if i+1 < len(args) {
+				fmt.Sscanf(args[i+1], "%d", &flags.Limit)
+				i++
+			}
+		case "--offset":
+			if i+1 < len(args) {
+				fmt.Sscanf(args[i+1], "%d", &flags.Offset)
+				i++
+			}
+		case "--sort-by":
+			if i+1 < len(args) {
+				flags.SortBy = args[i+1]
+				i++
+			}
+		case "--sort-order":
+			if i+1 < len(args) {
+				flags.SortOrder = args[i+1]
+				i++
+			}
+		case "--format":
+			if i+1 < len(args) {
+				flags.Format = args[i+1]
+				i++
+			}
+		case "--output", "-o":
+			if i+1 < len(args) {
+				flags.Output = args[i+1]
+				i++
+			}
+		}
+	}
+
+	return flags
+}
+
+func parseAuditExportFlags() *commands.AuditExportFlags {
+	flags := &commands.AuditExportFlags{}
+
+	args := os.Args[3:]
+	for i := 0; i < len(args); i++ {
+		switch args[i] {
+		case "--start-time":
+			if i+1 < len(args) {
+				flags.StartTime = args[i+1]
+				i++
+			}
+		case "--end-time":
+			if i+1 < len(args) {
+				flags.EndTime = args[i+1]
+				i++
+			}
+		case "--format":
+			if i+1 < len(args) {
+				flags.Format = args[i+1]
+				i++
+			}
+		case "--output", "-o":
+			if i+1 < len(args) {
+				flags.Output = args[i+1]
+				i++
+			}
+		}
+	}
+
+	return flags
+}
+
+func parseRetentionDays() int {
+	args := os.Args[3:]
+	for i := 0; i < len(args); i++ {
+		if args[i] == "--retention-days" && i+1 < len(args) {
+			var days int
+			fmt.Sscanf(args[i+1], "%d", &days)
+			return days
+		}
+	}
+	return 0
 }

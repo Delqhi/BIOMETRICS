@@ -1,0 +1,64 @@
+{
+  "name": "{{PROJECT_NAME}}",
+  "version": "1.0.0",
+  "description": "{{PROJECT_DESCRIPTION}}",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsup",
+    "build:tsc": "tsc --project tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "typecheck:strict": "tsc --noEmit --strict",
+    "prepare": "if [ -d .git ]; then husky install; fi",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build",
+    "security:audit": "npm audit --audit-level=high",
+    "security:fix": "npm audit fix"
+  },
+  "keywords": [],
+  "author": "{{AUTHOR}}",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-prettier": "^5.1.0",
+    "eslint-plugin-simple-import-sort": "^12.0.0",
+    "eslint-plugin-unused-imports": "^4.0.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.2.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0",
+    "vitest": "^2.0.0"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}

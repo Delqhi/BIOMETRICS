@@ -1,0 +1,17 @@
+GC Statistics
+=============
+Alloc: 2668 KB
+TotalAlloc: 17261 KB
+Sys: 13457 KB
+Lookups: 0
+Mallocs: 4727
+Frees: 3452
+HeapAlloc: 2668 KB
+HeapSys: 7776 KB
+HeapIdle: 4312 KB
+HeapInuse: 3464 KB
+HeapReleased: 2736 KB
+HeapObjects: 1275
+NumGC: 6
+GCCPUFraction: 0.001862
+PauseTotalNs: 631625 ns

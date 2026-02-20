@@ -90,7 +90,7 @@ func TestField(t *testing.T) {
 		{"Float64", Float64("pi", 3.14), 3.14},
 		{"Err", Err(err), "test error"},
 		{"ErrNil", Err(nil), nil},
-		{"Any", Any("data", map[string]string{"a": "b"}), map[string]string{"a": "b"}},
+		{"Any", Any("data", "test-value"), "test-value"},
 		{"Duration", Duration("dur", time.Second), "1s"},
 	}
 

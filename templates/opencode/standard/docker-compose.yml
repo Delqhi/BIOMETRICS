@@ -1,0 +1,77 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: {{PROJECT_NAME}}-app
+    ports:
+      - "50001:50001"
+    environment:
+      - NODE_ENV=development
+      - PORT=50001
+      - DATABASE_URL=postgresql://postgres:postgres@room-03-postgres:5432/{{PROJECT_NAME}}
+      - REDIS_URL=redis://room-04-redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+    restart: unless-stopped
+    networks:
+      - biometrics-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: {{PROJECT_NAME}}-postgres
+    ports:
+      - "51031:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB={{PROJECT_NAME}}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - biometrics-network
+    external_links:
+      - room-03-postgres-master:room-03-postgres
+
+  redis:
+    image: redis:7-alpine
+    container_name: {{PROJECT_NAME}}-redis
+    ports:
+      - "51032:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - biometrics-network
+    external_links:
+      - room-04-memory-redis:room-04-redis
+
+networks:
+  biometrics-network:
+    name: biometrics-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  postgres_data:
+  redis_data:

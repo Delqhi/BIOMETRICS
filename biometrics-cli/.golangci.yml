@@ -1,0 +1,249 @@
+# BIOMETRICS CLI - Linter Configuration
+# Enterprise-Grade Go Linting (Feb 2026 Best Practices)
+
+run:
+  # Timeout for analysis
+  timeout: 5m
+  
+  # Include test files
+  tests: true
+
+# Output configuration
+output:
+  formats:
+    - format: colored-line-number
+  
+  # Print issue source lines
+  print-issued-lines: true
+  
+  # Print linter name
+  print-linter-name: true
+  
+  # Make issues output unique by line
+  uniq-by-line: true
+  
+  # Show fix suggestions
+  show-fixes: true
+
+# Linters configuration
+linters:
+  # Enable specific linters only
+  enable:
+    # Standard linters
+    - govet           # Go's standard vet tool
+    - errcheck        # Check for unchecked errors
+    - staticcheck     # Advanced Go linter
+    - ineffassign     # Detect ineffective assignments
+    - typecheck       # Parse and type-check code
+    - gosimple        # Suggestions for simplifying code
+    - gofmt           # Check formatting
+    - goimports       # Check imports formatting
+    
+    # Additional useful linters
+    - unused          # Check for unused code
+    - misspell        # Spelling mistakes
+    - revive          # Drop-in replacement for golint
+    - prealloc        # Find slice declarations that can be pre-allocated
+    - unconvert       # Remove unnecessary type conversions
+    - nakedret        # Find naked returns in functions
+    - gocyclo         # Compute cyclomatic complexity
+    - dupl            # Find duplicate code
+    - goconst         # Find repeated strings
+    - lll             # Line length checker
+    - gocritic        # Highly extensible Go source code linter
+    - godox           # Search for TODO/BUG/FIXME comments
+    - whitespace      # Check for unnecessary whitespace
+  
+  # Disable specific linters
+  disable:
+    - exhaustruct     # Too strict for structs (requires all fields)
+    - varnamelen      # Too opinionated about variable names
+    - forcetypeassert # Sometimes type assertions are necessary
+  
+  # Enable all linters (then we disable specific ones)
+  enable-all: true
+  
+  # Maximum issues per linter
+  max-issues-per-linter: 50
+  
+  # Maximum same issues
+  max-same-issues: 10
+
+# Linter-specific settings
+linters-settings:
+  govet:
+    # Enable all govet checks
+    enable-all: true
+    disable:
+      - fieldalignment  # Too strict for performance optimization
+  
+  errcheck:
+    # Check for unchecked errors in type assertions
+    check-type-assertions: true
+    # Check for unchecked errors in method calls
+    check-blank: true
+  
+  staticcheck:
+    # Use all staticcheck checks
+    checks: ["all"]
+  
+  gofmt:
+    # Simplify code
+    simplify: true
+  
+  goimports:
+    # Local package prefix for import ordering
+    local-prefixes: biometrics-cli
+  
+  gocyclo:
+    # Maximum cyclomatic complexity
+    min-complexity: 15
+  
+  dupl:
+    # Tokens count to trigger duplicate detection
+    threshold: 100
+  
+  goconst:
+    # Minimal length of string constant
+    min-len: 3
+    # Minimum occurrences of constant
+    min-occurrences: 3
+  
+  lll:
+    # Maximum line length
+    line-length: 120
+    # Tab width in spaces
+    tab-width: 4
+  
+  gocritic:
+    # Enable all gocritic checks
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+    disabled-checks:
+      - wrapperFunc  # Sometimes wrappers are necessary
+  
+  godox:
+    # Keywords to search for
+    keywords:
+      - BUG
+      - FIXME
+      - HACK
+      - TODO
+      - XXX
+  
+  revive:
+    # Confidence threshold for issues
+    confidence: 0.8
+    rules:
+      - name: blank-imports
+      - name: context-as-argument
+      - name: context-keys-type
+      - name: dot-imports
+      - name: error-return
+      - name: error-strings
+      - name: error-naming
+      - name: exported
+      - name: if-return
+      - name: increment-decrement
+      - name: var-naming
+      - name: var-declaration
+      - name: package-comments
+      - name: range
+      - name: receiver-naming
+      - name: time-naming
+      - name: unexported-return
+      - name: indent-error-flow
+      - name: errorf
+      - name: empty-block
+      - name: superfluous-else
+      - name: unused-parameter
+      - name: unreachable-code
+      - name: redefines-builtin-id
+
+# Issues configuration
+issues:
+  # Don't use default exclude rules
+  exclude-use-default: false
+  
+  # Maximum issues per file
+  max-issues-per-linter: 50
+  
+  # Maximum same issues
+  max-same-issues: 10
+  
+  # Show all issues (don't limit)
+  new: false
+  
+  # Include issues from vendored code
+  exclude-dirs-use-default: false
+  
+  # Exclude directories
+  exclude-dirs:
+    - vendor
+    - third_party
+    - Godeps
+  
+  # Exclude files
+  exclude-files:
+    - ".*\\.pb\\.go$"  # Protocol buffer files
+    - ".*\\.gen\\.go$"  # Generated files
+  
+  # Include test files
+  exclude-rules:
+    # Exclude some linters from running on tests
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - dupl
+        - goconst
+        - lll
+        - scopelint
+        - unparam
+    
+    # Exclude long lines in test files (table-driven tests)
+    - path: _test\.go
+      linters:
+        - lll
+      text: "line is"
+    
+    # Exclude unused parameters in tests
+    - path: _test\.go
+      linters:
+        - unused
+      text: "parameter is not used"
+
+# Severity configuration
+severity:
+  # Default severity
+  default-severity: warning
+  
+  # Set specific rules
+  rules:
+    # Errors are critical
+    - linters:
+        - govet
+        - staticcheck
+        - typecheck
+      severity: error
+    
+    # Style issues are warnings
+    - linters:
+        - gofmt
+        - goimports
+        - misspell
+      severity: warning
+    
+    # Suggestions are info
+    - linters:
+        - godox
+        - lll
+      severity: info
+
+# Performance settings
+performance:
+  # Number of CPUs to use
+  concurrency: 4

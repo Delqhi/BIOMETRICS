@@ -37,6 +37,8 @@ func main() {
 		findAPIKeys()
 	case "version":
 		printVersion()
+	case "config":
+		runConfig()
 	default:
 		fmt.Printf("Unknown command: %s\n", command)
 		printUsage()
@@ -56,8 +58,9 @@ Commands:
   auto          Automatic AI-powered setup
   check         Check BIOMETRICS compliance
   find-keys     Find existing API keys on system
+  config        Manage configuration (init, validate, show)
   version       Show version information
- `)
+`)
 }
 
 func printVersion() {
@@ -67,6 +70,205 @@ func printVersion() {
 	}
 
 	fmt.Printf("biometrics-cli v%s (commit: %s, built: %s)\n", version, commit, buildTime)
+}
+
+func runConfig() {
+	if len(os.Args) < 3 {
+		printConfigUsage()
+		os.Exit(1)
+	}
+
+	subCommand := os.Args[2]
+
+	switch subCommand {
+	case "init":
+		initConfig()
+	case "validate":
+		validateConfig()
+	case "show":
+		showConfig()
+	default:
+		fmt.Printf("Unknown config subcommand: %s\n", subCommand)
+		printConfigUsage()
+		os.Exit(1)
+	}
+}
+
+func printConfigUsage() {
+	fmt.Println(`
+Usage: biometrics config <subcommand>
+
+Subcommands:
+  init       Create default configuration file
+  validate   Validate existing configuration
+  show       Display current configuration
+`)
+}
+
+func initConfig() {
+	configDir := getConfigDir()
+	configPath := filepath.Join(configDir, "config.yaml")
+
+	if checkFileExists(configPath) {
+		fmt.Printf("Config already exists at %s\n", configPath)
+		fmt.Print("Overwrite? (y/n): ")
+		reader := bufio.NewReader(os.Stdin)
+		response, _ := reader.ReadString('\n')
+		response = strings.TrimSpace(strings.ToLower(response))
+		if response != "y" {
+			fmt.Println("Cancelled")
+			return
+		}
+	}
+
+	if err := os.MkdirAll(configDir, 0755); err != nil {
+		fmt.Printf("Error creating config directory: %v\n", err)
+		os.Exit(1)
+	}
+
+	defaultConfig := `# BIOMETRICS CLI Configuration
+version: "2.0.0"
+
+# Logging configuration
+logging:
+  level: info
+  format: json
+  output: stdout
+
+# Audit configuration
+audit:
+  enabled: true
+  storage_path: /var/log/biometrics/audit
+  retention_days: 90
+  compression: true
+
+# Authentication configuration
+auth:
+  mtls:
+    enabled: false
+    cert_path: ""
+    key_path: ""
+  oauth2:
+    enabled: false
+    provider: ""
+    client_id: ""
+    client_secret: ""
+
+# Performance configuration
+performance:
+  profiling_enabled: false
+  cache_enabled: true
+  redis_url: "redis://localhost:54322"
+
+# API configuration
+api:
+  rate_limit:
+    enabled: true
+    requests_per_second: 100
+    burst: 200
+  health_check:
+    enabled: true
+    path: /health
+`
+
+	if err := os.WriteFile(configPath, []byte(defaultConfig), 0644); err != nil {
+		fmt.Printf("Error writing config: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("✓ Configuration created at %s\n", configPath)
+	fmt.Println("\nEdit the file to customize your settings")
+}
+
+func validateConfig() {
+	configPath := getConfigPath()
+
+	if !checkFileExists(configPath) {
+		fmt.Printf("Configuration file not found: %s\n", configPath)
+		fmt.Println("Run 'biometrics config init' to create one")
+		os.Exit(1)
+	}
+
+	data, err := os.ReadFile(configPath)
+	if err != nil {
+		fmt.Printf("Error reading config: %v\n", err)
+		os.Exit(1)
+	}
+
+	errors := []string{}
+	warnings := []string{}
+
+	content := string(data)
+
+	if !strings.Contains(content, "version:") {
+		errors = append(errors, "Missing 'version' field")
+	}
+
+	if !strings.Contains(content, "logging:") {
+		warnings = append(warnings, "Missing 'logging' configuration")
+	}
+
+	if !strings.Contains(content, "audit:") {
+		warnings = append(warnings, "Missing 'audit' configuration")
+	}
+
+	if len(errors) > 0 {
+		fmt.Println("❌ Configuration validation FAILED")
+		fmt.Println("\nErrors:")
+		for _, e := range errors {
+			fmt.Printf("  - %s\n", e)
+		}
+		os.Exit(1)
+	}
+
+	if len(warnings) > 0 {
+		fmt.Println("⚠️  Configuration validation passed with warnings")
+		fmt.Println("\nWarnings:")
+		for _, w := range warnings {
+			fmt.Printf("  - %s\n", w)
+		}
+	} else {
+		fmt.Println("✓ Configuration is valid")
+	}
+
+	fmt.Printf("\nConfig file: %s\n", configPath)
+}
+
+func showConfig() {
+	configPath := getConfigPath()
+
+	if !checkFileExists(configPath) {
+		fmt.Printf("Configuration file not found: %s\n", configPath)
+		fmt.Println("Run 'biometrics config init' to create one")
+		os.Exit(1)
+	}
+
+	data, err := os.ReadFile(configPath)
+	if err != nil {
+		fmt.Printf("Error reading config: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("Configuration (%s):\n", configPath)
+	fmt.Println(string(data))
+}
+
+func getConfigDir() string {
+	if dir := os.Getenv("BIOMETRICS_CONFIG_DIR"); dir != "" {
+		return dir
+	}
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return ".biometrics"
+	}
+	return filepath.Join(homeDir, ".biometrics")
+}
+
+func getConfigPath() string {
+	if path := os.Getenv("BIOMETRICS_CONFIG_PATH"); path != "" {
+		return path
+	}
+	return filepath.Join(getConfigDir(), "config.yaml")
 }
 
 func runInit() {

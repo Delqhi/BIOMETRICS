@@ -1,3 +1,5 @@
+// Package ratelimit provides thread-safe rate limiting implementations
+// including token bucket and sliding window algorithms with IP-based limiting.
 package ratelimit
 
 import (
@@ -8,35 +10,71 @@ import (
 	"golang.org/x/time/rate"
 )
 
+// RateLimiter defines the interface for rate limiting implementations
 type RateLimiter interface {
 	Allow(ctx context.Context, key string) bool
 	Wait(ctx context.Context, key string) error
 	GetLimit(key string) Limit
 	Reset(key string)
+	Stats(key string) LimiterStats
 }
 
+// Limit represents rate limiting configuration
 type Limit struct {
-	Requests   int
-	PerSeconds float64
-	Burst      int
+	Requests   int     // Number of requests
+	PerSeconds float64 // Requests per second
+	Burst      int     // Maximum burst size
 }
 
+// LimiterStats provides statistics about rate limiter state
+type LimiterStats struct {
+	Remaining  int           // Remaining requests in current window
+	ResetAt    time.Time     // When the limit resets
+	RetryAfter time.Duration // Time to wait before retrying
+}
+
+// Config holds configuration for rate limiters
+type Config struct {
+	RequestsPerSecond float64       // Base rate limit
+	Burst             int           // Burst allowance
+	WindowDuration    time.Duration // Window for sliding window
+	CleanupInterval   time.Duration // Cleanup interval for stale entries
+	EnableIPBased     bool          // Enable IP-based limiting
+	SlidingWindow     bool          // Use sliding window instead of token bucket
+}
+
+// DefaultConfig returns a reasonable default configuration
+func DefaultConfig() Config {
+	return Config{
+		RequestsPerSecond: 10.0,
+		Burst:             20,
+		WindowDuration:    time.Minute,
+		CleanupInterval:   time.Minute,
+		EnableIPBased:     true,
+		SlidingWindow:     false,
+	}
+}
+
+// TokenBucketLimiter implements token bucket rate limiting with per-key limiters
 type TokenBucketLimiter struct {
 	limiters        sync.Map
 	defaultLimit    Limit
 	mu              sync.RWMutex
 	cleanupInterval time.Duration
+	closed          chan struct{}
 }
 
 type bucket struct {
 	limiter    *rate.Limiter
 	lastAccess time.Time
+	hitCount   int64
 }
 
 func NewTokenBucketLimiter(defaultLimit Limit, cleanupInterval time.Duration) *TokenBucketLimiter {
 	rl := &TokenBucketLimiter{
 		defaultLimit:    defaultLimit,
 		cleanupInterval: cleanupInterval,
+		closed:          make(chan struct{}),
 	}
 
 	go rl.cleanupLoop()

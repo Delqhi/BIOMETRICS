@@ -100,6 +100,24 @@ func (rl *TokenBucketLimiter) Reset(key string) {
 	rl.limiters.Delete(key)
 }
 
+// Stats returns statistics about the rate limiter state
+func (rl *TokenBucketLimiter) Stats(key string) LimiterStats {
+	if stored, ok := rl.limiters.Load(key); ok {
+		b := stored.(*bucket)
+		remaining := b.limiter.Tokens()
+		return LimiterStats{
+			Remaining:  int(remaining),
+			ResetAt:    b.lastAccess.Add(time.Second),
+			RetryAfter: time.Until(b.lastAccess.Add(time.Second)),
+		}
+	}
+	return LimiterStats{
+		Remaining:  rl.defaultLimit.Burst,
+		ResetAt:    time.Now(),
+		RetryAfter: 0,
+	}
+}
+
 func (rl *TokenBucketLimiter) getLimiter(key string) *rate.Limiter {
 	if stored, ok := rl.limiters.Load(key); ok {
 		b := stored.(*bucket)
@@ -217,6 +235,35 @@ func (sw *SlidingWindowLimiter) GetLimit(key string) Limit {
 
 func (sw *SlidingWindowLimiter) Reset(key string) {
 	sw.windows.Delete(key)
+}
+
+// Stats returns statistics about the sliding window limiter state
+func (sw *SlidingWindowLimiter) Stats(key string) LimiterStats {
+	stored, ok := sw.windows.Load(key)
+	if !ok {
+		return LimiterStats{
+			Remaining:  sw.limit,
+			ResetAt:    time.Now().Add(sw.window),
+			RetryAfter: 0,
+		}
+	}
+
+	w := stored.(*window)
+	total := 0
+	for _, count := range w.counts {
+		total += count
+	}
+
+	remaining := sw.limit - total
+	if remaining < 0 {
+		remaining = 0
+	}
+
+	return LimiterStats{
+		Remaining:  remaining,
+		ResetAt:    time.Now().Add(sw.window),
+		RetryAfter: sw.window,
+	}
 }
 
 type RateLimitMiddleware struct {

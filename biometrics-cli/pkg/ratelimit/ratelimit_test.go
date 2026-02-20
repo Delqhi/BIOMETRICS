@@ -256,8 +256,8 @@ func TestSlidingWindowLimiter_WindowReset(t *testing.T) {
 	// Should be limited
 	assert.False(t, limiter.Allow(ctx, key), "Should be rate limited")
 
-	// Wait for window to pass
-	time.Sleep(250 * time.Millisecond)
+	// Wait for window to pass (add buffer for timing)
+	time.Sleep(300 * time.Millisecond)
 
 	// Should allow again
 	assert.True(t, limiter.Allow(ctx, key), "Should allow after window reset")

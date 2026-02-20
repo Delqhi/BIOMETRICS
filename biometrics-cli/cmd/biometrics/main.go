@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"biometrics-cli/pkg/shutdown"
 )
 
 var (
@@ -17,6 +19,12 @@ var (
 )
 
 func main() {
+	shutdownMgr := shutdown.NewShutdownManager(nil)
+
+	go func() {
+		shutdownMgr.WaitForSignal()
+	}()
+
 	if len(os.Args) < 2 {
 		printUsage()
 		os.Exit(1)

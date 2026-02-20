@@ -407,7 +407,156 @@ func (c *OAuth2Client) CompleteAuth(ctx context.Context, provider ProviderType, 
 	return userInfo, nil
 }
 
-// Logout logs out user and revokes token
+type TokenRefresher struct {
+	client        *OAuth2Client
+	provider      ProviderType
+	userID        string
+	refreshToken  string
+	tokenMu       sync.RWMutex
+	currentToken  *oauth2.Token
+	stopChan      chan struct{}
+	refreshBefore time.Duration
+	interval      time.Duration
+}
+
+type TokenRefresherOption func(*TokenRefresher)
+
+func WithRefreshInterval(interval time.Duration) TokenRefresherOption {
+	return func(tr *TokenRefresher) {
+		tr.interval = interval
+	}
+}
+
+func WithRefreshBefore(duration time.Duration) TokenRefresherOption {
+	return func(tr *TokenRefresher) {
+		tr.refreshBefore = duration
+	}
+}
+
+func (c *OAuth2Client) NewTokenRefresher(provider ProviderType, userID, refreshToken string, opts ...TokenRefresherOption) (*TokenRefresher, error) {
+	tr := &TokenRefresher{
+		client:        c,
+		provider:      provider,
+		userID:        userID,
+		refreshToken:  refreshToken,
+		stopChan:      make(chan struct{}),
+		refreshBefore: 5 * time.Minute,
+		interval:      1 * time.Minute,
+	}
+
+	for _, opt := range opts {
+		opt(tr)
+	}
+
+	return tr, nil
+}
+
+func (tr *TokenRefresher) Start(ctx context.Context) error {
+	go tr.run(ctx)
+	return nil
+}
+
+func (tr *TokenRefresher) Stop() {
+	close(tr.stopChan)
+}
+
+func (tr *TokenRefresher) GetToken(ctx context.Context) (*oauth2.Token, error) {
+	tr.tokenMu.RLock()
+	token := tr.currentToken
+	tr.tokenMu.RUnlock()
+
+	if token == nil {
+		return nil, ErrInvalidToken
+	}
+
+	if tr.needsRefresh(token) {
+		return tr.Refresh(ctx)
+	}
+
+	return token, nil
+}
+
+func (tr *TokenRefresher) Refresh(ctx context.Context) (*oauth2.Token, error) {
+	tr.tokenMu.Lock()
+	defer tr.tokenMu.Unlock()
+
+	newToken, err := tr.client.RefreshToken(ctx, tr.provider, tr.refreshToken)
+	if err != nil {
+		return nil, fmt.Errorf("failed to refresh token: %w", err)
+	}
+
+	if newToken.RefreshToken != "" {
+		tr.refreshToken = newToken.RefreshToken
+	}
+
+	tr.currentToken = newToken
+	tr.client.tokens.Store(string(tr.provider), tr.userID, newToken)
+
+	return newToken, nil
+}
+
+func (tr *TokenRefresher) needsRefresh(token *oauth2.Token) bool {
+	if token == nil {
+		return true
+	}
+
+	expiry := token.Expiry
+	if expiry.IsZero() {
+		return false
+	}
+
+	return time.Now().Add(tr.refreshBefore).After(expiry)
+}
+
+func (tr *TokenRefresher) run(ctx context.Context) {
+	ticker := time.NewTicker(tr.interval)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-tr.stopChan:
+			return
+		case <-ctx.Done():
+			return
+		case <-ticker.C:
+			tr.tokenMu.RLock()
+			token := tr.currentToken
+			tr.tokenMu.RUnlock()
+
+			if token != nil && tr.needsRefresh(token) {
+				newToken, err := tr.Refresh(ctx)
+				if err != nil {
+					continue
+				}
+				tr.client.tokens.Store(string(tr.provider), tr.userID, newToken)
+			}
+		}
+	}
+}
+
+func (tr *TokenRefresher) IsTokenExpiredOrExpiring() bool {
+	tr.tokenMu.RLock()
+	defer tr.tokenMu.RUnlock()
+
+	if tr.currentToken == nil {
+		return true
+	}
+
+	return tr.needsRefresh(tr.currentToken)
+}
+
+func (tr *TokenRefresher) GetRefreshToken() string {
+	tr.tokenMu.RLock()
+	defer tr.tokenMu.RUnlock()
+	return tr.refreshToken
+}
+
+func (tr *TokenRefresher) UpdateRefreshToken(newRefreshToken string) {
+	tr.tokenMu.Lock()
+	defer tr.tokenMu.Unlock()
+	tr.refreshToken = newRefreshToken
+}
+
 func (c *OAuth2Client) Logout(ctx context.Context, provider ProviderType, userID string) error {
 	token := c.tokens.Get(string(provider), userID)
 	if token != nil {

@@ -17,6 +17,7 @@ type Provider interface {
 	Endpoint() oauth2.Endpoint
 	Scopes() []string
 	GetUserInfo(ctx context.Context, token *oauth2.Token) (*UserInfo, error)
+	Refresh(ctx context.Context, refreshToken string) (*oauth2.Token, error)
 }
 
 // GoogleProvider implements Google OAuth2
@@ -121,8 +122,16 @@ func (p *GoogleProvider) RefreshToken(ctx context.Context, refreshToken string) 
 	return ts.Token()
 }
 
+func (p *GoogleProvider) Refresh(ctx context.Context, refreshToken string) (*oauth2.Token, error) {
+	return p.RefreshToken(ctx, refreshToken)
+}
+
 // RefreshToken refreshes token
 func (p *GitHubProvider) RefreshToken(ctx context.Context, refreshToken string) (*oauth2.Token, error) {
 	ts := p.config.TokenSource(ctx, &oauth2.Token{RefreshToken: refreshToken})
 	return ts.Token()
+}
+
+func (p *GitHubProvider) Refresh(ctx context.Context, refreshToken string) (*oauth2.Token, error) {
+	return p.RefreshToken(ctx, refreshToken)
 }

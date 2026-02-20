@@ -1,0 +1,427 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GO_VERSION: '1.24'
+  BINARY_NAME: biometrics
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # ===========================================================================
+  # BUILD JOB
+  # ===========================================================================
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Download dependencies
+        run: |
+          go mod download
+          go mod verify
+
+      - name: Build binary
+        run: |
+          echo "Building ${{ env.BINARY_NAME }}..."
+          go build -v -o ${{ env.BINARY_NAME }} ./cmd/biometrics
+          echo "Build complete!"
+          ls -lh ${{ env.BINARY_NAME }}
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.BINARY_NAME }}-linux-amd64
+          path: ${{ env.BINARY_NAME }}
+          retention-days: 7
+          if-no-files-found: error
+
+  # ===========================================================================
+  # TEST JOB
+  # ===========================================================================
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Download dependencies
+        run: |
+          go mod download
+          go mod verify
+
+      - name: Create coverage directory
+        run: mkdir -p coverage
+
+      - name: Run tests with coverage and race detection
+        run: |
+          echo "Running tests with race detection..."
+          go test ./... \
+            -v \
+            -race \
+            -coverprofile=coverage/coverage.out \
+            -covermode=atomic \
+            -timeout=5m \
+            -parallel=4 \
+            -json | tee test-results.json
+
+      - name: Generate coverage report
+        run: |
+          echo "Generating coverage report..."
+          go tool cover -html=coverage/coverage.out -o coverage/coverage.html
+          go tool cover -func=coverage/coverage.out -o coverage/coverage.txt
+          echo "Coverage summary:"
+          grep "^total:" coverage/coverage.txt
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/coverage.out
+          flags: unittests
+          name: codecov-${{ env.BINARY_NAME }}
+          fail_ci_if_error: false
+          verbose: true
+
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results.json
+          retention-days: 7
+          if-no-files-found: error
+
+  # ===========================================================================
+  # LINT JOB
+  # ===========================================================================
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Download dependencies
+        run: |
+          go mod download
+          go mod verify
+
+      - name: Install golangci-lint
+        uses: golangci/golangci-lint-action@v4
+        with:
+          version: latest
+          args: --timeout=5m
+
+      - name: Run golangci-lint
+        run: |
+          echo "Running comprehensive linting..."
+          golangci-lint run ./... \
+            --enable=gofmt \
+            --enable=govet \
+            --enable=errcheck \
+            --enable=staticcheck \
+            --enable=unused \
+            --enable=ineffassign \
+            --enable=gosimple \
+            --enable=structcheck \
+            --enable=varcheck \
+            --enable=misspell \
+            --enable=unconvert \
+            --deadline=5m \
+            --max-same-issues=50
+          echo "Linting passed!"
+
+      - name: Run go vet
+        run: |
+          echo "Running go vet..."
+          go vet ./...
+          echo "Vet passed!"
+
+      - name: Check formatting
+        run: |
+          echo "Checking code formatting..."
+          if [ -n "$(gofmt -l .)" ]; then
+            echo "ERROR: The following files are not formatted:"
+            gofmt -l .
+            exit 1
+          fi
+          echo "Formatting check passed!"
+
+  # ===========================================================================
+  # DOCKER BUILD JOB
+  # ===========================================================================
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [build, test, lint]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix=
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+
+  # ===========================================================================
+  # SECURITY SCAN JOB
+  # ===========================================================================
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: Install govulncheck
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@latest
+
+      - name: Run vulnerability scan
+        run: |
+          echo "Running security vulnerability scan..."
+          govulncheck ./...
+          echo "Security scan complete!"
+
+      - name: Run gosec security scanner
+        uses: securego/gosec@master
+        with:
+          args: ./...
+
+  # ===========================================================================
+  # BENCHMARK JOB (Optional - runs on main branch only)
+  # ===========================================================================
+  benchmark:
+    name: Benchmark
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [build, test, lint]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: Run benchmarks
+        run: |
+          echo "Running benchmarks..."
+          mkdir -p reports
+          go test ./benchmarks/... \
+            -bench=. \
+            -benchmem \
+            -benchtime=1s \
+            -run=^$$ \
+            -timeout=10m \
+            | tee reports/benchmark.txt
+          echo "Benchmarks complete!"
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: reports/benchmark.txt
+          retention-days: 30
+          if-no-files-found: error
+
+  # ===========================================================================
+  # RELEASE JOB (Creates release on tags)
+  # ===========================================================================
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [build, test, lint, docker, security]
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: Run cross-compilation
+        run: |
+          echo "Building for multiple platforms..."
+          mkdir -p dist
+          
+          # Linux AMD64
+          GOOS=linux GOARCH=amd64 go build -o dist/${{ env.BINARY_NAME }}-linux-amd64 ./cmd/biometrics
+          
+          # Linux ARM64
+          GOOS=linux GOARCH=arm64 go build -o dist/${{ env.BINARY_NAME }}-linux-arm64 ./cmd/biometrics
+          
+          # macOS AMD64
+          GOOS=darwin GOARCH=amd64 go build -o dist/${{ env.BINARY_NAME }}-darwin-amd64 ./cmd/biometrics
+          
+          # macOS ARM64
+          GOOS=darwin GOARCH=arm64 go build -o dist/${{ env.BINARY_NAME }}-darwin-arm64 ./cmd/biometrics
+          
+          # Windows AMD64
+          GOOS=windows GOARCH=amd64 go build -o dist/${{ env.BINARY_NAME }}-windows-amd64.exe ./cmd/biometrics
+          
+          echo "Cross-compilation complete!"
+          ls -lh dist/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# =============================================================================
+# END OF CI WORKFLOW
+# =============================================================================

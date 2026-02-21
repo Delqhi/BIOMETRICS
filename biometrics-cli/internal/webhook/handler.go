@@ -219,15 +219,36 @@ func RegisterDefaultHandlers() {
 
 	h.Register("task.completed", handleTaskCompleted)
 	h.Register("task.failed", handleTaskFailed)
+	h.Register("task.started", handleTaskStarted)
+	h.Register("task.progress", handleTaskProgress)
 	h.Register("agent.started", handleAgentStarted)
 	h.Register("agent.stopped", handleAgentStopped)
+	h.Register("agent.error", handleAgentError)
 	h.Register("session.created", handleSessionCreated)
 	h.Register("session.ended", handleSessionEnded)
+	h.Register("session.timeout", handleSessionTimeout)
 	h.Register("plan.activated", handlePlanActivated)
 	h.Register("plan.completed", handlePlanCompleted)
+	h.Register("plan.failed", handlePlanFailed)
 	h.Register("health.check", handleHealthCheck)
+	h.Register("health.degraded", handleHealthDegraded)
 	h.Register("model.acquired", handleModelAcquired)
 	h.Register("model.released", handleModelReleased)
+	h.Register("model.failed", handleModelFailed)
+	h.Register("docker.container.started", handleDockerContainerStarted)
+	h.Register("docker.container.stopped", handleDockerContainerStopped)
+	h.Register("docker.container.failed", handleDockerContainerFailed)
+	h.Register("scheduler.job.started", handleSchedulerJobStarted)
+	h.Register("scheduler.job.completed", handleSchedulerJobCompleted)
+	h.Register("scheduler.job.failed", handleSchedulerJobFailed)
+	h.Register("notification.sent", handleNotificationSent)
+	h.Register("notification.failed", handleNotificationFailed)
+	h.Register("ratelimit.exceeded", handleRateLimitExceeded)
+	h.Register("git.commit", handleGitCommit)
+	h.Register("git.push", handleGitPush)
+	h.Register("git.pull", handleGitPull)
+	h.Register("cache.hit", handleCacheHit)
+	h.Register("cache.miss", handleCacheMiss)
 }
 
 func handleTaskCompleted(payload []byte) (interface{}, error) {
@@ -333,6 +354,198 @@ func handleModelReleased(payload []byte) (interface{}, error) {
 		return nil, err
 	}
 	state.GlobalState.Log("INFO", fmt.Sprintf("Model released: %v", data["model"]))
+	return data, nil
+}
+
+func handleTaskStarted(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("INFO", fmt.Sprintf("Task started: %v", data["task_id"]))
+	metrics.TasksStartedTotal.Inc()
+	return data, nil
+}
+
+func handleTaskProgress(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("INFO", fmt.Sprintf("Task progress: %v - %v%%", data["task_id"], data["progress"]))
+	return data, nil
+}
+
+func handleAgentError(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("ERROR", fmt.Sprintf("Agent error: %v - %v", data["agent"], data["error"]))
+	return data, nil
+}
+
+func handleSessionTimeout(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("WARN", fmt.Sprintf("Session timeout: %v", data["session_id"]))
+	return data, nil
+}
+
+func handlePlanFailed(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("ERROR", fmt.Sprintf("Plan failed: %v", data["plan_name"]))
+	return data, nil
+}
+
+func handleHealthDegraded(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("WARN", fmt.Sprintf("Health degraded: %v", data["component"]))
+	return data, nil
+}
+
+func handleModelFailed(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("ERROR", fmt.Sprintf("Model failed: %v - %v", data["model"], data["error"]))
+	return data, nil
+}
+
+func handleDockerContainerStarted(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("INFO", fmt.Sprintf("Docker container started: %v", data["container"]))
+	metrics.DockerContainerStartsTotal.Inc()
+	return data, nil
+}
+
+func handleDockerContainerStopped(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("INFO", fmt.Sprintf("Docker container stopped: %v", data["container"]))
+	return data, nil
+}
+
+func handleDockerContainerFailed(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("ERROR", fmt.Sprintf("Docker container failed: %v - %v", data["container"], data["error"]))
+	metrics.DockerContainerStartsFailedTotal.Inc()
+	return data, nil
+}
+
+func handleSchedulerJobStarted(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("INFO", fmt.Sprintf("Scheduler job started: %v", data["job"]))
+	return data, nil
+}
+
+func handleSchedulerJobCompleted(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("INFO", fmt.Sprintf("Scheduler job completed: %v", data["job"]))
+	return data, nil
+}
+
+func handleSchedulerJobFailed(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("ERROR", fmt.Sprintf("Scheduler job failed: %v - %v", data["job"], data["error"]))
+	return data, nil
+}
+
+func handleNotificationSent(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("INFO", fmt.Sprintf("Notification sent: %v", data["channel"]))
+	metrics.NotificationsSentTotal.Inc()
+	return data, nil
+}
+
+func handleNotificationFailed(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("ERROR", fmt.Sprintf("Notification failed: %v - %v", data["channel"], data["error"]))
+	metrics.NotificationsFailedTotal.Inc()
+	return data, nil
+}
+
+func handleRateLimitExceeded(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("WARN", fmt.Sprintf("Rate limit exceeded: %v", data["key"]))
+	return data, nil
+}
+
+func handleGitCommit(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("INFO", fmt.Sprintf("Git commit: %v", data["message"]))
+	return data, nil
+}
+
+func handleGitPush(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("INFO", fmt.Sprintf("Git push: %v", data["branch"]))
+	return data, nil
+}
+
+func handleGitPull(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	state.GlobalState.Log("INFO", fmt.Sprintf("Git pull: %v", data["branch"]))
+	return data, nil
+}
+
+func handleCacheHit(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func handleCacheMiss(payload []byte) (interface{}, error) {
+	var data map[string]interface{}
+	if err := json.Unmarshal(payload, &data); err != nil {
+		return nil, err
+	}
 	return data, nil
 }
 

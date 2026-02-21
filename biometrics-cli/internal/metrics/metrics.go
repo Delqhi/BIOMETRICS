@@ -67,6 +67,23 @@ var (
 		Help: "Total number of work stealing rebalances",
 	})
 
+	DurableCheckpointsCreated = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_durable_checkpoints_created_total",
+		Help: "Total number of durable checkpoints created",
+	}, []string{"agent"})
+	DurableCheckpointsCompleted = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_durable_checkpoints_completed_total",
+		Help: "Total number of durable checkpoints completed",
+	}, []string{"agent"})
+	DurableCheckpointsFailed = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_durable_checkpoints_failed_total",
+		Help: "Total number of durable checkpoints failed",
+	}, []string{"agent"})
+	DurableStepsReplayed = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_durable_steps_replayed_total",
+		Help: "Total number of durable steps replayed",
+	}, []string{"agent"})
+
 	TasksCompletedTotal = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "biometrics_tasks_completed_total",
 		Help: "Total number of completed tasks",

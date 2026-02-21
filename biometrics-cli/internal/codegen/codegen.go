@@ -127,6 +127,10 @@ func (g *CodeGenerator) GetActiveTasks() []*Task {
 	g.mu.RLock()
 	defer g.mu.RUnlock()
 
+	if g.activeTasks == nil {
+		return []*Task{}
+	}
+
 	tasks := make([]*Task, 0, len(g.activeTasks))
 	for _, task := range g.activeTasks {
 		tasks = append(tasks, task)
@@ -137,6 +141,10 @@ func (g *CodeGenerator) GetActiveTasks() []*Task {
 func (g *CodeGenerator) ListTasks() []*Task {
 	g.mu.RLock()
 	defer g.mu.RUnlock()
+
+	if g.Tasks == nil {
+		return []*Task{}
+	}
 
 	return g.Tasks
 }

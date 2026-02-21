@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/signal"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"time"
 
 	"biometrics-cli/commands"
-	"biometrics-cli/pkg/shutdown"
 )
 
 var (
@@ -20,10 +21,14 @@ var (
 )
 
 func main() {
-	shutdownMgr := shutdown.NewShutdownManager(nil)
+	// Setup signal handling for graceful shutdown
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
 	go func() {
-		shutdownMgr.WaitForSignal()
+		sig := <-sigChan
+		fmt.Printf("\nReceived signal: %v. Shutting down...\n", sig)
+		os.Exit(0)
 	}()
 
 	if len(os.Args) < 2 {

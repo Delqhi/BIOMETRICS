@@ -1,0 +1,119 @@
+name: Close Stale Issues and PRs
+
+on:
+  schedule:
+    # Run every day at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  # ============================================
+  # STALE ISSUES AND PRS CLEANUP
+  # ============================================
+  stale:
+    name: Close Stale Issues and PRs
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Close Stale Issues
+        uses: actions/stale@v9
+        with:
+          # General Settings
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          ascending: true
+          debug-only: false
+          operations-per-run: 100
+          remove-stale-when-updated: true
+
+          # Stale Issues Settings
+          days-before-issue-stale: 30
+          days-before-issue-close: 14
+          stale-issue-label: 'stale'
+          stale-issue-message: |
+            This issue has been automatically marked as stale because it has not had any activity in the last **30 days**.
+            
+            If this issue is still relevant, please comment with an update or remove the stale label. Otherwise, it will be closed in **14 days**.
+            
+            Thank you for your contributions!
+          close-issue-message: |
+            This issue was automatically closed because it has been stale for **14 days** with no activity.
+            
+            If this issue is still relevant, please reopen it or create a new one with updated information.
+          close-issue-reason: 'not_planned'
+          exempt-issue-labels: 'pinned,security,help wanted,good first issue,bug,critical'
+          exempt-issue-assignees: true
+          exempt-all-issue-milestones: true
+          labels-to-add-when-unstale: 'not-stale'
+
+          # Stale PRs Settings
+          days-before-pr-stale: 14
+          days-before-pr-close: 7
+          stale-pr-label: 'stale'
+          stale-pr-message: |
+            This pull request has been automatically marked as stale because it has not had any activity in the last **14 days**.
+            
+            If this PR is still relevant, please comment with an update or remove the stale label. Otherwise, it will be closed in **7 days**.
+            
+            Thank you for your contributions!
+          close-pr-message: |
+            This pull request was automatically closed because it has been stale for **7 days** with no activity.
+            
+            If this PR is still relevant, please reopen it or create a new one with updated information.
+          exempt-pr-labels: 'pinned,security,wip,do-not-merge'
+          exempt-all-pr-assignees: false
+          exempt-all-pr-milestones: true
+          labels-to-add-when-unstale: 'not-stale'
+
+          # Exempt Draft PRs
+          exempt-draft-pr: true
+
+          # Only issues/PRs with these labels will be marked as stale
+          only-labels: ''
+
+          # Labels to remove when un-staling
+          labels-to-remove-when-unstale: 'stale'
+
+  # ============================================
+  # LOCK CLOSED ISSUES
+  # ============================================
+  lock-closed:
+    name: Lock Closed Issues
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.event_name == 'schedule'
+    steps:
+      - name: Lock Closed Issues
+        uses: dessant/lock-threads@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          process-only: 'issues'
+          issue-inactive-days: '90'
+          issue-lock-reason: 'resolved'
+          issue-comment: >
+            This issue has been automatically locked since there has not been any recent activity after it was closed.
+            Please open a new issue for related bugs or questions.
+          exclude-any-issue-labels: 'pinned,security'
+
+  # ============================================
+  # NO RESPONSE ISSUES
+  # ============================================
+  no-response:
+    name: Close Issues Without Response
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.event_name == 'schedule'
+    steps:
+      - name: Close Issues Without Response
+        uses: lee-dohm/no-response@v0.5.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          daysUntilClose: 14
+          responseRequiredLabel: 'waiting-for-response'
+          closeComment: >
+            This issue has been automatically closed because there has been no response from the original author.
+            
+            If you have additional information or can provide the requested details, please comment and the issue will be reopened.

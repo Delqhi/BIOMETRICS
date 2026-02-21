@@ -1,34 +1,160 @@
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 version: 2
-
+registries:
+  npm-registry-registry-npmjs-org:
+    type: npm-registry
+    url: https://registry.npmjs.org
+    replaces-base: true
 updates:
+  # Go Modules (biometrics-cli)
+  - package-ecosystem: "gomod"
+    directory: "/biometrics-cli"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "go"
+      - "automated"
+    commit-message:
+      prefix: "chore(deps-go-cli):"
+    groups:
+      go-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
+      go-development:
+        patterns:
+          - "github.com/charmbracelet/*"
+          - "github.com/stretchr/testify"
+        update-types:
+          - "minor"
+          - "patch"
+    reviewers:
+      - "jeremy"
+    assignees:
+      - "jeremy"
+
+  # Go Modules (biometrics backend)
+  - package-ecosystem: "gomod"
+    directory: "/BIOMETRICS/biometrics"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "go"
+      - "backend"
+      - "automated"
+    commit-message:
+      prefix: "chore(deps-go-backend):"
+    groups:
+      go-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
+      go-development:
+        patterns:
+          - "github.com/gin-gonic/gin"
+          - "github.com/golang-jwt/jwt/*"
+          - "go.uber.org/zap"
+        update-types:
+          - "minor"
+          - "patch"
+    reviewers:
+      - "jeremy"
+    assignees:
+      - "jeremy"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "ci/cd"
+      - "automated"
+    commit-message:
+      prefix: "ci(deps):"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    reviewers:
+      - "jeremy"
+    assignees:
+      - "jeremy"
+
+  # Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "docker"
+      - "automated"
+    commit-message:
+      prefix: "docker(deps):"
+    reviewers:
+      - "jeremy"
+    assignees:
+      - "jeremy"
+
+  # npm (for any frontend components)
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
+      time: "06:00"
+      timezone: "Europe/Berlin"
     open-pull-requests-limit: 10
     labels:
       - "dependencies"
+      - "npm"
       - "automated"
     commit-message:
-      prefix: "chore(deps):"
+      prefix: "chore(deps-npm):"
     groups:
-      development:
-        patterns:
-          - "@types/*"
-          - "eslint*"
-          - "prettier*"
-          - "typescript"
+      npm-development:
+        dependency-type: "development"
         update-types:
           - "minor"
           - "patch"
-
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    labels:
-      - "dependencies"
-      - "ci"
-    commit-message:
-      prefix: "ci(deps):"
+      npm-production:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+    reviewers:
+      - "jeremy"
+    assignees:
+      - "jeremy"
+    registries:
+      - npm-registry-registry-npmjs-org

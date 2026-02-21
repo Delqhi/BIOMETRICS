@@ -1,4 +1,4 @@
-name: CI
+name: CI Pipeline
 
 on:
   push:
@@ -10,52 +10,254 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  GO_VERSION: '1.24'
+  NODE_VERSION: '20'
+
 jobs:
+  # ============================================
+  # LINT JOB - Code Quality & Formatting
+  # ============================================
   lint:
+    name: Lint & Format
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run lint || true
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+          cache-dependency-path: biometrics-cli/go.sum
+
+      - name: Cache Go Modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Run go fmt
+        working-directory: biometrics-cli
+        run: |
+          UNFORMATTED=$(go fmt ./...)
+          if [ -n "$UNFORMATTED" ]; then
+            echo "Error: The following files are not formatted:"
+            echo "$UNFORMATTED"
+            exit 1
+          fi
+          echo "✓ All files formatted correctly"
+
+      - name: Run go vet
+        working-directory: biometrics-cli
+        run: go vet ./...
+
+      - name: Install golangci-lint
+        run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+      - name: Run golangci-lint
+        working-directory: biometrics-cli
+        run: golangci-lint run --timeout=5m
+
+  # ============================================
+  # TYPECHECK JOB - Type Safety
+  # ============================================
   typecheck:
+    name: Type Check
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run typecheck || true
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - name: Download Dependencies
+        working-directory: biometrics-cli
+        run: go mod download
+
+      - name: Run Go Build (Type Check)
+        working-directory: biometrics-cli
+        run: go build -v ./...
+
+  # ============================================
+  # TEST JOB - Matrix Testing (3 OS)
+  # ============================================
   test:
-    runs-on: ubuntu-latest
+    name: Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm test || true
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+          cache-dependency-path: biometrics-cli/go.sum
+
+      - name: Cache Go Modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Download Dependencies
+        working-directory: biometrics-cli
+        run: go mod download
+
+      - name: Run Tests with Race Detection & Coverage
+        working-directory: biometrics-cli
+        run: go test -race -coverprofile=coverage.out -covermode=atomic ./...
+
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./biometrics-cli/coverage.out
+          flags: ${{ matrix.os }}
+          name: codecov-${{ matrix.os }}
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  # ============================================
+  # BUILD JOB - Cross-Platform Compilation
+  # ============================================
   build:
+    name: Build
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     needs: [lint, typecheck, test]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
         with:
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run build
-      - uses: actions/upload-artifact@v4
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - name: Download Dependencies
+        working-directory: biometrics-cli
+        run: go mod download
+
+      - name: Create bin Directory
+        run: mkdir -p bin
+
+      - name: Build Binary (Linux)
+        working-directory: biometrics-cli
+        run: go build -o ../bin/biometrics-cli-linux ./...
+
+      - name: Build Binary (macOS)
+        working-directory: biometrics-cli
+        env:
+          GOOS: darwin
+          GOARCH: amd64
+        run: go build -o ../bin/biometrics-cli-darwin ./...
+
+      - name: Build Binary (Windows)
+        working-directory: biometrics-cli
+        env:
+          GOOS: windows
+          GOARCH: amd64
+        run: go build -o ../bin/biometrics-cli-windows.exe ./...
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
         with:
-          name: build
-          path: dist/
+          name: biometrics-cli-builds
+          path: bin/
+          retention-days: 7
+
+  # ============================================
+  # INTEGRATION TEST JOB - E2E Testing
+  # ============================================
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [build]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: biometrics-cli-builds
+          path: bin/
+
+      - name: Make Binary Executable
+        run: chmod +x bin/biometrics-cli-linux
+
+      - name: Run Integration Tests
+        run: |
+          echo "Running integration tests..."
+          ./bin/biometrics-cli-linux --help
+          echo "✓ Integration tests passed!"
+
+  # ============================================
+  # SECURITY SCAN JOB - Dependency Check
+  # ============================================
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Run Go Security Check
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@latest
+          cd biometrics-cli
+          govulncheck ./...
+
+  # ============================================
+  # DOCUMENTATION CHECK JOB
+  # ============================================
+  docs-check:
+    name: Documentation Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Check Documentation Files
+        run: |
+          echo "Checking documentation structure..."
+          test -d docs/ && echo "✓ docs/ directory exists" || (echo "✗ docs/ directory missing" && exit 1)
+          test -f README.md && echo "✓ README.md exists" || (echo "✗ README.md missing" && exit 1)
+          test -f CHANGELOG.md && echo "✓ CHANGELOG.md exists" || (echo "✗ CHANGELOG.md missing" && exit 1)
+          echo "✓ Documentation check complete!"

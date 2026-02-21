@@ -1,0 +1,252 @@
+name: Release Pipeline
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  GO_VERSION: '1.24'
+
+jobs:
+  # ============================================
+  # BUILD BINARIES - Cross-Platform Release
+  # ============================================
+  build-release:
+    name: Build Release Binaries
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      changelog: ${{ steps.changelog.outputs.changelog }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - name: Get Version from Tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Download Dependencies
+        working-directory: biometrics-cli
+        run: go mod download
+
+      - name: Create Release Directory
+        run: mkdir -p release
+
+      - name: Build Binary (Linux amd64)
+        working-directory: biometrics-cli
+        env:
+          GOOS: linux
+          GOARCH: amd64
+        run: go build -o ../release/biometrics-cli-linux-amd64 ./...
+
+      - name: Build Binary (Linux arm64)
+        working-directory: biometrics-cli
+        env:
+          GOOS: linux
+          GOARCH: arm64
+        run: go build -o ../release/biometrics-cli-linux-arm64 ./...
+
+      - name: Build Binary (macOS amd64)
+        working-directory: biometrics-cli
+        env:
+          GOOS: darwin
+          GOARCH: amd64
+        run: go build -o ../release/biometrics-cli-darwin-amd64 ./...
+
+      - name: Build Binary (macOS arm64)
+        working-directory: biometrics-cli
+        env:
+          GOOS: darwin
+          GOARCH: arm64
+        run: go build -o ../release/biometrics-cli-darwin-arm64 ./...
+
+      - name: Build Binary (Windows amd64)
+        working-directory: biometrics-cli
+        env:
+          GOOS: windows
+          GOARCH: amd64
+        run: go build -o ../release/biometrics-cli-windows-amd64.exe ./...
+
+      - name: Build Binary (Windows arm64)
+        working-directory: biometrics-cli
+        env:
+          GOOS: windows
+          GOARCH: arm64
+        run: go build -o ../release/biometrics-cli-windows-arm64.exe ./...
+
+      - name: Generate SHA256 Checksums
+        working-directory: release
+        run: sha256sum * > checksums.txt
+
+      - name: Upload Release Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-binaries
+          path: release/
+          retention-days: 30
+
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "## Changes in ${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          git log $(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || git rev-list --max-parents=0 HEAD)..HEAD --pretty=format:"* %s (%h)" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+  # ============================================
+  # CREATE GITHUB RELEASE
+  # ============================================
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [build-release]
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      discussions: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download Release Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-binaries
+          path: release/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            ${{ needs.build-release.outputs.changelog }}
+            
+            ---
+            
+            ## Installation
+            
+            ### macOS (Homebrew)
+            \`\`\`bash
+            # Coming soon to homebrew-delqhi tap
+            \`\`\`
+            
+            ### Linux
+            \`\`\`bash
+            curl -LO https://github.com/Delqhi/BIOMETRICS/releases/download/${{ github.ref_name }}/biometrics-cli-linux-amd64
+            chmod +x biometrics-cli-linux-amd64
+            sudo mv biometrics-cli-linux-amd64 /usr/local/bin/biometrics
+            \`\`\`
+            
+            ### Windows
+            \`\`\`powershell
+            curl -LO https://github.com/Delqhi/BIOMETRICS/releases/download/${{ github.ref_name }}/biometrics-cli-windows-amd64.exe
+            # Move to PATH
+            \`\`\`
+            
+            ## Checksums
+            \`\`\`
+            ${{ join(fromJSON('["release/checksums.txt"]'), '') }}
+            \`\`\`
+            
+            ---
+            
+            **Full Changelog**: https://github.com/Delqhi/BIOMETRICS/compare/${{ needs.build-release.outputs.version }}...${{ github.ref_name }}
+          files: |
+            release/*
+          draft: false
+          prerelease: ${{ contains(github.ref_name, 'rc') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'alpha') }}
+          generate_release_notes: true
+          make_latest: ${{ !contains(github.ref_name, 'rc') && !contains(github.ref_name, 'beta') && !contains(github.ref_name, 'alpha') }}
+          discussion_category_name: Announcements
+
+  # ============================================
+  # UPDATE CHANGELOG
+  # ============================================
+  update-changelog:
+    name: Update CHANGELOG.md
+    runs-on: ubuntu-latest
+    needs: [build-release]
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Update CHANGELOG.md
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          DATE=$(date +%Y-%m-%d)
+          
+          # Create temporary changelog entry
+          cat > /tmp/changelog_entry.md << EOF
+          ## [$VERSION] - $DATE
+          
+          $(git log $(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || git rev-list --max-parents=0 HEAD)..HEAD --pretty=format:"* %s (%h)" | head -20)
+          
+          EOF
+          
+          # Prepend to existing CHANGELOG.md
+          if [ -f CHANGELOG.md ]; then
+            cat /tmp/changelog_entry.md CHANGELOG.md > /tmp/CHANGELOG_new.md
+            mv /tmp/CHANGELOG_new.md CHANGELOG.md
+          else
+            mv /tmp/changelog_entry.md CHANGELOG.md
+          fi
+
+      - name: Commit CHANGELOG.md
+        run: |
+          git add CHANGELOG.md
+          git commit -m "docs: Update CHANGELOG for ${{ github.ref_name }}" || echo "No changes to commit"
+          git push origin HEAD:main
+
+  # ============================================
+  # PUBLISH TO PACKAGE MANAGERS
+  # ============================================
+  publish-packages:
+    name: Publish to Package Managers
+    runs-on: ubuntu-latest
+    needs: [create-release]
+    timeout-minutes: 20
+    if: ${{ !contains(github.ref_name, 'rc') && !contains(github.ref_name, 'beta') && !contains(github.ref_name, 'alpha') }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Publish to Go Package Proxy
+        run: |
+          # Trigger Go proxy to fetch latest version
+          curl https://proxy.golang.org/github.com/Delqhi/BIOMETRICS/@v/${{ github.ref_name }}.info || true
+
+      - name: Notify Release
+        run: |
+          echo "Release ${{ github.ref_name }} published successfully!"
+          echo "Binaries are available on GitHub Releases"
+          echo "Go module is available via proxy.golang.org"

@@ -114,11 +114,9 @@ func runSicherCheck(agent string) {
 
 func getModelForAgent(agent string) string {
 	switch agent {
-	case "sisyphus", "build":
+	case "sisyphus", "build", "atlas", "deep", "oracle", "ultrabrain", "visual-engineering":
 		return "qwen3.5"
-	case "atlas", "deep":
-		return "kimi-k2.5"
-	case "librarian", "explore", "quick":
+	case "librarian", "explore", "quick", "metis", "momus":
 		return "minimax"
 	default:
 		return "qwen3.5"

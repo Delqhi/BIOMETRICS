@@ -226,7 +226,50 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{
 		"status":    "healthy",
 		"service":   "biometrics-api",
+		"version":   "1.0.0",
 		"timestamp": time.Now().Format(time.RFC3339),
+	})
+}
+
+func handleTaskByID(w http.ResponseWriter, r *http.Request) {
+	taskID := r.URL.Path[len("/api/tasks/"):]
+
+	w.Header().Set("Content-Type", "application/json")
+
+	switch r.Method {
+	case http.MethodGet:
+		json.NewEncoder(w).Encode(map[string]string{"task_id": taskID, "status": "found"})
+	case http.MethodDelete:
+		json.NewEncoder(w).Encode(map[string]string{"task_id": taskID, "status": "deleted"})
+	default:
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+func handleMetrics(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"orchestrator": map[string]interface{}{
+			"cycles_total":       0,
+			"model_acquisitions": map[string]int{},
+			"tasks_created":      0,
+			"tasks_completed":    0,
+			"tasks_failed":       0,
+		},
+		"notifications": map[string]int{
+			"sent":    0,
+			"failed":  0,
+			"dropped": 0,
+		},
+		"scheduler": map[string]int{
+			"jobs_run":    0,
+			"jobs_failed": 0,
+		},
+		"git": map[string]int{
+			"commits": 0,
+			"pushes":  0,
+			"pulls":   0,
+		},
 	})
 }
 

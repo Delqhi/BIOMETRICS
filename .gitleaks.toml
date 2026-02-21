@@ -1,24 +1,33 @@
-title = "BIOMETRICS Gitleaks Configuration"
+# Gitleaks Configuration for BIOMETRICS
+# https://github.com/gitleaks/gitleaks
+
+title = "BIOMETRICS Security Configuration"
+
+[extend]
+useDefault = true
 
 [allowlist]
 description = "Global allowlist for known false positives"
 
 paths = [
+  '''(^|/)(test|tests|__tests__|mocks|fixtures|docs|examples)/.*''',
+  '''\.md$''',
+  '''\.lock$''',
+  '''package-lock\.json$''',
+  '''go\.sum$''',
+  '''vendor/''',
+  '''node_modules/''',
   '''\.env\.example$''',
   '''docs/api/.*\.md$''',
   '''docs/agents/.*\.md$''',
   '''BIOMETRICS/.*\.md$''',
   '''backups/.*\.json$''',
-  '''examples/.*$''',
-  '''templates/.*$''',
-  '''test/.*$''',
-  '''tests/.*$''',
-  '''__tests__/.*$''',
-  '''mock/.*$''',
-  '''mocks/.*$'''
+  '''templates/.*$'''
 ]
 
 regexes = [
+  '''(?i)(api[_-]?key|apikey)\s*[=:]\s*['"]?(example|xxx|\*{4,})['"]?''',
+  '''(?i)(your[_-]?)?(api[_-]?key|secret|token)\s*[=:]\s*['"]?(changeme|placeholder|replace[_-]?me|todo)['"]?''',
   '''YOUR_KEY''',
   '''YOUR_API_KEY''',
   '''YOUR_SECRET''',
@@ -32,3 +41,74 @@ regexes = [
   '''YYY''',
   '''ZZZ'''
 ]
+
+[[rules]]
+id = "nvidia-api-key"
+description = "NVIDIA API Key"
+regex = '''nvapi-[a-zA-Z0-9_-]{20,}'''
+keywords = ["nvapi"]
+severity = "CRITICAL"
+
+[[rules]]
+id = "supabase-url"
+description = "Supabase URL"
+regex = '''https://[a-z]{20}\.supabase\.co'''
+keywords = ["supabase.co"]
+severity = "HIGH"
+
+[[rules]]
+id = "supabase-key"
+description = "Supabase Key"
+regex = '''eyJ[a-zA-Z0-9_-]{36,}\.[a-zA-Z0-9_-]{36,}\.[a-zA-Z0-9_-]{36,}'''
+keywords = ["eyJ"]
+severity = "CRITICAL"
+
+[[rules]]
+id = "redis-url"
+description = "Redis Connection URL"
+regex = '''redis://:[a-zA-Z0-9_-]{8,}@[a-z0-9.-]+:\d+'''
+keywords = ["redis://"]
+severity = "HIGH"
+
+[[rules]]
+id = "postgres-url"
+description = "PostgreSQL Connection URL"
+regex = '''postgres://[a-zA-Z0-9_-]+:[a-zA-Z0-9_-]{8,}@[a-z0-9.-]+:\d+/[a-zA-Z0-9_-]+'''
+keywords = ["postgres://"]
+severity = "HIGH"
+
+[[rules]]
+id = "jwt-secret"
+description = "JWT Secret"
+regex = '''(?i)(jwt[_-]?secret|jwt[_-]?key)\s*[=:]\s*['"][a-zA-Z0-9_-]{16,}['"]'''
+keywords = ["jwt"]
+severity = "CRITICAL"
+
+[[rules]]
+id = "github-token"
+description = "GitHub Personal Access Token"
+regex = '''ghp_[a-zA-Z0-9]{36}'''
+keywords = ["ghp_"]
+severity = "CRITICAL"
+
+[[rules]]
+id = "aws-access-key"
+description = "AWS Access Key ID"
+regex = '''(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}'''
+keywords = ["AKIA", "AGPA", "AIDA"]
+severity = "CRITICAL"
+
+[[rules]]
+id = "private-key"
+description = "Private Key"
+regex = '''-----BEGIN (RSA|EC|OPENSSH|DSA|ENCRYPTED) PRIVATE KEY-----'''
+keywords = ["PRIVATE KEY"]
+severity = "CRITICAL"
+
+[[rules]]
+id = "generic-secret"
+description = "Generic Secret"
+regex = '''(?i)(secret|password|passwd|pwd|pass|token|api_key|apikey)\s*[=:]\s*['"][a-zA-Z0-9_-]{8,}['"]'''
+keywords = ["secret", "password", "passwd", "token"]
+severity = "MEDIUM"
+entropy = 3.5

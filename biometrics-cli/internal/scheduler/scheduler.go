@@ -355,6 +355,66 @@ func RegisterDefaultJobs() {
 		Handler:     metricsRotateJob,
 		Tags:        []string{"metrics"},
 	})
+
+	Sched.Register(&Job{
+		ID:          "session-cleanup",
+		Name:        "Session Cleanup",
+		Schedule:    "@every 30m",
+		Enabled:     true,
+		MaxFailures: 2,
+		Handler:     sessionCleanupJob,
+		Tags:        []string{"session", "maintenance"},
+	})
+
+	Sched.Register(&Job{
+		ID:          "cache-warmup",
+		Name:        "Cache Warmup",
+		Schedule:    "@every 6h",
+		Enabled:     true,
+		MaxFailures: 2,
+		Handler:     cacheWarmupJob,
+		Tags:        []string{"cache", "performance"},
+	})
+
+	Sched.Register(&Job{
+		ID:          "git-sync",
+		Name:        "Git Sync",
+		Schedule:    "@every 15m",
+		Enabled:     false,
+		MaxFailures: 3,
+		Handler:     gitSyncJob,
+		Tags:        []string{"git", "sync"},
+	})
+
+	Sched.Register(&Job{
+		ID:          "docker-prune",
+		Name:        "Docker Prune",
+		Schedule:    "@daily",
+		Enabled:     true,
+		MaxFailures: 1,
+		Handler:     dockerPruneJob,
+		Tags:        []string{"docker", "maintenance"},
+	})
+
+	Sched.Register(&Job{
+		ID:          "backup-state",
+		Name:        "Backup State",
+		Schedule:    "@every 2h",
+		Enabled:     true,
+		MaxFailures: 2,
+		Handler:     backupStateJob,
+		Tags:        []string{"backup", "state"},
+	})
+
+	Sched.Register(&Job{
+		ID:          "webhook-test",
+		Name:        "Webhook Test",
+		Schedule:    "@every 1h",
+		Enabled:     false,
+		MaxFailures: 3,
+		Handler:     webhookTestJob,
+		Tags:        []string{"webhook", "monitoring"},
+	})
 }
 
 func healthCheckJob(ctx context.Context) error {
@@ -374,6 +434,36 @@ func modelPoolCheckJob(ctx context.Context) error {
 
 func metricsRotateJob(ctx context.Context) error {
 	state.GlobalState.Log("INFO", "Running metrics rotation job")
+	return nil
+}
+
+func sessionCleanupJob(ctx context.Context) error {
+	state.GlobalState.Log("INFO", "Running session cleanup job")
+	return nil
+}
+
+func cacheWarmupJob(ctx context.Context) error {
+	state.GlobalState.Log("INFO", "Running cache warmup job")
+	return nil
+}
+
+func gitSyncJob(ctx context.Context) error {
+	state.GlobalState.Log("INFO", "Running git sync job")
+	return nil
+}
+
+func dockerPruneJob(ctx context.Context) error {
+	state.GlobalState.Log("INFO", "Running docker prune job")
+	return nil
+}
+
+func backupStateJob(ctx context.Context) error {
+	state.GlobalState.Log("INFO", "Running backup state job")
+	return nil
+}
+
+func webhookTestJob(ctx context.Context) error {
+	state.GlobalState.Log("INFO", "Running webhook test job")
 	return nil
 }
 

@@ -1,0 +1,114 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+  "google_auth": false,
+  "sisyphus_agent": {
+    "disabled": false,
+    "planner_enabled": true,
+    "replace_plan": true
+  },
+  "agents": {
+    "Delqhi": {
+      "model": "google/gemini-3.1-pro-preview-customtools",
+      "category": "general"
+    },
+    "sisyphus": {
+      "model": "google/gemini-3.1-pro-preview-customtools",
+      "category": "general"
+    },
+    "sisyphus-junior": {
+      "model": "google/gemini-3.1-pro-preview-customtools",
+      "category": "quick"
+    },
+    "prometheus": {
+      "model": "google/gemini-3.1-pro-preview",
+      "category": "ultrabrain"
+    },
+    "metis": {
+      "model": "google/gemini-3-flash-preview",
+      "category": "ultrabrain"
+    },
+    "momus": {
+      "model": "google/gemini-3-flash-preview",
+      "category": "ultrabrain"
+    },
+    "oracle": {
+      "model": "google/gemini-3.1-pro-preview-customtools",
+      "category": "ultrabrain"
+    },
+    "librarian": {
+      "model": "google/gemini-3-flash-preview",
+      "category": "general"
+    },
+    "explore": {
+      "model": "google/gemini-3-flash-preview",
+      "category": "quick"
+    },
+    "frontend-ui-ux-engineer": {
+      "model": "google/gemini-3.1-pro-preview",
+      "category": "visual-engineering"
+    },
+    "document-writer": {
+      "model": "google/gemini-3.1-pro-preview",
+      "category": "writing"
+    },
+    "multimodal-looker": {
+      "model": "google/gemini-3-flash-preview",
+      "category": "general"
+    },
+    "atlas": {
+      "model": "google/gemini-3.1-pro-preview-customtools"
+    },
+    "build": {
+      "model": "google/gemini-3.1-pro-preview-customtools"
+    },
+    "plan": {
+      "model": "google/gemini-3.1-pro-preview"
+    }
+  },
+  "categories": {
+    "visual-engineering": {
+      "model": "google/gemini-3.1-pro-preview",
+      "temperature": 1
+    },
+    "ultrabrain": {
+      "model": "google/gemini-3.1-pro-preview",
+      "temperature": 0.9,
+      "thinking": {
+        "type": "enabled",
+        "budgetTokens": 16000
+      }
+    },
+    "quick": {
+      "model": "google/gemini-3-flash-preview",
+      "temperature": 0.5
+    },
+    "writing": {
+      "model": "google/gemini-3.1-pro-preview",
+      "temperature": 0.7
+    },
+    "general": {
+      "model": "google/gemini-3.1-pro-preview-customtools",
+      "temperature": 0.5
+    }
+  },
+  "claude_code": {
+    "mcp": true,
+    "commands": true,
+    "skills": true,
+    "agents": true,
+    "hooks": true,
+    "plugins": true
+  },
+  "experimental": {
+    "preemptive_compaction": true,
+    "preemptive_compaction_threshold": 0.85,
+    "dynamic_context_pruning": {
+      "enabled": true,
+      "notification": "detailed"
+    }
+  },
+  "git_master": {
+    "commit_footer": true,
+    "include_co_authored_by": true
+  }
+}

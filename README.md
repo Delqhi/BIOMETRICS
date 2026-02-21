@@ -37,19 +37,19 @@ Get BIOMETRICS running in **<60 seconds**:
 # 1. Clone & Install
 git clone https://github.com/Delqhi/BIOMETRICS.git
 cd BIOMETRICS
-npm install
+pnpm install
 
 # 2. Setup NVIDIA API Key (Required)
 echo 'export NVIDIA_API_KEY="nvapi-YOUR_KEY"' >> ~/.zshrc
 source ~/.zshrc
 
 # 3. Install & Authenticate OpenCode
-npm install -g opencode
+ppnpm install -g opencode
 opencode auth add nvidia-nim
 opencode auth add moonshot-ai
 
 # 4. Verify Installation
-npm run doctor
+pnpm run doctor
 opencode models | grep nvidia
 ```
 
@@ -207,7 +207,7 @@ BIOMETRICS enforces **33 non-negotiable mandates** for enterprise quality:
 
 ### 🛠️ Developer Experience
 
-- **One-Command Setup** - `npm install && npm run doctor`
+- **One-Command Setup** - `pnpm install && pnpm run doctor`
 - **Hot Reload** - Live agent feedback loop
 - **Built-in Testing** - TDD enforced by default
 - **Auto-Documentation** - Every change documented

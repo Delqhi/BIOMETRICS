@@ -1,0 +1,82 @@
+name: 🛡️ Enterprise Gatekeeper (CI)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# Verhindert, dass alte, fehlerhafte Pipelines weiterlaufen, wenn neuer Code gepusht wird
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-compliance:
+    name: Go Backend Checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache: true
+
+      - name: Download Dependencies
+        run: go mod download
+
+      - name: 🚨 Format Check (Strict)
+        run: |
+          if [ "$(go fmt ./...)" ]; then
+            echo "Fehler: Code ist nicht nach Go-Standards formatiert!"
+            exit 1
+          fi
+
+      - name: 🚨 Static Analysis (go vet)
+        run: go vet ./...
+
+      - name: 🧪 Run Unit Tests & Race Detector
+        run: go test -v -race ./...
+
+      - name: 🏗️ Dry-Run Build
+        run: go build -v ./...
+
+  frontend-compliance:
+    name: Next.js Frontend Checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: ppnpm install --frozen-lockfile
+
+      - name: 🚨 Strict TypeScript Check
+        run: pnpm tsc --noEmit
+
+      - name: 🚨 ESLint & Prettier
+        run: pnpm lint
+
+      - name: 🏗️ Production Build Test
+        # Ein Next.js Build fällt sofort durch, wenn es tote Links, fehlende Typen oder kaputte UI-Komponenten gibt
+        run: pnpm build

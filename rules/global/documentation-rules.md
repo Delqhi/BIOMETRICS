@@ -492,10 +492,10 @@ cd project
 #### Step 2: Install Dependencies
 ```bash
 # For development
-npm install
+pnpm install
 
 # For production
-npm install --production
+pnpm install --production
 ```
 
 #### Step 3: Configure Environment
@@ -506,7 +506,7 @@ cp .env.example .env
 
 #### Step 4: Run Application
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 ### Verify Installation
@@ -632,7 +632,7 @@ Local:      http://localhost:3000/v1
 To enable debug logging:
 ```bash
 export DEBUG=project:*
-npm run dev
+pnpm run dev
 ```
 
 ### Getting Help
@@ -1678,11 +1678,11 @@ curl -X METHOD https://api.example.com/api/v1/endpoint \
 
 ```bash
 # Generate client SDKs
-npm install @openapitools/openapi-generator-cli
+pnpm install @openapitools/openapi-generator-cli
 openapi-generator generate -i docs/dev/openapi.yaml -g typescript-axios -o src/api
 
 # Validate OpenAPI spec
-npm install -g @apidevtools/swagger-cli
+ppnpm install -g @apidevtools/swagger-cli
 swagger-cli validate docs/dev/openapi.yaml
 ```
 

@@ -865,10 +865,10 @@ jobs:
         run: npm ci
       
       - name: Run linter
-        run: npm run lint
+        run: pnpm run lint
       
       - name: Run type check
-        run: npm run typecheck
+        run: pnpm run typecheck
 
   test:
     runs-on: ubuntu-latest
@@ -909,7 +909,7 @@ jobs:
         run: npm ci
       
       - name: Build
-        run: npm run build
+        run: pnpm run build
       
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -944,7 +944,7 @@ jobs:
         run: npm ci
       
       - name: Build
-        run: npm run build
+        run: pnpm run build
       
       - name: Publish to npm
         run: npm publish
@@ -958,7 +958,7 @@ jobs:
 
 ```bash
 # Install Husky
-npm install husky --save-dev
+pnpm install husky --save-dev
 
 # Initialize Husky
 npx husky install
@@ -979,7 +979,7 @@ Create `.husky/pre-commit`:
 npx lint-staged
 
 # Run type check
-npm run typecheck
+pnpm run typecheck
 
 # Run tests on changed files
 npm test -- --changedSince=HEAD
@@ -1027,10 +1027,10 @@ echo "Commit completed: $(git rev-parse HEAD)"
 npm test
 
 # Integration tests
-npm run test:integration
+pnpm run test:integration
 
 # E2E tests
-npm run test:e2e
+pnpm run test:e2e
 
 # Test with coverage
 npm test -- --coverage

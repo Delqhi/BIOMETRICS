@@ -107,7 +107,7 @@ print_header "Step 2: Installing Dependencies"
 # Install Node.js dependencies
 print_info "Installing Node.js dependencies..."
 if [ -f "package.json" ]; then
-    npm install
+    pnpm install
     print_success "Node.js dependencies installed"
 else
     print_error "package.json not found"
@@ -142,7 +142,7 @@ print_header "Step 3: Setting Up OpenCode"
 
 # Install OpenCode
 print_info "Installing OpenCode..."
-npm install -g opencode
+ppnpm install -g opencode
 print_success "OpenCode installed ($(opencode --version))"
 
 # Authenticate providers

@@ -48,6 +48,25 @@ Task 100 Complete → +5 New Tasks = 105 Tasks ← Loop continues!
 
 ## 🔄 CURRENT LOOP STATUS
 
+### Phase 1: PLANNING & ARCHITECTURE ⏳ PENDING
+
+**Goal:** Define system architecture and API contracts before coding
+
+**Tasks:**
+- ⏳ Phase 1.1: Define project scope and requirements
+- ⏳ Phase 1.2: Create system architecture diagram
+- ⏳ Phase 1.3: Design database schema
+
+### Phase 1.5: API CONTRACT DEFINITION (THE BRIDGE) ⏳ PENDING
+
+**Goal:** Define single source of truth for API before coding
+
+**Tasks:**
+- [ ] Task 1.5.1: Create `/docs/api-contract.yaml` (OpenAPI 3.0) based on DB schema. (Agent: `qwen-3.5`)
+- [ ] Task 1.5.2: Review and validate `api-contract.yaml` structure. (Agent: `kimi-k2.5`)
+- [ ] Task 1.5.3: Generate Frontend TS Interfaces (`/frontend/types`) strictly from YAML. (Agent: `minimax-m2.5`)
+- [ ] Task 1.5.4: Generate Backend Go Structs (`/backend/internal/models`) strictly from YAML. (Agent: `qwen-3.5`)
+
 ### Phase 2: CHAOS CLEANUP ✅ COMPLETE
 
 **Completed Tasks:**

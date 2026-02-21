@@ -734,7 +734,7 @@ func installDependencies() {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if err := cmd.Run(); err != nil {
-			fmt.Printf("Warning: npm install failed: %v\n", err)
+			fmt.Printf("Warning: pnpm install failed: %v\n", err)
 		} else {
 			fmt.Println("✓ npm dependencies installed")
 		}

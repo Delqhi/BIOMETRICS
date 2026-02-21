@@ -27,4 +27,12 @@ var (
 		Name: "biometrics_orchestrator_serena_sessions_cleaned_total",
 		Help: "Total number of Serena sessions cleaned up",
 	})
+	HealingFailures = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_selfhealing_failures_total",
+		Help: "Total number of self-healing failures by component",
+	}, []string{"component"})
+	HealingSuccesses = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_selfhealing_successes_total",
+		Help: "Total number of self-healing successes by component",
+	}, []string{"component"})
 )

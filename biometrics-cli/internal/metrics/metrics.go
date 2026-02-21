@@ -84,6 +84,27 @@ var (
 		Help: "Total number of durable steps replayed",
 	}, []string{"agent"})
 
+	HeartbeatsRegistered = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_heartbeats_registered_total",
+		Help: "Total number of registered heartbeats",
+	}, []string{"agent"})
+	HeartbeatsReceived = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_heartbeats_received_total",
+		Help: "Total number of received heartbeats",
+	}, []string{"agent"})
+	HeartbeatTasksDone = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_heartbeat_tasks_done_total",
+		Help: "Total number of tasks done by heartbeat agents",
+	}, []string{"agent"})
+	HeartbeatTimeouts = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_heartbeat_timeouts_total",
+		Help: "Total number of heartbeat timeouts",
+	}, []string{"agent"})
+	HeartbeatStuckAgents = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_heartbeat_stuck_agents_total",
+		Help: "Total number of stuck agents detected",
+	}, []string{"agent"})
+
 	TasksCompletedTotal = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "biometrics_tasks_completed_total",
 		Help: "Total number of completed tasks",

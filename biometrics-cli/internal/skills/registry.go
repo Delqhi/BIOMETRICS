@@ -1,7 +1,6 @@
 package skills
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -32,7 +31,7 @@ var Registry = []Skill{
 func MatchSkills(prompt string) []string {
 	matched := make([]string, 0)
 	lowerPrompt := strings.ToLower(prompt)
-	
+
 	for _, skill := range Registry {
 		for _, kw := range skill.Keywords {
 			if strings.Contains(lowerPrompt, kw) {

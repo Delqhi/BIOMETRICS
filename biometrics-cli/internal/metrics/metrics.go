@@ -182,4 +182,9 @@ var (
 		Name: "biometrics_rate_limit_rejected_total",
 		Help: "Total number of rejected rate limit requests",
 	}, []string{"key"})
+
+	TasksCreatedTotal = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "biometrics_tasks_created_total",
+		Help: "Total number of created tasks",
+	})
 )

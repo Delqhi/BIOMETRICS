@@ -3,7 +3,6 @@ package orchestrator
 import (
 	"biometrics-cli/internal/lock"
 	"biometrics-cli/internal/metrics"
-	"context"
 	"fmt"
 	"sync"
 	"time"
@@ -17,9 +16,7 @@ type WorkStealer struct {
 	maxLoad        int
 	stealThreshold int
 	stolenTasks    map[string][]*Task
-	lock           *DistributedLock
-	ctx            context.Context
-	cancel         context.CancelFunc
+	lock           *lock.DistributedLock
 }
 
 type Task struct {
@@ -40,7 +37,6 @@ type StealResult struct {
 }
 
 func NewWorkStealer(minLoad, maxLoad, stealThreshold int) *WorkStealer {
-	ctx, cancel := context.WithCancel(context.Background())
 	return &WorkStealer{
 		agentQueues:    make(map[string][]*Task),
 		agentLoads:     make(map[string]int),
@@ -49,8 +45,6 @@ func NewWorkStealer(minLoad, maxLoad, stealThreshold int) *WorkStealer {
 		stealThreshold: stealThreshold,
 		stolenTasks:    make(map[string][]*Task),
 		lock:           lock.NewDistributedLock(""),
-		ctx:            context.Background(),
-		cancel:         cancel,
 	}
 }
 
@@ -255,8 +249,6 @@ func (ws *WorkStealer) StartRebalancer(interval time.Duration) {
 
 		for {
 			select {
-			case <-ws.ctx.Done():
-				return
 			case <-ticker.C:
 				results := ws.Rebalance()
 				if len(results) > 0 {
@@ -268,7 +260,6 @@ func (ws *WorkStealer) StartRebalancer(interval time.Duration) {
 }
 
 func (ws *WorkStealer) Stop() {
-	ws.cancel()
 }
 
 func (ws *WorkStealer) GetStats() map[string]interface{} {

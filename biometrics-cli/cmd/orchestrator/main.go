@@ -60,7 +60,7 @@ func main() {
 		DiskPath: "./cache", TTL: 5 * time.Minute, CleanupInterval: 1 * time.Minute,
 	})
 
-	modelTracker := tracker.NewModelTracker()
+	modelPool := tracker.NewModelPool()
 
 	go startMetricsServer()
 	go heartbeatMonitor()
@@ -84,7 +84,7 @@ func main() {
 
 		verifyOpenCodeHealth()
 
-		processBoulderWithCircuitBreaker(modelTracker)
+		processBoulderWithCircuitBreaker(modelPool)
 
 		duration := time.Since(cycleStart).Seconds()
 		metrics.CycleDuration.Observe(duration)
@@ -152,7 +152,8 @@ func processBoulderWithCircuitBreaker(mt *tracker.ModelPool) {
 	models := []string{"qwen3.5", "minimax", "kimi", "gemini"}
 	var acquiredModel string
 	for _, m := range models {
-		if err := mt.Acquire(m); err == nil {
+		acquired, err := mt.AcquireModel(m)
+		if acquired != nil && err == nil {
 			acquiredModel = m
 			break
 		}
@@ -168,7 +169,7 @@ func processBoulderWithCircuitBreaker(mt *tracker.ModelPool) {
 
 	runAgentWithMonitoring(agent.Name, boulder)
 
-	mt.Release(acquiredModel)
+	mt.ReleaseModel(acquiredModel)
 	state.GlobalState.ActiveModel = "NONE"
 }
 

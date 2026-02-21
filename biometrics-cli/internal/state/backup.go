@@ -1,7 +1,6 @@
 package state
 
 import (
-	"biometrics-cli/internal/models"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -226,35 +225,4 @@ func (bm *BackupManager) GetBackupDir() string {
 	bm.mu.RLock()
 	defer bm.mu.RUnlock()
 	return bm.backupDir
-}
-
-func CaptureCurrentState(agents map[string]*models.Agent, taskQueue []models.Task) *OrchestratorState {
-	state := &OrchestratorState{
-		ActiveAgents:    make(map[string]AgentState),
-		ModelPool:       ModelPoolState{},
-		TaskQueue:       make([]TaskState, 0),
-		CircuitBreakers: make(map[string]CBState),
-		Timestamp:       time.Now(),
-	}
-
-	for id, agent := range agents {
-		state.ActiveAgents[id] = AgentState{
-			ID:        agent.ID,
-			Name:      agent.Name,
-			Status:    agent.Status,
-			Model:     agent.Model,
-			StartedAt: agent.StartedAt,
-		}
-	}
-
-	for _, task := range taskQueue {
-		state.TaskQueue = append(state.TaskQueue, TaskState{
-			ID:       task.ID,
-			AgentID:  task.AgentID,
-			Priority: task.Priority,
-			Status:   task.Status,
-		})
-	}
-
-	return state
 }

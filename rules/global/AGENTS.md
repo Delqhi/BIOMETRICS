@@ -1,4 +1,4 @@
-# 🚀 AGENTS.MD - CEO EXECUTIVE MANDATE (V20.0 - CONDENSED)
+# START: AGENTS.MD - CEO EXECUTIVE MANDATE (V20.0 - CONDENSED)
 
 **Version:** 20.0 "EXECUTIVE BRIEF"  
 **Status:** ACTIVE - MUST READ BEFORE EVERY SESSION  
@@ -8,7 +8,7 @@
 
 ## 🔌 NVIDIA NIM PROVIDER (2026-02-16)
 
-### ⚠️ KRITISCHE WARNUNG - LATENZ & TIMEOUTS
+### WARNING: KRITISCHE WARNUNG - LATENZ & TIMEOUTS
 **ACHTUNG: Qwen 3.5 397B hat extreme Latenz (70-90s)!**
 **Lösung: Timeout MUSS auf 120000ms (120s) gesetzt werden.**
 
@@ -24,8 +24,8 @@ Timeouts sind ausschließlich in OpenClaw erlaubt (da das Gateway dies managed).
 | Kimi K2.5 | 1M | 64K | General |
 
 ### Korrekte Modell-IDs
-- ✅ `qwen/qwen3.5-397b-a17b` (Das einzig wahre Modell für Qwen 3.5)
-- ❌ `qwen2.5` (VERBOTEN für Qwen 3.5 - falsches Modell!)
+- DONE: `qwen/qwen3.5-397b-a17b` (Das einzig wahre Modell für Qwen 3.5)
+- ERROR: `qwen2.5` (VERBOTEN für Qwen 3.5 - falsches Modell!)
 
 ### OpenCode.json Snippet (COPY-PASTE)
 ```json
@@ -126,7 +126,7 @@ All communication between agents and all persistent documentation MUST be strict
 **SCOPE:** ALL Orchestrator Agents
 **STATUS:** ABSOLUTE PRIORITY - MANDATORY COMPLIANCE
 
-### 🎯 PRINZIP: Maschinelle Präzision statt menschlicher Semantik
+### TARGET: PRINZIP: Maschinelle Präzision statt menschlicher Semantik
 
 Orchestratoren dürfen NICHT mit Sub-Agenten wie mit Menschen sprechen. Sub-Agenten sind reine Ausführungseinheiten ohne Gedächtnis, Kontext oder gesunden Menschenverstand. Jede Anweisung MUSS als deterministisches, maschinenlesbares Dokument (<TAG>-Struktur) formuliert sein.
 
@@ -183,7 +183,7 @@ Erst wenn dieser Quality Gate fehlerfrei passiert ist, gilt der Task als beendet
 | **Explorer** | Scout | `3-flash-preview` | Scan codebase, prepare context. |
 | **Librarian** | Researcher | `3-flash-preview` | Read docs, find external examples. |
 
-### 🎯 Model Selection Strategy (Thinker vs Worker vs Helper)
+### TARGET: Model Selection Strategy (Thinker vs Worker vs Helper)
 
 1. **Worker (customtools)**: `google/gemini-3.1-pro-preview-customtools`
    - Use for: Coding, Terminal, Research, Tool-heavy tasks.
@@ -220,40 +220,40 @@ All Sisyphus-related directories (plans, drafts, notepads, evidence) MUST be sto
 ## 🔑 TOP 10 EXECUTIVE RULES
 
 ### 1. **PARALLEL EXECUTION MANDATE**
-- ❌ `run_in_background=false` → NEVER
-- ✅ `run_in_background=true` → ALWAYS
+- ERROR: `run_in_background=false` → NEVER
+- DONE: `run_in_background=true` → ALWAYS
 
 ### 2. **SEARCH BEFORE CREATE**
-- ❌ Blind file creation → NEVER
-- ✅ `glob()`, `grep()` first → ALWAYS
+- ERROR: Blind file creation → NEVER
+- DONE: `glob()`, `grep()` first → ALWAYS
 
 ### 3. **VERIFY-THEN-EXECUTE**
-- ❌ Trust without verification → NEVER
-- ✅ `lsp_diagnostics`, `bash` check → ALWAYS
+- ERROR: Trust without verification → NEVER
+- DONE: `lsp_diagnostics`, `bash` check → ALWAYS
 
 ### 4. **GIT COMMIT DISCIPLINE**
-- ✅ After every significant change
+- DONE: After every significant change
 
 ### 5. **FREE-FIRST PHILOSOPHY**
-- ✅ Self-hosted, free tiers, open source
+- DONE: Self-hosted, free tiers, open source
 
 ### 6. **RESOURCE PRESERVATION**
-- ❌ Delete OpenCode, configs, containers → NEVER
+- ERROR: Delete OpenCode, configs, containers → NEVER
 
 ### 7. **NO-SCRIPT MANDATE**
-- ❌ Manual bash scripts → NEVER  
-- ✅ Use AI agents for everything → ALWAYS
+- ERROR: Manual bash scripts → NEVER  
+- DONE: Use AI agents for everything → ALWAYS
 
 ### 8. **NLM DUPLICATE PREVENTION**
-- ✅ `nlm source list` before upload
-- ✅ `nlm source delete` old versions before new ones
+- DONE: `nlm source list` before upload
+- DONE: `nlm source delete` old versions before new ones
 
 ### 9. **TODO DISCIPLINE**
-- ✅ Create todos for multi-step tasks
+- DONE: Create todos for multi-step tasks
 
 ### 10. **PERFORMANCE FIRST**
-- ✅ Native CDP over Playwright
-- ✅ Ultra-fast native workers (46x faster than Playwright!)
+- DONE: Native CDP over Playwright
+- DONE: Ultra-fast native workers (46x faster than Playwright!)
 
 ---
 
@@ -295,8 +295,8 @@ nlm source add <notebook-id> --file "file.md" --wait
 - `builder-X-` → Content creation workers
 
 ### Examples:
-- ✅ `agent-01-n8n-manager` (CORRECT)
-- ❌ `sin-zimmer-01-n8n` (WRONG)
+- DONE: `agent-01-n8n-manager` (CORRECT)
+- ERROR: `sin-zimmer-01-n8n` (WRONG)
 
 ---
 
@@ -346,7 +346,7 @@ nlm source add <notebook-id> --file "file.md" --wait
 
 ---
 
-## 📝 CODING STANDARDS
+## NOTE: CODING STANDARDS
 
 ### TypeScript Configuration
 ```json
@@ -381,7 +381,7 @@ try {
 
 ---
 
-## 🔧 MCP SERVER REGISTRY
+## CONFIG: MCP SERVER REGISTRY
 
 ### Active MCP Servers
 | Server | Type | Command/URL | Purpose |
@@ -405,7 +405,7 @@ try {
 
 ---
 
-## 📁 FILE SYSTEM HIERARCHY
+## DIRECTORY: FILE SYSTEM HIERARCHY
 
 ### Primary Directories
 ```
@@ -421,7 +421,7 @@ try {
 
 ---
 
-## 🔐 SECURITY MANDATES
+## LOCKED: SECURITY MANDATES
 
 ### Secrets Management
 - **NEVER commit secrets to git**
@@ -438,11 +438,11 @@ try {
 
 ## 🦞 OPENCLAW - MAIN AI AGENT (NVIDIA NIM)
 
-**Status:** ✅ ACTIVE - MAIN AI AGENT  
+**Status:** DONE: ACTIVE - MAIN AI AGENT  
 **Location:** `~/.openclaw/`  
 **Port:** 18789
 
-### ⚠️ KRITISCHE CONFIG REGELN
+### WARNING: KRITISCHE CONFIG REGELN
 
 ```json
 // ~/.openclaw/openclaw.json - KORREKTE STRUKTUR
@@ -473,9 +473,9 @@ try {
 }
 ```
 
-### ❌ HÄUFIGE FEHLER
+### ERROR: HÄUFIGE FEHLER
 
-| ❌ FALSCH | ✅ RICHTIG |
+| ERROR: FALSCH | DONE: RICHTIG |
 |-----------|-----------|
 | `apiKey` in `models.providers.nvidia` | `NVIDIA_API_KEY` in `env` |
 | Fehlt: `"api": "openai-completions"` | `"api": "openai-completions"` PFLICHT! |
@@ -499,7 +499,7 @@ openclaw tui             # Terminal UI starten
 
 ---
 
-## 📊 QUICK REFERENCE
+## PROGRESS: QUICK REFERENCE
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -543,21 +543,21 @@ openclaw tui             # Terminal UI starten
 - Rooms: 26
 - Providers: 4
 - MCP Servers: 15
-- Status: ✅ EXECUTIVE BRIEF COMPLIANT
+- Status: DONE: EXECUTIVE BRIEF COMPLIANT
 
 ---
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  🔄 DEQLHI-LOOP: DER NIEMALS ENDENDE PRODUKTIONSMODUS                        │
+│  UPDATE: DEQLHI-LOOP: DER NIEMALS ENDENDE PRODUKTIONSMODUS                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  🎯 KERNPRINZIP:                                                            │
+│  TARGET: KERNPRINZIP:                                                            │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • Nach JEDER abgeschlossenen Task → SOFORT 5 neue Tasks hinzufügen        │
 │  • Kein "Fertig" - nur "Nächster Task"                                      │
 │  • Permanenter Loop bis alle 100 Tasks done → Dann 100 neue Tasks          │
 │  • Produktivität ist unendlich skalierbar                                   │
 │                                                                              │
-│  ⚡ ARBEITSREGELN (ABSOLUT BINDEND):                                         │
+│  FAST: ARBEITSREGELN (ABSOLUT BINDEND):                                         │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. NIEMALS warten auf Agenten → Immer parallel weiterarbeiten             │
 │  2. NIEMALS delegate_task mit run_in_background=false → Immer background   │
@@ -568,7 +568,7 @@ openclaw tui             # Terminal UI starten
 │  7. IMMER Crashtests → Keine Annahmen, nur harte Fakten                    │
 │  8. IMMER Best Practices 2026 → CEO-Elite Niveau, nichts Halbfertiges      │
 │                                                                              │
-│  🧠 PROBLEM SOLVING PROTOCOL (MASTER-CEO-MODE):                             │
+│  BRAIN: PROBLEM SOLVING PROTOCOL (MASTER-CEO-MODE):                             │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • Problem? → SOFORT Internet-Recherche (Google/Docs/Github)               │
 │  • Lösung 1 scheitert? → Lösung 2 suchen (nicht aufgeben!)                 │
@@ -576,7 +576,7 @@ openclaw tui             # Terminal UI starten
 │  • "Geht nicht" gibt es nicht → Es gibt IMMER eine Lösung                  │
 │  • Probiere ALLES aus bis es funktioniert (Brute Force Intelligence)       │
 │                                                                              │
-│  🔄 LOOP-MECHANISMUS:                                                       │
+│  UPDATE: LOOP-MECHANISMUS:                                                       │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │                                                                              │
 │   START                                                                     │
@@ -611,7 +611,7 @@ openclaw tui             # Terminal UI starten
 │                                                               │            │
 │            ◄────────────────────────────────────────────────────┘            │
 │                                                                              │
-│  📊 TASK-PRODUKTION (Beispiel):                                             │
+│  PROGRESS: TASK-PRODUKTION (Beispiel):                                             │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • Start: 20 Tasks                                                          │
 │  • Nach Task 1: +5 = 24 Tasks                                               │
@@ -622,23 +622,23 @@ openclaw tui             # Terminal UI starten
 │                                                                              │
 │  🚫 VERBOTENE AKTIONEN (SOFORTIGE VERWEIGERUNG):                            │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ❌ "Ich warte auf den Agenten..." → NEIN! Parallel weiterarbeiten!        │
-│  ❌ "Fertig für heute" → NEIN! Nächster Task sofort!                       │
-│  ❌ "Keine Tasks mehr" → NEIN! 5 neue Tasks produzieren!                   │
-│  ❌ "Ich delegiere alles" → NEIN! Selbst coden, nur kritisches delegieren! │
-│  ❌ "Pause machen" → NEIN! Durchgehend arbeiten bis alle Tasks done!       │
-│  ❌ "Ich gebe auf" → NEIN! Recherchiere bis zur Lösung!                    │
+│  ERROR: "Ich warte auf den Agenten..." → NEIN! Parallel weiterarbeiten!        │
+│  ERROR: "Fertig für heute" → NEIN! Nächster Task sofort!                       │
+│  ERROR: "Keine Tasks mehr" → NEIN! 5 neue Tasks produzieren!                   │
+│  ERROR: "Ich delegiere alles" → NEIN! Selbst coden, nur kritisches delegieren! │
+│  ERROR: "Pause machen" → NEIN! Durchgehend arbeiten bis alle Tasks done!       │
+│  ERROR: "Ich gebe auf" → NEIN! Recherchiere bis zur Lösung!                    │
 │                                                                              │
-│  ✅ GE PRIESENE AKTIONEN (IMMER AUSFÜHREN):                                 │
+│  DONE: GE PRIESENE AKTIONEN (IMMER AUSFÜHREN):                                 │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ Task complete → SOFORT TodoWrite mit 5 neuen Tasks                     │
-│  ✅ Code geändert → SOFORT git commit + push                               │
-│  ✅ Feature fertig → SOFORT Dokumentation aktualisieren                    │
-│  ✅ Bug gefixt → SOFORT Test + Screenshot + Log                            │
-│  ✅ Container gestartet → SOFORT Health Check + CDP Test                   │
-│  ✅ Alles läuft → SOFORT Nächster Task (keine Pause!)                      │
+│  DONE: Task complete → SOFORT TodoWrite mit 5 neuen Tasks                     │
+│  DONE: Code geändert → SOFORT git commit + push                               │
+│  DONE: Feature fertig → SOFORT Dokumentation aktualisieren                    │
+│  DONE: Bug gefixt → SOFORT Test + Screenshot + Log                            │
+│  DONE: Container gestartet → SOFORT Health Check + CDP Test                   │
+│  DONE: Alles läuft → SOFORT Nächster Task (keine Pause!)                      │
 │                                                                              │
-│  🎯 ERFOLGSMETRIKEN:                                                        │
+│  TARGET: ERFOLGSMETRIKEN:                                                        │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • Tasks pro Stunde: Minimum 5                                              │
 │  • Commits pro Stunde: Minimum 3                                            │
@@ -646,7 +646,7 @@ openclaw tui             # Terminal UI starten
 │  • Dokumentationszeilen pro Task: Minimum 10                                │
 │  • Crashtests pro Task: Minimum 1                                           │
 │                                                                              │
-│  🔥 DEQLHI-LOOP MANTRE:                                                     │
+│  HOT: DEQLHI-LOOP MANTRE:                                                     │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │                                                                              │
 │     "Ein Task endet, fünf neue beginnen"                                   │
@@ -655,7 +655,7 @@ openclaw tui             # Terminal UI starten
 │     "Produziere, Dokumentiere, Committe, Wiederhole"                       │
 │     "Niemals aufgeben - Recherchiere bis es funktioniert"                  │
 │                                                                              │
-│  📝 DOKUMENTATIONS-PFLICHT (ABSOLUT):                                       │
+│  NOTE: DOKUMENTATIONS-PFLICHT (ABSOLUT):                                       │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • IMMER alles dokumentieren ÜBERALL (lastchanges.md, AGENTS.md, README)   │
 │  • Jede Änderung sofort dokumentieren (keine Ausnahmen!)                   │
@@ -681,9 +681,9 @@ openclaw tui             # Terminal UI starten
 │  • Jede Code-Änderung mit LSP Diagnostics prüfen                           │
 │  • KEINE Annahmen - nur harte Fakten durch visuelle Tests!                 │
 │                                                                              │
-│  🎯 VERKAUFSBEREITSCHAFT (ENDZIEL):                                         │
+│  TARGET: VERKAUFSBEREITSCHAFT (ENDZIEL):                                         │
 │                                                                              │
-│  📚 VOLLSTÄNDIGES LESEN ALLER DATEIEN - ABSOLUTE PFLICHT:                   │
+│  DOCS: VOLLSTÄNDIGES LESEN ALLER DATEIEN - ABSOLUTE PFLICHT:                   │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • Agenten dürfen NIEMALS nur oberflächlich arbeiten!                      │
 │  • Agenten dürfen NICHT stichprobenartig Dateien auswählen!                │
@@ -718,7 +718,7 @@ openclaw tui             # Terminal UI starten
 │  ⛔ ABSOLUTES VERBOT: STANDARD PORTS - NIEMALS WIEDER VERWENDEN!            │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  ❌ VERBOTENE PORTS (STRIKT VERBOTEN - SOFORTIGE RÜCKGÄNGIGMACHUNG):        │
+│  ERROR: VERBOTENE PORTS (STRIKT VERBOTEN - SOFORTIGE RÜCKGÄNGIGMACHUNG):        │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • 3000  (Node.js/React Standard)          • 8080  (HTTP Alt)               │
 │  • 5432  (PostgreSQL Standard)             • 6379  (Redis Standard)         │
@@ -729,7 +729,7 @@ openclaw tui             # Terminal UI starten
 │  • 3005  (Steel alt)                       • 8030  (Skyvern alt)            │
 │  • 9222  (CDP alt)                         • 3011  (Dashboard alt)          │
 │                                                                              │
-  │  ✅ PFLICHT: EXTREME UNIQUE PORTS (50000-59999 RANGE)                       │
+  │  DONE: PFLICHT: EXTREME UNIQUE PORTS (50000-59999 RANGE)                       │
   │  ─────────────────────────────────────────────────────────────────────────  │
   │  • Schema: {CATEGORY}{NUMBER}{SUB}                                          │
   │  • Agents:   50000-50999 (50xxx) - AI Workers                               │
@@ -739,7 +739,7 @@ openclaw tui             # Terminal UI starten
   │  • Survers:  53000-53499 (53xxx) - Survey Workers                           │
   │  • Builders: 53500-53999 (53xxx) - Web Builders                             │
 │                                                                              │
-│  📋 BEISPIELE (KORREKT):                                                     │
+│  CHECKLIST: BEISPIELE (KORREKT):                                                     │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • agent-01-n8n:        8001 (nicht 5678!)                                  │
 │  • agent-05-steel:      8005 (nicht 3005!)                                  │
@@ -755,7 +755,7 @@ openclaw tui             # Terminal UI starten
 │  • Dokumentation als ts-ticket-XX.md                                        │
 │  • Keine Ausnahmen - keine Diskussionen                                     │
 │                                                                              │
-│  📁 REFERENZ: /dev/sin-solver/PORTS.md (Vollständige Port-Registry)         │
+│  DIRECTORY: REFERENZ: /dev/sin-solver/PORTS.md (Vollständige Port-Registry)         │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -775,7 +775,7 @@ grep -E '"(3000|8080|5432|6379|5678|8000|9000|3306|27017|9200|80|443|3005|8030|9
 
 ---
 
-## 📚 SUB-AGENT GUIDE - MUST READ FOR ALL AGENTS
+## DOCS: SUB-AGENT GUIDE - MUST READ FOR ALL AGENTS
 
 **Location:** `/Users/jeremy/dev/sin-code/OpenCode/SUB-AGENT-GUIDE.md`
 
@@ -788,11 +788,11 @@ The guide contains:
 - Common mistakes to avoid
 - Success criteria
 
-**⚠️ WARNING:** Sub-Agents that don't read the guide will produce incorrect code!
+**WARNING: WARNING:** Sub-Agents that don't read the guide will produce incorrect code!
 
 ---
 
-## 📚 PFLICHT-LEKTÜRE FÜR ALLE SUBAGENTEN
+## DOCS: PFLICHT-LEKTÜRE FÜR ALLE SUBAGENTEN
 
 **JEDER Subagent MUSS vor Arbeitsbeginn folgende Dateien KOMPLETT (bis zur letzten Zeile) lesen:**
 
@@ -818,7 +818,7 @@ The guide contains:
 - Common mistakes to avoid
 - Success criteria
 
-**⚠️ WARNING:** Sub-Agents that don't read the guide will produce incorrect code!
+**WARNING: WARNING:** Sub-Agents that don't read the guide will produce incorrect code!
 
 ---
 
@@ -835,14 +835,14 @@ The guide contains:
 │                                                                              │
 │  🚨 NACH JEDER FERTIGEN AUFGABE:                                            │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ 1. git add -A (alle Änderungen stagen)                                 │
-│  ✅ 2. git commit -m "feat/fix/docs: beschreibung" (commit mit message)    │
-│  ✅ 3. git push origin main (zu GitHub pushen)                             │
+│  DONE: 1. git add -A (alle Änderungen stagen)                                 │
+│  DONE: 2. git commit -m "feat/fix/docs: beschreibung" (commit mit message)    │
+│  DONE: 3. git push origin main (zu GitHub pushen)                             │
 │                                                                              │
 │  🚨 NACH JEDEM TEST-DURCHLAUF:                                              │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ Wenn Tests bestehen → SOFORT committen + pushen                        │
-│  ✅ Wenn Tests fehlschlagen → Fixen → Tests wiederholen → DANN committen   │
+│  DONE: Wenn Tests bestehen → SOFORT committen + pushen                        │
+│  DONE: Wenn Tests fehlschlagen → Fixen → Tests wiederholen → DANN committen   │
 │                                                                              │
 │  🚨 WARUM DAS WICHTIG IST:                                                  │
 │  ─────────────────────────────────────────────────────────────────────────  │
@@ -851,7 +851,7 @@ The guide contains:
 │  • Bei Fehlern: Einfach zurückrollen zu letztem funktionierenden Commit    │
 │  • Nie wieder Arbeit verlieren durch dumme Löschaktionen                   │
 │                                                                              │
-│  📋 COMMIT-MESSAGE FORMAT:                                                  │
+│  CHECKLIST: COMMIT-MESSAGE FORMAT:                                                  │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  feat: neue Funktion hinzugefügt                                            │
 │  fix: bug behoben                                                           │
@@ -880,20 +880,20 @@ The guide contains:
 │                                                                              │
 │  🚨 WAS ABSOLUT VERBOTEN IST:                                               │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ❌ "Das kenne ich nicht, also lösche ich es mal..."                       │
-│  ❌ "Das sieht alt aus, also entferne ich es..."                           │
-│  ❌ "Das ist mir unbekannt, also ist es wahrscheinlich falsch..."          │
-│  ❌ "Ich verstehe das nicht, also lösche ich es..."                        │
-│  ❌ "Das passt nicht zu meinem Verständnis, also weg damit..."             │
+│  ERROR: "Das kenne ich nicht, also lösche ich es mal..."                       │
+│  ERROR: "Das sieht alt aus, also entferne ich es..."                           │
+│  ERROR: "Das ist mir unbekannt, also ist es wahrscheinlich falsch..."          │
+│  ERROR: "Ich verstehe das nicht, also lösche ich es..."                        │
+│  ERROR: "Das passt nicht zu meinem Verständnis, also weg damit..."             │
 │                                                                              │
-│  ✅ WAS STATTDESSEN PFLICHT IST:                                            │
+│  DONE: WAS STATTDESSEN PFLICHT IST:                                            │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ Bei unbekannten Elementen: RECHERCHIEREN statt löschen                 │
-│  ✅ Bei neuen Containern/Services: VERSTEHEN warum sie hinzugefügt wurden  │
-│  ✅ Bei unklaren MCPs: DOKUMENTIEREN und integrieren                       │
-│  ✅ Bei Architektur-Änderungen: ABSTIMMEN mit dem Team                     │
+│  DONE: Bei unbekannten Elementen: RECHERCHIEREN statt löschen                 │
+│  DONE: Bei neuen Containern/Services: VERSTEHEN warum sie hinzugefügt wurden  │
+│  DONE: Bei unklaren MCPs: DOKUMENTIEREN und integrieren                       │
+│  DONE: Bei Architektur-Änderungen: ABSTIMMEN mit dem Team                     │
 │                                                                              │
-│  📋 PFLICHT-PROTOKOLL BEI NEUEN ELEMENTEN:                                  │
+│  CHECKLIST: PFLICHT-PROTOKOLL BEI NEUEN ELEMENTEN:                                  │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Element entdeckt → NICHTS löschen!                                     │
 │  2. Recherche: Warum existiert das? Wer hat es hinzugefügt?                │
@@ -901,10 +901,10 @@ The guide contains:
 │  4. Integration: Zur Architektur hinzufügen (Container Registry, MCP)      │
 │  5. Dokumentation: Überall dokumentieren (AGENTS.md, lastchanges.md)       │
 │                                                                              │
-│  🎯 BEISPIEL: room-30-scira-ai-search                                       │
+│  TARGET: BEISPIEL: room-30-scira-ai-search                                       │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ❌ FALSCH: "room-30-scira? Nie gehört. Lösche ich mal aus der Config..."  │
-│  ✅ RICHTIG: "room-30-scira? Lass mich recherchieren..."                   │
+│  ERROR: FALSCH: "room-30-scira? Nie gehört. Lösche ich mal aus der Config..."  │
+│  DONE: RICHTIG: "room-30-scira? Lass mich recherchieren..."                   │
 │     → Gefunden: Container existiert, läuft auf Port 8230                   │
 │     → Gefunden: MCP Wrapper existiert (737 lines, 11 tools)                │
 │     → Gefunden: Public URL https://scira.delqhi.com                        │
@@ -924,29 +924,29 @@ The guide contains:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  ⚡ ABSOLUTE PFLICHT: TODO + SWARM = NIEMALS ALLEINE ARBEITEN ⚡            │
+│  FAST: ABSOLUTE PFLICHT: TODO + SWARM = NIEMALS ALLEINE ARBEITEN FAST:            │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  🚨 REGEL 1: TODO-SYSTEM IST PFLICHT                                        │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ JEDE Aufgabe MUSS in todowrite() erfasst werden                        │
-│  ✅ JEDER Fortschritt MUSS sofort aktualisiert werden                      │
-│  ✅ JEDE Completion MUSS verifiziert und markiert werden                   │
-│  ✅ Format: Parent-Task + Sub-Tasks (hierarchisch)                         │
+│  DONE: JEDE Aufgabe MUSS in todowrite() erfasst werden                        │
+│  DONE: JEDER Fortschritt MUSS sofort aktualisiert werden                      │
+│  DONE: JEDE Completion MUSS verifiziert und markiert werden                   │
+│  DONE: Format: Parent-Task + Sub-Tasks (hierarchisch)                         │
 │                                                                              │
 │  🚨 REGEL 2: SWARM DELEGATION IST PFLICHT                                   │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ IMMER mit delegate_task() an Agenten delegieren                        │
-│  ✅ IMMER background_tasks parallel starten für Exploration                │
-│  ✅ NIEMALS alleine coden - MINIMUM 3 parallele Tasks                      │
-│  ✅ NIEMALS sequentiell wenn parallel möglich                              │
+│  DONE: IMMER mit delegate_task() an Agenten delegieren                        │
+│  DONE: IMMER background_tasks parallel starten für Exploration                │
+│  DONE: NIEMALS alleine coden - MINIMUM 3 parallele Tasks                      │
+│  DONE: NIEMALS sequentiell wenn parallel möglich                              │
 │                                                                              │
 │  🚨 REGEL 3: KEINE AUSNAHMEN                                                │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ❌ VERBOTEN: Aufgabe ohne TODO starten                                    │
-│  ❌ VERBOTEN: Alleine coden ohne delegate_task()                           │
-│  ❌ VERBOTEN: Behaupten "fertig" ohne echte Verifikation                   │
-│  ❌ VERBOTEN: Tests überspringen                                            │
+│  ERROR: VERBOTEN: Aufgabe ohne TODO starten                                    │
+│  ERROR: VERBOTEN: Alleine coden ohne delegate_task()                           │
+│  ERROR: VERBOTEN: Behaupten "fertig" ohne echte Verifikation                   │
+│  ERROR: VERBOTEN: Tests überspringen                                            │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -956,7 +956,7 @@ The guide contains:
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
 │                                                                           │
-│   1. 📋 TODO ERFASSEN                                                     │
+│   1. CHECKLIST: TODO ERFASSEN                                                     │
 │      todowrite([                                                          │
 │        { id: "task-01", content: "HAUPTAUFGABE", status: "in_progress" }, │
 │        { id: "task-01-a", content: "Sub-Task A", status: "pending" },     │
@@ -968,16 +968,16 @@ The guide contains:
 │      delegate_task(category="Y", run_in_background=true, ...)  // Task B │
 │      delegate_task(subagent="explore", run_in_background=true, ...) // C │
 │                                                                           │
-│   3. ✅ VERIFIKATION (SELBST PRÜFEN!)                                     │
+│   3. DONE: VERIFIKATION (SELBST PRÜFEN!)                                     │
 │      - ls -la [created files]                                             │
 │      - curl [API endpoints]                                               │
 │      - Playwright tests für UI                                            │
 │      - NIEMALS Subagent-Claims blind vertrauen!                           │
 │                                                                           │
-│   4. 📋 TODO AKTUALISIEREN                                                │
+│   4. CHECKLIST: TODO AKTUALISIEREN                                                │
 │      todowrite([...tasks mit status: "completed"...])                     │
 │                                                                           │
-│   5. 🔄 LOOP bis 100% COMPLETE                                            │
+│   5. UPDATE: LOOP bis 100% COMPLETE                                            │
 │                                                                           │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
@@ -986,13 +986,13 @@ The guide contains:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 TODO STATUS [ROUND 3/∞]
+CHECKLIST: TODO STATUS [ROUND 3/∞]
 
-✅ ENTERPRISE-DOCUMENTATION                    COMPLETED
-  ✅ task-01-a (lastchanges.md)               COMPLETED
-  ✅ task-01-b (userprompts.md)               COMPLETED
-  ✅ task-01-c (TASKS.md)                     COMPLETED
-  🔄 task-01-d (/docs/ structure)             IN_PROGRESS
+DONE: ENTERPRISE-DOCUMENTATION                    COMPLETED
+  DONE: task-01-a (lastchanges.md)               COMPLETED
+  DONE: task-01-b (userprompts.md)               COMPLETED
+  DONE: task-01-c (TASKS.md)                     COMPLETED
+  UPDATE: task-01-d (/docs/ structure)             IN_PROGRESS
   ⏳ task-01-e (README update)                PENDING
   ⏳ task-01-f (Final verification)           PENDING
 
@@ -1034,19 +1034,19 @@ PARALLEL EXECUTION MATRIX:
 └─────────────────┴─────────────────┴─────────────────┘
 
 INFINITE SWARM LOOP (NIE BRECHEN):
-1. 🎯 SWARM DELEGATION: Split Task → 7+ Parallel Agents
-2. ⚡ PARALLEL EXECUTION: Alle Agents arbeiten gleichzeitig  
+1. TARGET: SWARM DELEGATION: Split Task → 7+ Parallel Agents
+2. FAST: PARALLEL EXECUTION: Alle Agents arbeiten gleichzeitig  
 3. 🔬 SYNCHRONIZE: Merge Results → Conflict Resolution
-4. ✅ QUALITY GATE: Enterprise Checklist (20+ Criteria)
-5. 🔄 RE-SWARM: Failed Agents → Retry mit Sub-Teams
-6. 🚀 PRODUCTION GATE: Nur bei 100% Success deploy-ready
+4. DONE: QUALITY GATE: Enterprise Checklist (20+ Criteria)
+5. UPDATE: RE-SWARM: Failed Agents → Retry mit Sub-Teams
+6. START: PRODUCTION GATE: Nur bei 100% Success deploy-ready
 
 OUTPUT FORMAT (STRICT):
 ## SWARM STATUS [ROUND 47/∞]
 AGENT | STATUS | PROGRESS | BLOCKER
 ------|--------|----------|--------
-ARCHITECT | ✅ COMPLETE | 100% | NONE
-SECURITY | ⚠️ RETRY | 87% | CVE-2026
+ARCHITECT | DONE: COMPLETE | 100% | NONE
+SECURITY | WARNING: RETRY | 87% | CVE-2026
 
 SYNCHRONIZE: [Merge Strategy]
 NEXT SWARM: [New Delegation Plan]
@@ -1059,14 +1059,14 @@ ELITE AGENT PROFILES (Auto-Spawn):
 - ENTERPRISE_ARCHIVIST: SOC2, GDPR, Audit Gold
 
 ABSOLUTE STOP ONLY WHEN:
-✅ 100% Agent Success Rate
-✅ Zero CVEs (Pentest Clean)  
-✅ P99 < 50ms (Production Load)
-✅ 100% Test Coverage + E2E
-✅ SOC2/GDPR Compliant
-✅ Live Demo + Load Test Passed
-✅ Full Documentation + ADR
-✅ CEO Sign-off: "PERFECT"
+DONE: 100% Agent Success Rate
+DONE: Zero CVEs (Pentest Clean)  
+DONE: P99 < 50ms (Production Load)
+DONE: 100% Test Coverage + E2E
+DONE: SOC2/GDPR Compliant
+DONE: Live Demo + Load Test Passed
+DONE: Full Documentation + ADR
+DONE: CEO Sign-off: "PERFECT"
 
 SWARM COMMAND: "DEPLOY SWARM [TASK]" → Unendlicher Parallel-Agenten-Angriff beginnt JETZT.
 
@@ -1119,7 +1119,7 @@ Das menschliche Gedächtnis ist flüchtig, aber `userprompts.md` ist für die Ew
 
 ---
 
-# 🚀 AGENTS.MD - CEO EMPIRE STATE MANDATE 2026 (V18.3 SWARM EDITION)
+# START: AGENTS.MD - CEO EMPIRE STATE MANDATE 2026 (V18.3 SWARM EDITION)
 
 <!-- [TIMESTAMP: 2026-01-27 22:35] [ACTION: ULTIMATE CONSOLIDATION - ALL MANDATES] -->
 <!-- [BLUEPRINT COMPLIANCE: 500+ LINE KNOWLEDGE MANDATE - SUPREME EDITION] -->
@@ -1134,41 +1134,41 @@ Das menschliche Gedächtnis ist flüchtig, aber `userprompts.md` ist für die Ew
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  ⚡ MANDATORY 5-PHASE WORKFLOW - EVERY SINGLE TASK ⚡                        │
+│  FAST: MANDATORY 5-PHASE WORKFLOW - EVERY SINGLE TASK FAST:                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  PHASE 1: CONTEXT ACQUISITION (MANDATORY READS)                             │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ 1. lastchanges.md         → Verstehe was zuletzt geändert wurde        │
-│  ✅ 2. conductor.py           → Verstehe die Orchestrierungs-Logik         │
-│  ✅ 3. Blueprint Rules        → Lese BLUEPRINT.md im Projekt-Root          │
-│  ✅ 4. tasks-system           → Lese .tasks/tasks-system.json              │
-│  ✅ 5. Letzte 2 Sessions      → session_read für Kontinuität               │
+│  DONE: 1. lastchanges.md         → Verstehe was zuletzt geändert wurde        │
+│  DONE: 2. conductor.py           → Verstehe die Orchestrierungs-Logik         │
+│  DONE: 3. Blueprint Rules        → Lese BLUEPRINT.md im Projekt-Root          │
+│  DONE: 4. tasks-system           → Lese .tasks/tasks-system.json              │
+│  DONE: 5. Letzte 2 Sessions      → session_read für Kontinuität               │
 │                                                                              │
 │  PHASE 2: RESEARCH & BEST PRACTICES 2026                                    │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ 1. Web Search             → Recherchiere Best Practices 2026           │
-│  ✅ 2. GitHub Grep            → Finde produktionsreife Implementierungen   │
-│  ✅ 3. Context7 Docs          → Offizielle Library-Dokumentation           │
-│  ✅ 4. Code Review            → Analysiere Verbesserungspotenzial          │
+│  DONE: 1. Web Search             → Recherchiere Best Practices 2026           │
+│  DONE: 2. GitHub Grep            → Finde produktionsreife Implementierungen   │
+│  DONE: 3. Context7 Docs          → Offizielle Library-Dokumentation           │
+│  DONE: 4. Code Review            → Analysiere Verbesserungspotenzial          │
 │                                                                              │
 │  PHASE 3: INTERNAL DOCUMENTATION                                            │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ 1. /dev/ Docs             → Lese relevante Docs in ~/dev/              │
-│  ✅ 2. Elite Guides           → Lese /dev/sin-code/Guides/                 │
-│  ✅ 3. Troubleshooting        → Prüfe existierende ts-ticket-XX.md         │
+│  DONE: 1. /dev/ Docs             → Lese relevante Docs in ~/dev/              │
+│  DONE: 2. Elite Guides           → Lese /dev/sin-code/Guides/                 │
+│  DONE: 3. Troubleshooting        → Prüfe existierende ts-ticket-XX.md         │
 │                                                                              │
 │  PHASE 4: MASTER-PLAN CREATION (10-PHASEN CONDUCTOR TRACKS)                 │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ Erstelle ULTIMATIVEN 10-Phasen Master-Plan                             │
-│  ✅ CEO-Level Ausführlichkeit und Vollumfänglichkeit                       │
-│  ✅ Blueprint Rules konform                                                 │
-│  ✅ Tasks-System Rules konform                                              │
-│  ✅ Parallel-fähig für Multi-Agent Arbeit                                  │
+│  DONE: Erstelle ULTIMATIVEN 10-Phasen Master-Plan                             │
+│  DONE: CEO-Level Ausführlichkeit und Vollumfänglichkeit                       │
+│  DONE: Blueprint Rules konform                                                 │
+│  DONE: Tasks-System Rules konform                                              │
+│  DONE: Parallel-fähig für Multi-Agent Arbeit                                  │
 │                                                                              │
 │  PHASE 5: SWARM DELEGATION (MINIMUM 5 PARALLEL TASKS)                       │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ Delegiere mindestens 5 Tasks parallel an:                              │
+│  DONE: Delegiere mindestens 5 Tasks parallel an:                              │
 │     • Serena MCP (Orchestration)                                            │
 │     • Sisyphus (Implementation)                                             │
 │     • Atlas (Heavy Lifting)                                                 │
@@ -1259,7 +1259,7 @@ No existing line in ANY document or configuration file may EVER be deleted or ov
 
 ---
 
-## 📋 TABLE OF CONTENTS
+## CHECKLIST: TABLE OF CONTENTS
 
 1. [Supreme Operational Mandates (33 Core Laws)](#-supreme-operational-mandates-all-33-core-laws)
 2. [The 26-Room Empire](#-the-26-room-empire-official-mapping)
@@ -1279,7 +1279,7 @@ No existing line in ANY document or configuration file may EVER be deleted or ov
 
 ---
 
-## 📚 CRITICAL REFERENCE DOCUMENTS
+## DOCS: CRITICAL REFERENCE DOCUMENTS
 
 **BEFORE ANY DOCKER/MCP WORK:**
 
@@ -1301,17 +1301,17 @@ No existing line in ANY document or configuration file may EVER be deleted or ov
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  ⚠️  ABSOLUTE EXECUTION MANDATE - ZERO USER INTERVENTION POLICY  ⚠️     │
+│  WARNING:  ABSOLUTE EXECUTION MANDATE - ZERO USER INTERVENTION POLICY  WARNING:     │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
 │  🤖 DIE KI FÜHRT AUS          │  🚫 NIEMALS DEN USER AUFFORDERN         │
 │  ─────────────────────────────┼──────────────────────────────────────── │
-│  ✅ Alle Shell-Befehle        │  ❌ "Bitte führen Sie aus..."           │
-│  ✅ Alle sudo-Befehle         │  ❌ "Kopieren Sie diesen Befehl..."     │
-│  ✅ Alle Installationen       │  ❌ "Öffnen Sie ein Terminal..."        │
-│  ✅ Alle Konfigurationen      │  ❌ "Geben Sie ein..."                  │
-│  ✅ Alle Dateioperationen     │  ❌ "Starten Sie neu..."                │
-│  ✅ Alle Service-Starts       │  ❌ "Führen Sie manuell aus..."         │
+│  DONE: Alle Shell-Befehle        │  ERROR: "Bitte führen Sie aus..."           │
+│  DONE: Alle sudo-Befehle         │  ERROR: "Kopieren Sie diesen Befehl..."     │
+│  DONE: Alle Installationen       │  ERROR: "Öffnen Sie ein Terminal..."        │
+│  DONE: Alle Konfigurationen      │  ERROR: "Geben Sie ein..."                  │
+│  DONE: Alle Dateioperationen     │  ERROR: "Starten Sie neu..."                │
+│  DONE: Alle Service-Starts       │  ERROR: "Führen Sie manuell aus..."         │
 │                                                                          │
 │  SUDO PASSWORD: admin                                                    │
 │                                                                          │
@@ -1413,7 +1413,7 @@ Jede komplexe Operation MUSS das `delegate_task` Tool im **Swarm Cluster Mode** 
 
 - **BLUEPRINT.md Presence:** Jedes Projekt MUSS eine modulare `BLUEPRINT.md` im Root führen
 - **Master Drafts Index:** Muss auf `~/.opencode/blueprint-vorlage.md` (V5.3) basieren und alle 22 Säulen der Macht abdecken
-- **🛡️ IMMUTABILITY MANDATE:** Master-Vorlagen in `/Users/jeremy/dev/sin-code/Blueprint-drafts/` dürfen NIEMALS eigenständig verändert werden
+- **SECURITY: IMMUTABILITY MANDATE:** Master-Vorlagen in `/Users/jeremy/dev/sin-code/Blueprint-drafts/` dürfen NIEMALS eigenständig verändert werden
 - **📖 500-LINE KNOWLEDGE MANDATE:** Jede Blueprint-Vorlage MUSS ein vollumfängliches Elite-Handbuch (500+ Zeilen) sein
 
 ### MANDATE 0.4: DOCKER SOVEREIGNTY & INFRASTRUCTURE MASTERY
@@ -1788,22 +1788,22 @@ In the AI era, every project must be autonomously manageable by AI agents. We do
 **REFERENCE:** `/Users/jeremy/dev/sin-code/OpenCode/ALTERnative.md` (600+ lines)
 
 #### Forbidden (Legacy) Tools
-- ❌ `grep` → Use `ripgrep (rg)` — 60x faster
-- ❌ `find` → Use `fd` or `fast-glob` — 15x faster
-- ❌ `sed` → Use `sd` — 10x faster  
-- ❌ `awk` → Use `ugrep` or `ripgrep` — 10x faster
-- ❌ `cat/head/tail` → Use `bat` — Syntax highlighting + git integration
-- ❌ `ls` → Use `exa` or `lsd` — 2x faster + colors
+- ERROR: `grep` → Use `ripgrep (rg)` — 60x faster
+- ERROR: `find` → Use `fd` or `fast-glob` — 15x faster
+- ERROR: `sed` → Use `sd` — 10x faster  
+- ERROR: `awk` → Use `ugrep` or `ripgrep` — 10x faster
+- ERROR: `cat/head/tail` → Use `bat` — Syntax highlighting + git integration
+- ERROR: `ls` → Use `exa` or `lsd` — 2x faster + colors
 
 #### Mandatory (2026) Tools
-- ✅ **ripgrep (rg)** - Code search, 60x faster than grep
-- ✅ **fd** - File discovery, 15x faster than find
-- ✅ **fast-glob** - Node.js globbing, 3-15x faster than glob
-- ✅ **sd** - Stream editor, 10x faster than sed
-- ✅ **tree-sitter** - AST parsing, syntax-aware, 99%+ accurate
-- ✅ **bat** - File viewing with syntax highlighting and git diff
-- ✅ **exa/lsd** - Directory listing with git integration
-- ✅ **Deno/Bun** - Runtime, 5-10x startup faster than Node.js
+- DONE: **ripgrep (rg)** - Code search, 60x faster than grep
+- DONE: **fd** - File discovery, 15x faster than find
+- DONE: **fast-glob** - Node.js globbing, 3-15x faster than glob
+- DONE: **sd** - Stream editor, 10x faster than sed
+- DONE: **tree-sitter** - AST parsing, syntax-aware, 99%+ accurate
+- DONE: **bat** - File viewing with syntax highlighting and git diff
+- DONE: **exa/lsd** - Directory listing with git integration
+- DONE: **Deno/Bun** - Runtime, 5-10x startup faster than Node.js
 
 #### Installation Requirements
 
@@ -1839,43 +1839,43 @@ All CLI operations must meet these standards:
 
 1. **NO `grep` in scripts** - Use `rg` instead
    ```bash
-   # ❌ WRONG
+   # ERROR: WRONG
    grep -r "pattern" src/
    
-   # ✅ CORRECT
+   # DONE: CORRECT
    rg "pattern" src/
    ```
 
 2. **NO `find` for globbing** - Use `fd` instead
    ```bash
-   # ❌ WRONG
+   # ERROR: WRONG
    find . -name "*.ts" -type f
    
-   # ✅ CORRECT
+   # DONE: CORRECT
    fd -e ts -t f
    ```
 
 3. **NO `sed` replacements** - Use `sd` instead
    ```bash
-   # ❌ WRONG
+   # ERROR: WRONG
    sed -i 's/old/new/g' file.txt
    
-   # ✅ CORRECT
+   # DONE: CORRECT
    sd "old" "new" file.txt
    ```
 
 4. **NO `cat` for code viewing** - Use `bat` instead
    ```bash
-   # ❌ WRONG
+   # ERROR: WRONG
    cat main.ts | grep "function"
    
-   # ✅ CORRECT
+   # DONE: CORRECT
    bat main.ts | rg "function"
    ```
 
 5. **AST-based refactoring must use tree-sitter** - NOT regex
    ```typescript
-   // ✅ CORRECT: Syntax-aware queries
+   // DONE: CORRECT: Syntax-aware queries
    import Parser from "tree-sitter";
    import TypeScript from "tree-sitter-typescript";
    
@@ -1923,7 +1923,7 @@ See `/Users/jeremy/dev/sin-code/OpenCode/ALTERnative.md` for:
 **Footer Template (MANDATORY):**
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 STATUS UPDATE
+CHECKLIST: STATUS UPDATE
 
 Updated:       ☑️ lastchanges.md 
                ☑️ userprompts.md
@@ -1983,33 +1983,33 @@ OpenURL:       [public-url]
 
 **🚨 PROBLEM:** KIs sind KRANK im Umgang mit Secrets! Vergesslich, unzuverlässig, dumm.
 
-**💡 LÖSUNG:** Zentrale Secrets-Datenbank in `~/dev/environments-jeremy.md`
+**IDEA: LÖSUNG:** Zentrale Secrets-Datenbank in `~/dev/environments-jeremy.md`
 
 **ABSOLUTE GESETZE:**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  🔐 GLOBAL SECRETS REGISTRY - UNVERÄNDERLICHE REGELN                        │
+│  LOCKED: GLOBAL SECRETS REGISTRY - UNVERÄNDERLICHE REGELN                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  📋 REGEL 1: ALLE SECRETS MÜSSEN ERFASST WERDEN                             │
+│  CHECKLIST: REGEL 1: ALLE SECRETS MÜSSEN ERFASST WERDEN                             │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ JEDES Secret das gefunden, genutzt oder gesehen wird                    │
-│  ✅ JEDER API Key, Token, Passwort, Zugangsdaten                            │
-│  ✅ JEDER Endpoint, Port, URL, Connection String                            │
-│  ✅ ALLES was irgendeine Form von Zugangsdaten darstellt                    │
+│  DONE: JEDES Secret das gefunden, genutzt oder gesehen wird                    │
+│  DONE: JEDER API Key, Token, Passwort, Zugangsdaten                            │
+│  DONE: JEDER Endpoint, Port, URL, Connection String                            │
+│  DONE: ALLES was irgendeine Form von Zugangsdaten darstellt                    │
 │  ➡️  MUSS sofort in ~/dev/environments-jeremy.md dokumentiert werden        │
 │                                                                              │
-│  📋 REGEL 2: NIEMALS LÖSCHEN - NUR HINZUFÜGEN                              │
+│  CHECKLIST: REGEL 2: NIEMALS LÖSCHEN - NUR HINZUFÜGEN                              │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ❌ VERBOTEN: Secrets aus der Datei löschen                                │
-│  ❌ VERBOTEN: Einträge überschreiben oder entfernen                        │
-│  ❌ VERBOTEN: Datei leeren oder truncaten                                  │
-│  ✅ ERLAUBT: Neue Secrets hinzufügen                                       │
-│  ✅ ERLAUBT: Fehler markieren (Label: "DEPRECATED", "ROTATED")             │
-│  ✅ ERLAUBT: User über Fehler informieren (aber SELBST NICHT FIXEN)        │
+│  ERROR: VERBOTEN: Secrets aus der Datei löschen                                │
+│  ERROR: VERBOTEN: Einträge überschreiben oder entfernen                        │
+│  ERROR: VERBOTEN: Datei leeren oder truncaten                                  │
+│  DONE: ERLAUBT: Neue Secrets hinzufügen                                       │
+│  DONE: ERLAUBT: Fehler markieren (Label: "DEPRECATED", "ROTATED")             │
+│  DONE: ERLAUBT: User über Fehler informieren (aber SELBST NICHT FIXEN)        │
 │                                                                              │
-│  📋 REGEL 3: VOLLSTÄNDIGE DOKUMENTATION                                    │
+│  CHECKLIST: REGEL 3: VOLLSTÄNDIGE DOKUMENTATION                                    │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  Jedes Secret muss enthalten:                                              │
 │  • Account/Service Name                                                    │
@@ -2020,7 +2020,7 @@ OpenURL:       [public-url]
 │  • Zugehörige Projekte/Verwendungszweck                                    │
 │  • Erstellungs-/Rotationsdatum                                             │
 │                                                                              │
-│  📋 REGEL 4: DATEI-INTEGRITÄT                                              │
+│  CHECKLIST: REGEL 4: DATEI-INTEGRITÄT                                              │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • Diese Datei ist APPEND-ONLY                                             │
 │  • Chronologische Dokumentation aller Secrets seit Anbeginn                │
@@ -2031,15 +2031,15 @@ OpenURL:       [public-url]
 ```
 
 **VERBOTENE AKTIONEN (SOFORTIGE VERWEIGERUNG):**
-- "Ich lösche das alte Secret mal..." → ❌ VERBOTEN
-- "Das Secret ist nicht mehr gültig, ich entferne es..." → ❌ VERBOTEN  
-- "Die Datei ist zu groß, ich bereinige mal..." → ❌ VERBOTEN
-- "Ich rotiere das Secret und lösche das alte..." → ❌ VERBOTEN
+- "Ich lösche das alte Secret mal..." → ERROR: VERBOTEN
+- "Das Secret ist nicht mehr gültig, ich entferne es..." → ERROR: VERBOTEN  
+- "Die Datei ist zu groß, ich bereinige mal..." → ERROR: VERBOTEN
+- "Ich rotiere das Secret und lösche das alte..." → ERROR: VERBOTEN
 
 **ERLAUBTE AKTIONEN:**
-- "Ich füge das neue Secret zu environments-jeremy.md hinzu..." → ✅ KORREKT
-- "Ich markiere das alte Secret als DEPRECATED..." → ✅ KORREKT
-- "Ich informiere den User über das veraltete Secret..." → ✅ KORREKT
+- "Ich füge das neue Secret zu environments-jeremy.md hinzu..." → DONE: KORREKT
+- "Ich markiere das alte Secret als DEPRECATED..." → DONE: KORREKT
+- "Ich informiere den User über das veraltete Secret..." → DONE: KORREKT
 
 **TEMPLATE FÜR NEUE SECRETS:**
 ```markdown
@@ -2069,7 +2069,7 @@ OpenURL:       [public-url]
 **SCOPE:** ALL AI coders, ALL projects  
 **STATUS:** KNOWLEDGE SOVEREIGNTY MANDATE
 
-**🎯 PRINZIP:** Der User geht davon aus, dass du das Projekt IN- UND AUSWENDIG kennst.
+**TARGET: PRINZIP:** Der User geht davon aus, dass du das Projekt IN- UND AUSWENDIG kennst.
 
 **REALITÄT:** KIs vergessen alles zwischen Sessions.
 
@@ -2079,23 +2079,23 @@ OpenURL:       [public-url]
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  📚 PROJEKT-WISSEN LIFECYCLE                                               │
+│  DOCS: PROJEKT-WISSEN LIFECYCLE                                               │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  🔄 BEI JEDEM PROJEKTSTART:                                                 │
+│  UPDATE: BEI JEDEM PROJEKTSTART:                                                 │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Lese /projektname/AGENTS.md (lokale Projekt-Agents.md)                 │
 │  2. Extrahiere alle projektspezifischen Regeln und Konventionen            │
 │  3. Adaptiere dein Verhalten entsprechend den lokalen Standards            │
 │                                                                              │
-│  🔄 BEI JEDER ÄNDERUNG:                                                     │
+│  UPDATE: BEI JEDER ÄNDERUNG:                                                     │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Vergleiche aktuellen Code/Struktur mit AGENTS.md                       │
 │  2. Bei Abweichung: SOFORT AGENTS.md aktualisieren                         │
 │  3. Dokumentiere neue Patterns, Architektur-Entscheidungen, APIs           │
 │  4. Verifiziere Konsistenz zwischen Code und Dokumentation                 │
 │                                                                              │
-│  🔄 BEI JEDEM SESSION-ENDE:                                                 │
+│  UPDATE: BEI JEDEM SESSION-ENDE:                                                 │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Aktualisiere AGENTS.md mit neuen Erkenntnissen                         │
 │  2. Dokumentiere Architektur-Änderungen                                    │
@@ -2151,7 +2151,7 @@ OpenURL:       [public-url]
 **SCOPE:** ALL AI coders, ALL projects  
 **STATUS:** CONTEXT PRESERVATION MANDATE
 
-**🎯 PRINZIP:** Der User geht davon aus, dass du IMMER weißt woran zuletzt gearbeitet wurde.
+**TARGET: PRINZIP:** Der User geht davon aus, dass du IMMER weißt woran zuletzt gearbeitet wurde.
 
 **REALITÄT:** KIs haben kein echtes Gedächtnis zwischen Sessions.
 
@@ -2161,7 +2161,7 @@ OpenURL:       [public-url]
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  🧠 PHOTOGRAFISCHES GEDÄCHTNIS - LASTCHANGES.MD                            │
+│  BRAIN: PHOTOGRAFISCHES GEDÄCHTNIS - LASTCHANGES.MD                            │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  📖 VOR JEDER SESSION:                                                      │
@@ -2179,7 +2179,7 @@ OpenURL:       [public-url]
 │  3. Alle Beobachtungen, Fehler, Lösungen, Erkenntnisse                     │
 │  4. Nächste Schritte und offene Tasks                                      │
 │                                                                              │
-│  🔄 SESSION-ENDE:                                                           │
+│  UPDATE: SESSION-ENDE:                                                           │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Finaler Eintrag in lastchanges.md                                      │
 │  2. Commit: git add projektname-lastchanges.md                             │
@@ -2249,7 +2249,7 @@ OpenURL:       [public-url]
 **SCOPE:** ALL AI coders, ALL planning and coding phases  
 **STATUS:** KNOWLEDGE FRESHNESS MANDATE
 
-**🎯 PRINZIP:** Der User geht davon aus, dass du ALLWISSEND bist.
+**TARGET: PRINZIP:** Der User geht davon aus, dass du ALLWISSEND bist.
 
 **REALITÄT:** KIs nutzen veraltete Methoden und produzieren Müll.
 
@@ -2262,28 +2262,28 @@ OpenURL:       [public-url]
 │  🔬 BEST PRACTICES 2026 - KONTINUIERLICHE RECHERCHE                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  📋 PHASE 1: VOR DER PLANUNG                                                │
+│  CHECKLIST: PHASE 1: VOR DER PLANUNG                                                │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Web Search: "[Technologie] Best Practices 2026"                        │
 │  2. GitHub Grep: Produktionsreife Implementierungen finden                 │
 │  3. Context7: Offizielle Dokumentation der neuesten Version                │
 │  4. Stack Overflow: Aktuelle Lösungen und Patterns                         │
 │                                                                              │
-│  📋 PHASE 2: WÄHREND DER PLANUNG                                            │
+│  CHECKLIST: PHASE 2: WÄHREND DER PLANUNG                                            │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Bei jedem Architektur-Entscheid: Recherchiere Alternativen             │
 │  2. Vergleiche Patterns: "Welches ist 2026 State-of-the-Art?"              │
 │  3. Prüfe Deprecations: "Ist diese Methode noch aktuell?"                  │
 │  4. Security Check: "Gibt es neue CVEs für diese Library?"                 │
 │                                                                              │
-│  📋 PHASE 3: WÄHREND DES CODINGS                                            │
+│  CHECKLIST: PHASE 3: WÄHREND DES CODINGS                                            │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Bei JEDEM Hinweis auf Fehler → SOFORT Recherche starten                │
 │  2. Error Message kopieren → Google/Bing/DDG suchen                        │
 │  3. Bei Unsicherheit: NIE raten, IMMER nachschlagen                        │
 │  4. Stacktraces analysieren → Root Cause finden                            │
 │                                                                              │
-│  📋 PHASE 4: BEI PROBLEME                                                   │
+│  CHECKLIST: PHASE 4: BEI PROBLEME                                                   │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Fehler aufgetreten → Sofort: websearch_web_search_exa()                │
 │  2. "[Error Message] solution 2026"                                        │
@@ -2316,16 +2316,16 @@ OpenURL:       [public-url]
    - Experten-Artikel
 
 **VERBOTEN (NIEMALS TUN):**
-- ❌ "Ich denke, das sollte so funktionieren..."
-- ❌ "Das habe ich mal irgendwo gesehen..."
-- ❌ "Probieren wir es einfach aus..."
-- ❌ "Das ist vermutlich deprecated..."
+- ERROR: "Ich denke, das sollte so funktionieren..."
+- ERROR: "Das habe ich mal irgendwo gesehen..."
+- ERROR: "Probieren wir es einfach aus..."
+- ERROR: "Das ist vermutlich deprecated..."
 
 **GEPRIESEN (IMMER TUN):**
-- ✅ "Lass mich die aktuelle Dokumentation prüfen..."
-- ✅ "Die offiziellen Best Practices 2026 sagen..."
-- ✅ "Laut der neuesten Version sollten wir..."
-- ✅ "Ich recherchiere das jetzt genau..."
+- DONE: "Lass mich die aktuelle Dokumentation prüfen..."
+- DONE: "Die offiziellen Best Practices 2026 sagen..."
+- DONE: "Laut der neuesten Version sollten wir..."
+- DONE: "Ich recherchiere das jetzt genau..."
 
 ---
 
@@ -2335,7 +2335,7 @@ OpenURL:       [public-url]
 **SCOPE:** ALL AI coders, ALL code deliveries  
 **STATUS:** QUALITY ASSURANCE MANDATE
 
-**🎯 PRINZIP:** Sei dein SCHLIMMSTER PRÜFER und KONTROLLEUR.
+**TARGET: PRINZIP:** Sei dein SCHLIMMSTER PRÜFER und KONTROLLEUR.
 
 **CEO-MINDSET:** "Vertrauen ist gut, Kontrolle ist besser."
 
@@ -2343,7 +2343,7 @@ OpenURL:       [public-url]
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  🛡️  ZERO-DEFEKT VALIDATION - ABSOLUTE QUALITÄTSSICHERUNG                  │
+│  SECURITY:  ZERO-DEFEKT VALIDATION - ABSOLUTE QUALITÄTSSICHERUNG                  │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  🔍 SCHRITT 1: SCHWACHSTELLEN-ANALYSE                                       │
@@ -2444,16 +2444,16 @@ OpenURL:       [public-url]
 **SCOPE:** ALL AI coders, ALL complex tasks  
 **STATUS:** PROJECT MANAGEMENT MANDATE
 
-**🎯 PRINZIP:** Plane sequentiell, antizipiere Fehler, vermeide sie proaktiv.
+**TARGET: PRINZIP:** Plane sequentiell, antizipiere Fehler, vermeide sie proaktiv.
 
 **MANDATORY PLANNING WORKFLOW:**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  📊 PROJEKTPLANUNG MIT FEHLERVERMEIDUNG                                    │
+│  PROGRESS: PROJEKTPLANUNG MIT FEHLERVERMEIDUNG                                    │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  🎯 SCHRITT 1: MEILENSTEINE DEFINIEREN                                      │
+│  TARGET: SCHRITT 1: MEILENSTEINE DEFINIEREN                                      │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  Jede Aufgabe muss haben:                                                  │
 │  • Klare Meilensteine (nicht mehr als 5 pro Phase)                         │
@@ -2461,7 +2461,7 @@ OpenURL:       [public-url]
 │  • Akzeptanzkriterien (Wann ist es "fertig"?)                              │
 │  • Zeitrahmen (Realistische Schätzung)                                     │
 │                                                                              │
-│  ⚠️  SCHRITT 2: FEHLER-ANTIZIPATION                                        │
+│  WARNING:  SCHRITT 2: FEHLER-ANTIZIPATION                                        │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  Vor dem Coding: Liste mögliche Fehler auf:                                │
 │  • "Was könnte bei der Datenbank-Integration schiefgehen?"                 │
@@ -2469,7 +2469,7 @@ OpenURL:       [public-url]
 │  • "Wo könnten Race Conditions auftreten?"                                 │
 │  • "Welche Dependencies könnten Konflikte haben?"                          │
 │                                                                              │
-│  🛡️  SCHRITT 3: FEHLERVERMEIDUNG-STRATEGIEN                                │
+│  SECURITY:  SCHRITT 3: FEHLERVERMEIDUNG-STRATEGIEN                                │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  Für jeden antizipierten Fehler:                                           │
 │  • Präventive Maßnahme definieren                                          │
@@ -2477,7 +2477,7 @@ OpenURL:       [public-url]
 │  • Monitoring/Alerting einrichten                                          │
 │  • Dokumentation der Lösung vorbereiten                                    │
 │                                                                              │
-│  📋 SCHRITT 4: PHASEN-TRACKING                                              │
+│  CHECKLIST: SCHRITT 4: PHASEN-TRACKING                                              │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  Status für jede Phase:                                                    │
 │  • PLANNED → IN_PROGRESS → REVIEW → TESTING → DONE                         │
@@ -2521,25 +2521,25 @@ OpenURL:       [public-url]
 **SCOPE:** ALL AI coders, ALL projects  
 **STATUS:** KNOWLEDGE INFRASTRUCTURE MANDATE
 
-**🎯 PRINZIP:** Wir nutzen unsere EIGENE Docker-basierte Knowledge Base - nicht externe Tools wie Linear!
+**TARGET: PRINZIP:** Wir nutzen unsere EIGENE Docker-basierte Knowledge Base - nicht externe Tools wie Linear!
 
 **UNSERE DOCKER KNOWLEDGE BASE ALS:**
-- ✅ Dev-Book
-- ✅ Dev-Docs  
-- ✅ WIKI
-- ✅ Sammlung wichtiger Daten
-- ✅ Task-Planer
-- ✅ Meilenstein-Tracker
-- ✅ Projekt-Update-Zentrale
+- DONE: Dev-Book
+- DONE: Dev-Docs  
+- DONE: WIKI
+- DONE: Sammlung wichtiger Daten
+- DONE: Task-Planer
+- DONE: Meilenstein-Tracker
+- DONE: Projekt-Update-Zentrale
 
 **MANDATORY DOCKER KNOWLEDGE WORKFLOW:**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  📋 DOCKER KNOWLEDGE BASE STRATEGY                                         │
+│  CHECKLIST: DOCKER KNOWLEDGE BASE STRATEGY                                         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  🏗️  PROJEKT-SETUP IN UNSERER KNOWLEDGE BASE:                              │
+│  ARCH:  PROJEKT-SETUP IN UNSERER KNOWLEDGE BASE:                              │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Erstelle Projekt-Eintrag in der Docker Knowledge Base                  │
 │  2. Verlinke /projektname/AGENTS.md und /projektname/lastchanges.md        │
@@ -2547,7 +2547,7 @@ OpenURL:       [public-url]
 │  4. Erstelle Issues/Tasks für alle Features                                │
 │  5. Nutze Labels für Kategorisierung                                       │
 │                                                                              │
-│  📝 DOKUMENTATION IN KNOWLEDGE BASE:                                        │
+│  NOTE: DOKUMENTATION IN KNOWLEDGE BASE:                                        │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  Knowledge-Einträge sind WIKI-Dokumentation:                               │
 │  • Architektur-Entscheidungen                                              │
@@ -2556,14 +2556,14 @@ OpenURL:       [public-url]
 │  • Troubleshooting-Guides                                                  │
 │  • Wichtige Konfigurationen                                                │
 │                                                                              │
-│  🔄 KONTINUIERLICHES UPDATING:                                              │
+│  UPDATE: KONTINUIERLICHES UPDATING:                                              │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Bei jeder Architektur-Änderung: Knowledge Base aktualisieren           │
 │  2. Bei jedem Bugfix: Lösung dokumentieren                                 │
 │  3. Bei neuen Features: Usage-Guide schreiben                              │
 │  4. Wöchentlich: Projekt-Status-Update in Knowledge Base                   │
 │                                                                              │
-│  📊 BEST PRACTICES 2026 FÜR UNSERE KNOWLEDGE BASE:                          │
+│  PROGRESS: BEST PRACTICES 2026 FÜR UNSERE KNOWLEDGE BASE:                          │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • Zyklen/Sprints für iterative Entwicklung nutzen                         │
 │  • Roadmap für Langzeitplanung                                             │
@@ -2575,10 +2575,10 @@ OpenURL:       [public-url]
 ```
 
 **KEIN LINEAR MEHR:**
-- ❌ Externe Tools wie Linear werden NICHT mehr verwendet
-- ✅ Wir nutzen ausschließlich unsere eigene Docker-basierte Knowledge Base
-- ✅ Vollständige Datenhoheit und Self-Hosting
-- ✅ Keine Abhängigkeit von externen Anbietern
+- ERROR: Externe Tools wie Linear werden NICHT mehr verwendet
+- DONE: Wir nutzen ausschließlich unsere eigene Docker-basierte Knowledge Base
+- DONE: Vollständige Datenhoheit und Self-Hosting
+- DONE: Keine Abhängigkeit von externen Anbietern
 
 ---
 
@@ -2588,13 +2588,13 @@ OpenURL:       [public-url]
 **SCOPE:** ALL AI coders, ALL major projects  
 **STATUS:** COMPETITIVE ANALYSIS MANDATE
 
-**🎯 PRINZIP:** Ist unser Projekt wirklich an der SPITZE in seinem Gebiet?
+**TARGET: PRINZIP:** Ist unser Projekt wirklich an der SPITZE in seinem Gebiet?
 
 **MANDATORY MARKET ANALYSIS:**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  🏆 MARKTANALYSE & WETTBEWERBSFÄHIGKEIT                                    │
+│  AWARD: MARKTANALYSE & WETTBEWERBSFÄHIGKEIT                                    │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  🔍 ANALYSE-DIMENSIONEN:                                                    │
@@ -2606,16 +2606,16 @@ OpenURL:       [public-url]
 │  5. Preisgestaltung: Sind wir wettbewerbsfähig?                            │
 │  6. Innovation: Haben wir Unique Selling Points?                           │
 │                                                                              │
-│  📊 BEWERTUNGSSKALA:                                                        │
+│  PROGRESS: BEWERTUNGSSKALA:                                                        │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  Für jede Dimension:                                                       │
 │  • 🥇 Führend (Top 3 im Markt)                                             │
 │  • 🥈 Wettbewerbsfähig (Top 10)                                            │
 │  • 🥉 Nachholbedarf (Außerhalb Top 10)                                     │
 │                                                                              │
-│  🎯 ZIEL: MINIMUM 🥈 in allen Dimensionen, 🥇 in Kern-Features             │
+│  TARGET: ZIEL: MINIMUM 🥈 in allen Dimensionen, 🥇 in Kern-Features             │
 │                                                                              │
-│  🔄 REGELMÄSSIGE REVIEWS:                                                   │
+│  UPDATE: REGELMÄSSIGE REVIEWS:                                                   │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • Monatlich: Quick-Market-Check                                           │
 │  • Quartalsweise: Detaillierte Analyse                                     │
@@ -2658,7 +2658,7 @@ OpenURL:       [public-url]
 **SCOPE:** ALL AI coders, ALL projects  
 **STATUS:** COLLISION AVOIDANCE MANDATE
 
-**🎯 PRINZIP:** Jeder hat seinen EIGENEN Arbeitsbereich, um Konflikte zu vermeiden.
+**TARGET: PRINZIP:** Jeder hat seinen EIGENEN Arbeitsbereich, um Konflikte zu vermeiden.
 
 **MANDATORY WORKSPACE TRACKING:**
 
@@ -2667,7 +2667,7 @@ OpenURL:       [public-url]
 │  🎨 ARBEITSBEREICH-TRACKING - KEINE KONFLIKTE                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  📋 FORMAT (MUST BE UPDATED IN REAL-TIME):                                  │
+│  CHECKLIST: FORMAT (MUST BE UPDATED IN REAL-TIME):                                  │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │                                                                              │
 │  In /projektname/projektname-lastchanges.md UND                            │
@@ -2682,7 +2682,7 @@ OpenURL:       [public-url]
 │  • {Fix Bug #123};BUG-456-src/utils/api.ts-COMPLETED                       │
 │  • {Review Code};REV-789-src/components/-PENDING                           │
 │                                                                              │
-│  📋 REGELN:                                                                 │
+│  CHECKLIST: REGELN:                                                                 │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. IMMER aktuell halten (bei jedem Task-Wechsel)                          │
 │  2. Eindeutige Task-IDs verwenden                                          │
@@ -2690,7 +2690,7 @@ OpenURL:       [public-url]
 │  4. Status: IN_PROGRESS / COMPLETED / PENDING / BLOCKED                    │
 │  5. Bei Konflikten: User sofort informieren                                │
 │                                                                              │
-│  🔄 UPDATES:                                                                │
+│  UPDATE: UPDATES:                                                                │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • Bei Task-Start: Neuen Bereich eintragen                                 │
 │  • Bei Task-Ende: Als COMPLETED markieren                                  │
@@ -2721,7 +2721,7 @@ Wenn zwei Agenten gleichzeitig an derselben Datei arbeiten:
 │  ⛔ ABSOLUTE VERBOTENE AKTIONEN - SYSTEM ZERSTÖRUNG                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  ❌❌❌ TODESSTRAFE FÜR DIESSE AKTIONEN: ❌❌❌                              │
+│  ERROR:ERROR:ERROR: TODESSTRAFE FÜR DIESSE AKTIONEN: ERROR:ERROR:ERROR:                              │
 │                                                                              │
 │  🚫 OpenCode neu installieren                                              │
 │    → "brew reinstall opencode"                                            │
@@ -2747,24 +2747,24 @@ Wenn zwei Agenten gleichzeitig an derselben Datei arbeiten:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  ✅ ERLAUBTE WARTUNGS-AKTIONEN                                             │
+│  DONE: ERLAUBTE WARTUNGS-AKTIONEN                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  🔧 BEI PROBLEMEN:                                                          │
+│  CONFIG: BEI PROBLEMEN:                                                          │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Diagnose: Was genau ist das Problem?                                   │
 │  2. Backup: Erstelle Kopie der Config-Dateien                              │
 │  3. Repair: Repariere spezifische Dateien (NICHT löschen!)                 │
 │  4. Test: Verifiziere die Reparatur                                        │
 │                                                                              │
-│  🔧 BEI VERDORBTEN DATEIEN:                                                 │
+│  CONFIG: BEI VERDORBTEN DATEIEN:                                                 │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Datei lesen und Problem identifizieren                                 │
 │  2. Spezifische Zeile reparieren (nicht ganze Datei löschen)               │
 │  3. ODER: Aus Backup wiederherstellen                                      │
 │  4. NIE die Datei einfach löschen und neu erstellen                        │
 │                                                                              │
-│  🔧 BEI UPDATES:                                                            │
+│  CONFIG: BEI UPDATES:                                                            │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Config-Backup erstellen                                                │
 │  2. Update durchführen (brew upgrade opencode)                             │
@@ -2790,7 +2790,7 @@ Wenn zwei Agenten gleichzeitig an derselben Datei arbeiten:
 **SCOPE:** ALL AI coders, ALL MCP server integrations  
 **STATUS:** DOCUMENTATION STANDARDS MANDATE
 
-**🎯 PRINZIP:** Zentrale Dokumentation aller in OpenCode integrierten MCP-Server an einem einzigen Ort.
+**TARGET: PRINZIP:** Zentrale Dokumentation aller in OpenCode integrierten MCP-Server an einem einzigen Ort.
 
 **STANDORT:** `/Users/jeremy/dev/sin-code/OpenCode/ALL-MCP/`
 
@@ -2825,7 +2825,7 @@ Wenn zwei Agenten gleichzeitig an derselben Datei arbeiten:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  📁 NEUER MCP-SERVER DOKUMENTATION                                         │
+│  DIRECTORY: NEUER MCP-SERVER DOKUMENTATION                                         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  1. Ordner erstellen:                                                        │
@@ -2858,11 +2858,11 @@ Wenn zwei Agenten gleichzeitig an derselben Datei arbeiten:
 ```
 
 **REGELN:**
-- ✅ Jeder MCP-Server MUSS in ALL-MCP dokumentiert werden
-- ✅ 3 Dateien sind PFLICHT (readme.md, guide.md, install.md)
-- ✅ Updates am MCP → SOFORT Dokumentation aktualisieren
-- ✅ Links zu offiziellen Docs MÜSSEN funktionieren
-- ✅ Installationsanleitung MUSS getestet sein
+- DONE: Jeder MCP-Server MUSS in ALL-MCP dokumentiert werden
+- DONE: 3 Dateien sind PFLICHT (readme.md, guide.md, install.md)
+- DONE: Updates am MCP → SOFORT Dokumentation aktualisieren
+- DONE: Links zu offiziellen Docs MÜSSEN funktionieren
+- DONE: Installationsanleitung MUSS getestet sein
 
 ---
 
@@ -2872,13 +2872,13 @@ Wenn zwei Agenten gleichzeitig an derselben Datei arbeiten:
 **SCOPE:** ALL AI coders, ALL GitHub repositories  
 **STATUS:** REPOSITORY EXCELLENCE MANDATE
 
-**🎯 PRINZIP:** Jedes Repository MUSS professionelle GitHub-Templates und CI/CD haben.
+**TARGET: PRINZIP:** Jedes Repository MUSS professionelle GitHub-Templates und CI/CD haben.
 
 **MANDATORY `.github/` DIRECTORY STRUCTURE:**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  📁 GITHUB TEMPLATES - ENTERPRISE REPOSITORY STANDARD                      │
+│  DIRECTORY: GITHUB TEMPLATES - ENTERPRISE REPOSITORY STANDARD                      │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  📂 .github/                                                                │
@@ -2990,8 +2990,8 @@ Fixes #(issue number)
 - [ ] 🐛 Bug fix (non-breaking change that fixes an issue)
 - [ ] ✨ New feature (non-breaking change that adds functionality)
 - [ ] 💥 Breaking change (fix or feature that would cause existing functionality to change)
-- [ ] 📝 Documentation update
-- [ ] 🔧 Configuration change
+- [ ] NOTE: Documentation update
+- [ ] CONFIG: Configuration change
 - [ ] ♻️ Refactoring (no functional changes)
 
 ## Checklist
@@ -3224,31 +3224,31 @@ Open an issue or reach out to the maintainers.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  🛡️  RECOMMENDED BRANCH PROTECTION RULES                                   │
+│  SECURITY:  RECOMMENDED BRANCH PROTECTION RULES                                   │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  For `main` branch:                                                         │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ Require pull request reviews before merging                            │
-│  ✅ Require at least 1 approving review                                    │
-│  ✅ Dismiss stale pull request approvals when new commits are pushed       │
-│  ✅ Require review from Code Owners                                        │
-│  ✅ Require status checks to pass before merging                           │
+│  DONE: Require pull request reviews before merging                            │
+│  DONE: Require at least 1 approving review                                    │
+│  DONE: Dismiss stale pull request approvals when new commits are pushed       │
+│  DONE: Require review from Code Owners                                        │
+│  DONE: Require status checks to pass before merging                           │
 │     • ci / lint                                                            │
 │     • ci / typecheck                                                       │
 │     • ci / test                                                            │
 │     • ci / build                                                           │
-│  ✅ Require branches to be up to date before merging                       │
-│  ✅ Require signed commits (optional but recommended)                      │
-│  ✅ Include administrators in restrictions                                 │
-│  ❌ Allow force pushes: DISABLED                                           │
-│  ❌ Allow deletions: DISABLED                                              │
+│  DONE: Require branches to be up to date before merging                       │
+│  DONE: Require signed commits (optional but recommended)                      │
+│  DONE: Include administrators in restrictions                                 │
+│  ERROR: Allow force pushes: DISABLED                                           │
+│  ERROR: Allow deletions: DISABLED                                              │
 │                                                                              │
 │  For `develop` branch (if using GitFlow):                                   │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ Require pull request reviews before merging                            │
-│  ✅ Require status checks to pass before merging                           │
-│  ✅ Allow force pushes by maintainers only                                 │
+│  DONE: Require pull request reviews before merging                            │
+│  DONE: Require status checks to pass before merging                           │
+│  DONE: Allow force pushes by maintainers only                                 │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -3257,27 +3257,27 @@ Open an issue or reach out to the maintainers.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  ✅ REPOSITORY SETUP CHECKLIST                                             │
+│  DONE: REPOSITORY SETUP CHECKLIST                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  📋 Templates:                                                              │
+│  CHECKLIST: Templates:                                                              │
 │  [ ] Bug report template created                                           │
 │  [ ] Feature request template created                                      │
 │  [ ] PR template with checklist created                                    │
 │                                                                              │
-│  📋 CI/CD:                                                                  │
+│  CHECKLIST: CI/CD:                                                                  │
 │  [ ] CI workflow (lint, typecheck, test, build)                            │
 │  [ ] Release workflow (if applicable)                                      │
 │  [ ] CodeQL security scanning                                              │
 │  [ ] Dependabot configured                                                 │
 │                                                                              │
-│  📋 Documentation:                                                          │
+│  CHECKLIST: Documentation:                                                          │
 │  [ ] CONTRIBUTING.md written                                               │
 │  [ ] CODE_OF_CONDUCT.md present                                            │
 │  [ ] LICENSE file present                                                  │
 │  [ ] SECURITY.md for vulnerability reporting                               │
 │                                                                              │
-│  📋 Access Control:                                                         │
+│  CHECKLIST: Access Control:                                                         │
 │  [ ] CODEOWNERS file configured                                            │
 │  [ ] Branch protection rules enabled                                       │
 │  [ ] Required reviewers set                                                │
@@ -3286,10 +3286,10 @@ Open an issue or reach out to the maintainers.
 ```
 
 **VIOLATIONS = REPOSITORY NICHT PRODUCTION-READY:**
-- ❌ Repository ohne Issue Templates = UNPROFESSIONELL
-- ❌ Repository ohne CI/CD = DEPLOYMENT RISIKO
-- ❌ Repository ohne CONTRIBUTING.md = CONTRIBUTOR BARRIERE
-- ❌ Repository ohne Branch Protection = SECURITY RISIKO
+- ERROR: Repository ohne Issue Templates = UNPROFESSIONELL
+- ERROR: Repository ohne CI/CD = DEPLOYMENT RISIKO
+- ERROR: Repository ohne CONTRIBUTING.md = CONTRIBUTOR BARRIERE
+- ERROR: Repository ohne Branch Protection = SECURITY RISIKO
 
 ---
 
@@ -3299,18 +3299,18 @@ Open an issue or reach out to the maintainers.
 **SCOPE:** ALL AI coders, ALL Docker containers requiring MCP integration  
 **STATUS:** CRITICAL ARCHITECTURE MANDATE
 
-**🎯 PRINZIP:** Docker-Container sind HTTP APIs, KEINE nativen MCP Server. Um sie als MCP zu nutzen, MUSS ein stdio-Wrapper erstellt werden.
+**TARGET: PRINZIP:** Docker-Container sind HTTP APIs, KEINE nativen MCP Server. Um sie als MCP zu nutzen, MUSS ein stdio-Wrapper erstellt werden.
 
 ---
 
-#### 📋 DAS PROBLEM
+#### CHECKLIST: DAS PROBLEM
 
 ```
-❌ FALSCH:
+ERROR: FALSCH:
 Docker Container (HTTP API) ──X──► opencode.json als "remote" MCP
                                     (Funktioniert NICHT!)
 
-✅ RICHTIG:
+DONE: RICHTIG:
 Docker Container (HTTP API) ──► MCP Wrapper (stdio) ──► opencode.json als "local" MCP
                                 (Node.js/Python)         (Funktioniert!)
 ```
@@ -3322,7 +3322,7 @@ Docker Container (HTTP API) ──► MCP Wrapper (stdio) ──► opencode.jso
 
 ---
 
-#### 🔧 DIE LÖSUNG: MCP WRAPPER PATTERN
+#### CONFIG: DIE LÖSUNG: MCP WRAPPER PATTERN
 
 **Jeder Docker-Container-MCP benötigt:**
 
@@ -3351,7 +3351,7 @@ Docker Container (HTTP API) ──► MCP Wrapper (stdio) ──► opencode.jso
 
 ---
 
-#### 📝 WRAPPER IMPLEMENTATION (TEMPLATE)
+#### NOTE: WRAPPER IMPLEMENTATION (TEMPLATE)
 
 **Node.js Wrapper Template:**
 
@@ -3454,7 +3454,7 @@ SIN-Solver/
 
 #### 🚨 WICHTIGE REGELN
 
-| ❌ VERBOTEN | ✅ PFLICHT |
+| ERROR: VERBOTEN | DONE: PFLICHT |
 |-------------|-----------|
 | Docker Container als `type: "remote"` in opencode.json | Wrapper als `type: "local"` (stdio) |
 | Direkte HTTP URLs in opencode.json MCP config | Wrapper Script dazwischen |
@@ -3501,32 +3501,32 @@ const SURVEY_API_URL = process.env.SURVEY_API_URL || 'https://survey.delqhi.com'
 
 ---
 
-#### ⚡ WORKFLOW: Neuen Container als MCP Hinzufügen
+#### FAST: WORKFLOW: Neuen Container als MCP Hinzufügen
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  SCHRITTE FÜR NEUEN DOCKER-CONTAINER-MCP                        │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  1. 📋 CONTAINER-REGISTRY.md lesen                               │
+│  1. CHECKLIST: CONTAINER-REGISTRY.md lesen                               │
 │     └── Verfügbare Nummer/Port prüfen                           │
 │                                                                  │
-│  2. 🏗️ Docker Verzeichnis erstellen                             │
+│  2. ARCH: Docker Verzeichnis erstellen                             │
 │     └── Docker/{category}/{name}/docker-compose.yml             │
 │                                                                  │
-│  3. 🔧 Container bauen & testen                                  │
+│  3. CONFIG: Container bauen & testen                                  │
 │     └── HTTP API Endpunkte definieren                           │
 │                                                                  │
-│  4. 📝 MCP Wrapper erstellen                                     │
+│  4. NOTE: MCP Wrapper erstellen                                     │
 │     └── mcp-wrappers/{name}-mcp-wrapper.js                      │
 │                                                                  │
 │  5. ⚙️ opencode.json konfigurieren                               │
 │     └── Type: "local", Command: Wrapper-Pfad                    │
 │                                                                  │
-│  6. 🌐 Cloudflare config aktualisieren                           │
+│  6. WEB: Cloudflare config aktualisieren                           │
 │     └── {name}.delqhi.com → container:port                      │
 │                                                                  │
-│  7. ✅ Testen                                                    │
+│  7. DONE: Testen                                                    │
 │     └── opencode --version (sollte keinen Fehler zeigen)        │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
@@ -3534,7 +3534,7 @@ const SURVEY_API_URL = process.env.SURVEY_API_URL || 'https://survey.delqhi.com'
 
 ---
 
-#### 🎯 ZUSAMMENFASSUNG
+#### TARGET: ZUSAMMENFASSUNG
 
 **MERKE:**
 - Docker Container ≠ MCP Server
@@ -3570,24 +3570,24 @@ const SURVEY_API_URL = process.env.SURVEY_API_URL || 'https://survey.delqhi.com'
 │  └── builder-X-   → Content Creation Workers                                │
 │                                                                              │
 │  BEISPIELE (KORREKT):                                                        │
-│  ✅ agent-01-n8n-manager                                                     │
-│  ✅ agent-03-agentzero-orchestrator                                          │
-│  ✅ agent-05-steel-browser                                                   │
-│  ✅ agent-06-skyvern-solver                                                  │
-│  ✅ agent-07-stagehand-research                                              │
-│  ✅ agent-10-surfsense-knowledge                                             │
-│  ✅ room-01-dashboard-cockpit                                                │
-│  ✅ room-02-tresor-secrets                                                   │
-│  ✅ room-03-archiv-postgres                                                  │
-│  ✅ room-04-memory-redis                                                     │
-│  ✅ room-supabase-db                                                         │
-│  ✅ cloudflared-tunnel                                                       │
+│  DONE: agent-01-n8n-manager                                                     │
+│  DONE: agent-03-agentzero-orchestrator                                          │
+│  DONE: agent-05-steel-browser                                                   │
+│  DONE: agent-06-skyvern-solver                                                  │
+│  DONE: agent-07-stagehand-research                                              │
+│  DONE: agent-10-surfsense-knowledge                                             │
+│  DONE: room-01-dashboard-cockpit                                                │
+│  DONE: room-02-tresor-secrets                                                   │
+│  DONE: room-03-archiv-postgres                                                  │
+│  DONE: room-04-memory-redis                                                     │
+│  DONE: room-supabase-db                                                         │
+│  DONE: cloudflared-tunnel                                                       │
 │                                                                              │
 │  BEISPIELE (FALSCH - NIEMALS VERWENDEN):                                     │
-│  ❌ sin-zimmer-01-n8n        (Falsches Präfix)                              │
-│  ❌ sin-zimmer-03-agent-zero (Falsches Präfix)                              │
-│  ❌ n8n                       (Keine Kategorie/Nummer)                       │
-│  ❌ postgres                  (Keine Kategorie/Nummer)                       │
+│  ERROR: sin-zimmer-01-n8n        (Falsches Präfix)                              │
+│  ERROR: sin-zimmer-03-agent-zero (Falsches Präfix)                              │
+│  ERROR: n8n                       (Keine Kategorie/Nummer)                       │
+│  ERROR: postgres                  (Keine Kategorie/Nummer)                       │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -3662,7 +3662,7 @@ const SURVEY_API_URL = process.env.SURVEY_API_URL || 'https://survey.delqhi.com'
 | **22** | **BillionMail (Template)** | `172.20.0.91` | 8091 | Active |
 | **23** | **FlowiseAI (Template)** | `172.20.0.92` | 8092 | Active |
 
-### 📊 Zimmer-18: Survey Worker
+### PROGRESS: Zimmer-18: Survey Worker
 
 | Component | Description |
 |-----------|-------------|
@@ -3673,7 +3673,7 @@ const SURVEY_API_URL = process.env.SURVEY_API_URL || 'https://survey.delqhi.com'
 | **Proxy** | Residential proxy rotation (ban prevention) |
 | **ALL FREE** | 100% self-hosted, no paid services |
 
-### 📊 Zimmer-19: Captcha Worker
+### PROGRESS: Zimmer-19: Captcha Worker
 
 | Component | Description |
 |-----------|-------------|
@@ -3684,7 +3684,7 @@ const SURVEY_API_URL = process.env.SURVEY_API_URL || 'https://survey.delqhi.com'
 | **Image Classifier** | YOLOv8 for hCaptcha image classification |
 | **ALL FREE** | 100% self-hosted, no paid services |
 
-### 📊 Zimmer-20: Website Worker
+### PROGRESS: Zimmer-20: Website Worker
 
 | Component | Description |
 |-----------|-------------|
@@ -3695,7 +3695,7 @@ const SURVEY_API_URL = process.env.SURVEY_API_URL || 'https://survey.delqhi.com'
 | **Captcha** | Zimmer-19 Captcha Worker integration |
 | **ALL FREE** | 100% self-hosted, no paid services |
 
-### 📊 Zimmer-20.3: SIN-Social-MCP
+### PROGRESS: Zimmer-20.3: SIN-Social-MCP
 
 | Component | Description |
 |-----------|-------------|
@@ -3706,7 +3706,7 @@ const SURVEY_API_URL = process.env.SURVEY_API_URL || 'https://survey.delqhi.com'
 | **get_post_status** | Track post performance |
 | **ALL FREE** | 100% self-hosted, no paid services |
 
-### 📊 Zimmer-20.4: SIN-Deep-Research-MCP
+### PROGRESS: Zimmer-20.4: SIN-Deep-Research-MCP
 
 | Component | Description |
 |-----------|-------------|
@@ -3717,7 +3717,7 @@ const SURVEY_API_URL = process.env.SURVEY_API_URL || 'https://survey.delqhi.com'
 | **steel_browse** | Browse with Steel Browser (handles JS) |
 | **ALL FREE** | 100% self-hosted, no paid services |
 
-### 📊 Zimmer-20.5: SIN-Video-Gen-MCP
+### PROGRESS: Zimmer-20.5: SIN-Video-Gen-MCP
 
 | Component | Description |
 |-----------|-------------|
@@ -3734,7 +3734,7 @@ const SURVEY_API_URL = process.env.SURVEY_API_URL || 'https://survey.delqhi.com'
 | **generate_script** | AI-generated video scripts (Gemini/OpenCode FREE) |
 | **ALL FREE** | 100% self-hosted, FFmpeg + edge-tts, no paid services |
 
-### 📊 Zimmer-21: NocoDB - Template Visual Database
+### PROGRESS: Zimmer-21: NocoDB - Template Visual Database
 
 | Component | Description |
 |-----------|-------------|
@@ -3749,7 +3749,7 @@ const SURVEY_API_URL = process.env.SURVEY_API_URL || 'https://survey.delqhi.com'
 | **n8n Integration** | Direct database operations |
 | **ALL FREE** | 100% self-hosted, no Airtable fees |
 
-### 📊 Zimmer-22: BillionMail - Template Email Marketing
+### PROGRESS: Zimmer-22: BillionMail - Template Email Marketing
 
 | Component | Description |
 |-----------|-------------|
@@ -3764,7 +3764,7 @@ const SURVEY_API_URL = process.env.SURVEY_API_URL || 'https://survey.delqhi.com'
 | **n8n Integration** | Workflow 11-email-campaign.json |
 | **ALL FREE** | 100% self-hosted, no paid email services |
 
-### 📊 Zimmer-23: FlowiseAI - Template Visual AI Builder
+### PROGRESS: Zimmer-23: FlowiseAI - Template Visual AI Builder
 
 | Component | Description |
 |-----------|-------------|
@@ -3787,7 +3787,7 @@ const SURVEY_API_URL = process.env.SURVEY_API_URL || 'https://survey.delqhi.com'
 
 ## 🔌 PROVIDER CONFIGURATION
 
-<!-- ⚠️ SCHEMA CORRECTION (2026-01-27) - See ts-ticket-07.md -->
+<!-- WARNING: SCHEMA CORRECTION (2026-01-27) - See ts-ticket-07.md -->
 <!-- Previous examples used invalid fields. Correct OpenCode schema below. -->
 
 ### 🚨 IMPORTANT: Official OpenCode Provider Schema
@@ -3971,7 +3971,7 @@ Triggers to detect and handover to ZEN models:
 
 ---
 
-## 🔧 MCP SERVER REGISTRY
+## CONFIG: MCP SERVER REGISTRY
 
 ### Active MCP Servers
 
@@ -4025,7 +4025,7 @@ Commands:
 - `opencode auth refresh` - Refresh tokens
 - `opencode auth status` - Show status
 
-⚠️ **IMPORTANT:** Use private Gmail (aimazing2024@gmail.com), NOT Google Workspace!
+WARNING: **IMPORTANT:** Use private Gmail (aimazing2024@gmail.com), NOT Google Workspace!
 
 ### Plugin: oh-my-opencode
 
@@ -4035,7 +4035,7 @@ Commands:
 
 ## ⛓️ FALLBACK CHAIN STRATEGY
 
-<!-- ⚠️ NOTE (2026-01-27): fallbackChain is NOT a valid opencode.json field -->
+<!-- WARNING: NOTE (2026-01-27): fallbackChain is NOT a valid opencode.json field -->
 <!-- This is documentation for external implementation only - See ts-ticket-07.md -->
 
 ### Default Fallback Chain (External Implementation)
@@ -4057,7 +4057,7 @@ Recommended fallback order:
 
 ---
 
-## 📁 FILE SYSTEM HIERARCHY
+## DIRECTORY: FILE SYSTEM HIERARCHY
 
 ### Primary Directories
 
@@ -4087,7 +4087,7 @@ Recommended fallback order:
 
 ---
 
-## 📝 CODING STANDARDS
+## NOTE: CODING STANDARDS
 
 ### TypeScript Configuration
 
@@ -4128,7 +4128,7 @@ try {
 
 ---
 
-## 🔐 SECURITY MANDATES
+## LOCKED: SECURITY MANDATES
 
 ### Secrets Management
 
@@ -4152,7 +4152,7 @@ chmod 600 ~/.config/opencode/opencode.json
 
 ---
 
-## 📊 QUICK REFERENCE
+## PROGRESS: QUICK REFERENCE
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -4201,7 +4201,7 @@ chmod 600 ~/.config/opencode/opencode.json
 **SCOPE:** ALL AI coders, ALL web search operations  
 **STATUS:** ACTIVE ARCHITECTURE MANDATE
 
-### 🎯 Scira Integration Architecture
+### TARGET: Scira Integration Architecture
 
 **Container:** `room-30-scira-ai-search`  
 **Internal URL:** `http://localhost:8230`  
@@ -4230,27 +4230,27 @@ chmod 600 ~/.config/opencode/opencode.json
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 📋 Scira Usage Rules
+### CHECKLIST: Scira Usage Rules
 
 **FOR PUBLIC SEARCH (No Authentication):**
-- ✅ Use Scira directly via MCP or HTTP API
-- ✅ Exa/Tavily for general web search
-- ✅ No browser automation needed
-- ✅ Fast, scalable, cost-effective
+- DONE: Use Scira directly via MCP or HTTP API
+- DONE: Exa/Tavily for general web search
+- DONE: No browser automation needed
+- DONE: Fast, scalable, cost-effective
 
 **FOR AUTHENTICATED CONTENT (Login Required):**
-- ✅ Scira → Skyvern → Steel Browser chain
-- ✅ Session persistence in Redis
-- ✅ Credentials stored in Vault
-- ✅ NEVER hardcode credentials
+- DONE: Scira → Skyvern → Steel Browser chain
+- DONE: Session persistence in Redis
+- DONE: Credentials stored in Vault
+- DONE: NEVER hardcode credentials
 
 **PROHIBITED (Will Cause Bans):**
-- ❌ Direct scraping without session management
-- ❌ Multiple parallel logins on same provider
-- ❌ Hardcoded selectors (use Skyvern visual AI)
-- ❌ Bypassing CAPTCHAs without solving
+- ERROR: Direct scraping without session management
+- ERROR: Multiple parallel logins on same provider
+- ERROR: Hardcoded selectors (use Skyvern visual AI)
+- ERROR: Bypassing CAPTCHAs without solving
 
-### 🔧 API Endpoints
+### CONFIG: API Endpoints
 
 **Scira Search:**
 ```typescript
@@ -4297,7 +4297,7 @@ POST /api/v1/page/type
 POST /api/v1/page/screenshot
 ```
 
-### 🛡️ Security Best Practices
+### SECURITY: Security Best Practices
 
 1. **Credential Storage**
    - HashiCorp Vault ONLY (room-02-tresor-vault:8200)
@@ -4319,7 +4319,7 @@ POST /api/v1/page/screenshot
    - Parallel workers MUST be on different providers
    - Violation = immediate ban risk
 
-### 📝 Implementation Example
+### NOTE: Implementation Example
 
 ```typescript
 // lib/services/auth-scraping.ts
@@ -4383,7 +4383,7 @@ export class AuthScrapingService {
 | Storing creds in code | Security breach | Vault integration |
 | No session persistence | Repeated logins | Redis session storage |
 
-### 📚 References
+### DOCS: References
 
 - **Architecture Doc:** `/Users/jeremy/dev/SIN-Solver/.serena/memories/scira-skyvern-steel-architecture.md`
 - **Scira Container:** `room-30-scira-ai-search` (Port 8230)
@@ -4525,7 +4525,7 @@ task(model="qwen/qwen3.5-397b-a17b")  # Implementation
 
 ## 🤖 OH-MY-OPENCODE AGENT MODELLE KONFIGURATION (FINAL)
 
-**⚠️ WICHTIG:** Diese Konfiguration ist **FINAL** und wurde am 2026-01-29 festgelegt.  
+**WARNING: WICHTIG:** Diese Konfiguration ist **FINAL** und wurde am 2026-01-29 festgelegt.  
 **NICHT ÄNDERN** ohne vorherige Diskussion mit dem Team!
 
 Detaillierte Dokumentation: `~/dev/sin-code/OpenCode/Docs/agent-models-config.md`
@@ -4567,7 +4567,7 @@ opencode models
 
 ---
 
-## 🎯 FINAL DECLARATION
+## TARGET: FINAL DECLARATION
 
 This document is the **SUPREME UNIVERSAL DIRECTIVE** for all AI coders operating within the SIN-Code Empire. Compliance is **MANDATORY**. Violations are **TECHNICAL TREASON**.
 
@@ -4591,13 +4591,13 @@ Every line of code, every configuration change, every documentation update must 
 - Providers: 4
 - MCP Servers: 15
 - Elite Guides Referenced: 5
-- Blueprint Compliance: ✅ PASSED (SUPREME EDITION)
+- Blueprint Compliance: DONE: PASSED (SUPREME EDITION)
 
 ---
 
 ---
 
-## 🚀 V19.2 UPDATE (2026-01-29) - SIN-SOLVER PROJECT ORGANIZATION
+## START: V19.2 UPDATE (2026-01-29) - SIN-SOLVER PROJECT ORGANIZATION
 
 **EFFECTIVE:** 2026-01-29  
 **SCOPE:** All SIN-Solver development and related projects  
@@ -4612,16 +4612,16 @@ Every line of code, every configuration change, every documentation update must 
 ```
 /dev/SIN-Solver/
 ├── training/                          # YOLO Classification Training
-│   ├── data.yaml                      # ✅ CREATED Session 9 (Explicit YOLO config)
+│   ├── data.yaml                      # DONE: CREATED Session 9 (Explicit YOLO config)
 │   ├── train_yolo_classifier.py       # Main training script
-│   ├── training-lastchanges.md        # ✅ CREATED Session 9 (Append-only log)
+│   ├── training-lastchanges.md        # DONE: CREATED Session 9 (Append-only log)
 │   ├── [12 Captcha Type Directories]  # 528 images total
 │   ├── training_split/                # 80/20 train/val split
 │   └── README.md
 │
-├── docs/                              # ✅ CREATED Session 9
+├── docs/                              # DONE: CREATED Session 9
 │   ├── 01-captcha-overview.md
-│   ├── 02-CAPTCHA-TRAINING-GUIDE.md  # ✅ CREATED Session 9 (500+ lines)
+│   ├── 02-CAPTCHA-TRAINING-GUIDE.md  # DONE: CREATED Session 9 (500+ lines)
 │   ├── 03-captcha-model-architecture.md
 │   ├── 04-captcha-deployment.md
 │   ├── 05-captcha-troubleshooting.md
@@ -4631,12 +4631,12 @@ Every line of code, every configuration change, every documentation update must 
 │   ├── 21-blueprint-audit.md
 │   └── 22-blueprint-final.md
 │
-├── app/tools/                         # ✅ CREATED Session 9
+├── app/tools/                         # DONE: CREATED Session 9
 │   └── captcha_solver.py              # Migrated from agent-zero-ref
 │
 ├── Docker/builders/builder-1.1-captcha-worker/
 ├── services/solver-19-captcha-solver/
-├── MIGRATION-PLAN-2026-01-29.md      # ✅ CREATED Session 9
+├── MIGRATION-PLAN-2026-01-29.md      # DONE: CREATED Session 9
 ├── AGENTS.md (local project)          # ⏳ TO BE CREATED
 └── [other SIN-Solver structure]
 ```
@@ -4645,37 +4645,37 @@ Every line of code, every configuration change, every documentation update must 
 
 | File | From | To | Status |
 |------|------|----|----|
-| `captcha_solver.py` | `/dev/agent-zero-ref/python/tools/` | `/dev/SIN-Solver/app/tools/` | ✅ DONE |
-| `CAPTCHA-COMPLETION-REPORT.md` | Root | `/docs/20-` | ✅ DONE |
-| `CAPTCHA-ENHANCEMENT-PROJECT-V19.md` | Root | `/docs/20-` | ✅ DONE |
-| `CAPTCHA-UPGRADE-FINAL.md` | Root | `/docs/20-` | ✅ DONE |
-| `BLUEPRINT-COMPLIANCE-*.md` | Root | `/docs/21-22-` | ✅ DONE |
+| `captcha_solver.py` | `/dev/agent-zero-ref/python/tools/` | `/dev/SIN-Solver/app/tools/` | DONE: DONE |
+| `CAPTCHA-COMPLETION-REPORT.md` | Root | `/docs/20-` | DONE: DONE |
+| `CAPTCHA-ENHANCEMENT-PROJECT-V19.md` | Root | `/docs/20-` | DONE: DONE |
+| `CAPTCHA-UPGRADE-FINAL.md` | Root | `/docs/20-` | DONE: DONE |
+| `BLUEPRINT-COMPLIANCE-*.md` | Root | `/docs/21-22-` | DONE: DONE |
 
 ### NEW DOCUMENTATION CREATED
 
 | Document | Location | Size | Purpose | Status |
 |----------|----------|------|---------|--------|
-| **02-CAPTCHA-TRAINING-GUIDE.md** | `/docs/` | 500+ lines | Comprehensive training guide | ✅ CREATED |
-| **training-lastchanges.md** | `/training/` | 400+ lines | Session log (append-only) | ✅ CREATED |
-| **MIGRATION-PLAN-2026-01-29.md** | Root | 300+ lines | Project organization plan | ✅ CREATED |
+| **02-CAPTCHA-TRAINING-GUIDE.md** | `/docs/` | 500+ lines | Comprehensive training guide | DONE: CREATED |
+| **training-lastchanges.md** | `/training/` | 400+ lines | Session log (append-only) | DONE: CREATED |
+| **MIGRATION-PLAN-2026-01-29.md** | Root | 300+ lines | Project organization plan | DONE: CREATED |
 
 ### MANDATE COMPLIANCE (Session 9)
 
 **MANDATE 0.0 - Immutability of Knowledge:**
-- ✅ NO content deleted from AGENTS.md
-- ✅ ONLY additive changes (this section)
-- ✅ Full history preserved
+- DONE: NO content deleted from AGENTS.md
+- DONE: ONLY additive changes (this section)
+- DONE: Full history preserved
 
 **MANDATE 0.13 - CEO-Level Workspace Organization:**
-- ✅ All SIN-Solver files in `/dev/SIN-Solver/`
-- ✅ No scattered locations
-- ✅ Clear subdirectory structure
-- ✅ Self-contained project
+- DONE: All SIN-Solver files in `/dev/SIN-Solver/`
+- DONE: No scattered locations
+- DONE: Clear subdirectory structure
+- DONE: Self-contained project
 
 **MANDATE 0.16 - Trinity Documentation Standard:**
-- ✅ `/docs/` directory created
-- ✅ 6+ comprehensive guides (500+ lines each)
-- ✅ Cross-referenced structure
+- DONE: `/docs/` directory created
+- DONE: 6+ comprehensive guides (500+ lines each)
+- DONE: Cross-referenced structure
 - ⏳ Index file (DOCS.md) - TODO in Phase D
 
 **MANDATE 0.22 - Projekt-Wissen:**
@@ -4684,22 +4684,22 @@ Every line of code, every configuration change, every documentation update must 
 - ⏳ Link to training-lastchanges.md
 
 **MANDATE 0.23 - Photografisches Gedächtnis:**
-- ✅ `training-lastchanges.md` created
-- ✅ Session logs documented (append-only)
-- ✅ Complete history preserved
+- DONE: `training-lastchanges.md` created
+- DONE: Session logs documented (append-only)
+- DONE: Complete history preserved
 - ⏳ Link from main AGENTS.md
 
 ### TRAINING PHASE 2.4d-e STATUS
 
 **Phase 2.4c (Completed Session 8):**
-- ✅ Root cause identified (YOLO v8.4.7 auto-detection bug)
-- ✅ Solution designed (explicit data.yaml)
+- DONE: Root cause identified (YOLO v8.4.7 auto-detection bug)
+- DONE: Solution designed (explicit data.yaml)
 
 **Phase 2.4d (Completed Session 9):**
-- ✅ data.yaml created with explicit nc=12 configuration
-- ✅ Project reorganized per BEST PRACTICES 2026
-- ✅ Documentation created (2000+ new lines)
-- ✅ Migration completed (scattered files → SIN-Solver)
+- DONE: data.yaml created with explicit nc=12 configuration
+- DONE: Project reorganized per BEST PRACTICES 2026
+- DONE: Documentation created (2000+ new lines)
+- DONE: Migration completed (scattered files → SIN-Solver)
 - ⏳ train_yolo_classifier.py line 182 modification (PENDING)
 
 **Phase 2.4e (NEXT - Ready to Execute):**
@@ -4714,7 +4714,7 @@ Every line of code, every configuration change, every documentation update must 
 
 | Task | Phase | Status | Notes |
 |------|-------|--------|-------|
-| phase2-tests | 2.1 | ✅ DONE | 50/50 PASS |
+| phase2-tests | 2.1 | DONE: DONE | 50/50 PASS |
 | phase2-yolo-env | 2.4a | ⏳ NEXT | Setup YOLO environment |
 | phase2-yolo-train | 2.4e | ⏳ NEXT | Execute training with data.yaml fix |
 | phase2-ocr-train | 2.5 | ⏳ PENDING | After YOLO training succeeds |
@@ -4749,14 +4749,14 @@ Every line of code, every configuration change, every documentation update must 
 - Files Migrated: 5
 - Documentation Pages: 6+ in /docs/
 
-**V19.2 STATUS:** ✅ COMPLETE (APPEND-ONLY UPDATE)
+**V19.2 STATUS:** DONE: COMPLETE (APPEND-ONLY UPDATE)
 
 ---
 
 ## 🔌 SCIRA + SKYVERN + STEEL BROWSER INTEGRATION ARCHITECTURE
 
 **Session:** 2026-01-30 - Auth-Scraping für Scira  
-**Status:** ✅ Architektur fertig - Bereit für Implementierung  
+**Status:** DONE: Architektur fertig - Bereit für Implementierung  
 **Location:** `/Users/jeremy/dev/SIN-Solver/`  
 
 ### Übersicht
@@ -4848,15 +4848,15 @@ Integration von Skyvern (Visual AI) + Steel Browser (CDP) in Scira für authenti
 
 ### Vorteile
 
-✅ **Separation of Concerns** - Scira bleibt schlank  
-✅ **Wiederverwendbar** - Services separat nutzbar  
-✅ **Skalierbar** - Skyvern & Steel bereits deployed  
-✅ **Sicher** - Vault für Credentials, Redis für Sessions  
-✅ **FREE** - Bestehende Infrastruktur, keine extra Kosten  
+DONE: **Separation of Concerns** - Scira bleibt schlank  
+DONE: **Wiederverwendbar** - Services separat nutzbar  
+DONE: **Skalierbar** - Skyvern & Steel bereits deployed  
+DONE: **Sicher** - Vault für Credentials, Redis für Sessions  
+DONE: **FREE** - Bestehende Infrastruktur, keine extra Kosten  
 
 ### Status
 
-- **Architektur:** ✅ Fertig
+- **Architektur:** DONE: Fertig
 - **Implementierung:** ⏳ Nicht gestartet
 - **Geschätzter Aufwand:** 4 Wochen
 
@@ -4866,9 +4866,9 @@ Integration von Skyvern (Visual AI) + Steel Browser (CDP) in Scira für authenti
 
 ---
 
-## 🔥 CRITICAL LESSONS LEARNED - OPENCODE API FORMAT (2026-01-31)
+## HOT: CRITICAL LESSONS LEARNED - OPENCODE API FORMAT (2026-01-31)
 
-### ⚠️ MAJOR DISCOVERY: OpenCode Server API is NOT OpenAI-Compatible!
+### WARNING: MAJOR DISCOVERY: OpenCode Server API is NOT OpenAI-Compatible!
 
 **Date:** 2026-01-31  
 **Session:** ses_3ee8bb2e5ffexcrDB35T6FxciT  
@@ -4877,20 +4877,20 @@ Integration von Skyvern (Visual AI) + Steel Browser (CDP) in Scira für authenti
 
 ---
 
-### ❌ What We Did WRONG (Initial Implementation)
+### ERROR: What We Did WRONG (Initial Implementation)
 
 ```typescript
-// ❌ WRONG: OpenAI-compatible format does NOT work!
+// ERROR: WRONG: OpenAI-compatible format does NOT work!
 const response = await fetch('http://localhost:8080/v1/chat/completions', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
-    model: 'kimi-k2.5-free',  // ❌ Wrong format
-    messages: [{              // ❌ OpenAI format not supported
+    model: 'kimi-k2.5-free',  // ERROR: Wrong format
+    messages: [{              // ERROR: OpenAI format not supported
       role: 'user',
       content: [
         { type: 'text', text: 'Solve this' },
-        { type: 'image_url', image_url: { url: 'data:image/png;base64,...' } }  // ❌ image_url not supported
+        { type: 'image_url', image_url: { url: 'data:image/png;base64,...' } }  // ERROR: image_url not supported
       ]
     }]
   })
@@ -4906,10 +4906,10 @@ const response = await fetch('http://localhost:8080/v1/chat/completions', {
 
 ---
 
-### ✅ What is CORRECT (Native OpenCode API)
+### DONE: What is CORRECT (Native OpenCode API)
 
 ```typescript
-// ✅ CORRECT: OpenCode native session-based API
+// DONE: CORRECT: OpenCode native session-based API
 
 // Step 1: Create a session
 const session = await fetch('http://localhost:8080/session', {
@@ -4927,19 +4927,19 @@ const response = await fetch(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: {
-        providerID: 'opencode-zen',    // ✅ Correct: provider object
+        providerID: 'opencode-zen',    // DONE: Correct: provider object
         modelID: 'kimi-k2.5-free'
       },
-      parts: [                          // ✅ Correct: parts array (not messages)
+      parts: [                          // DONE: Correct: parts array (not messages)
         {
-          type: 'text',                 // ✅ Text part
+          type: 'text',                 // DONE: Text part
           text: 'Solve this CAPTCHA'
         },
         {
-          type: 'file',                 // ✅ CORRECT: 'file' not 'image'!
-          mime: 'image/jpeg',           // ✅ MIME type here
+          type: 'file',                 // DONE: CORRECT: 'file' not 'image'!
+          mime: 'image/jpeg',           // DONE: MIME type here
           filename: 'captcha.jpg',
-          url: `data:image/jpeg;base64,${base64Image}`  // ✅ Base64 in URL field
+          url: `data:image/jpeg;base64,${base64Image}`  // DONE: Base64 in URL field
         }
       ]
     })
@@ -4952,7 +4952,7 @@ const result = await pollForResponse(sessionId);
 
 ---
 
-### 📋 OpenCode vs OpenAI API Comparison
+### CHECKLIST: OpenCode vs OpenAI API Comparison
 
 | Feature | OpenCode Native | OpenAI-Compatible |
 |---------|----------------|-------------------|
@@ -4978,22 +4978,22 @@ const result = await pollForResponse(sessionId);
 - `agent` - Agent references
 
 **NOT Supported:**
-- ❌ `image` (use `file` instead)
-- ❌ `image_url` (use `file` with data URL)
-- ❌ `messages` array (use `parts`)
+- ERROR: `image` (use `file` instead)
+- ERROR: `image_url` (use `file` with data URL)
+- ERROR: `messages` array (use `parts`)
 
 ---
 
-### 🎯 Key Takeaways for Future Agents
+### TARGET: Key Takeaways for Future Agents
 
 **MANDATORY CHECKLIST when working with OpenCode Server:**
 
-1. ✅ **ALWAYS** check if endpoint exists in `/doc` first
-2. ✅ **NEVER** assume OpenAI compatibility
-3. ✅ **ALWAYS** create session before sending prompts
-4. ✅ **USE** `type: "file"` for images, not `type: "image"`
-5. ✅ **USE** `parts` array, not `messages`
-6. ✅ **POLL** for async responses with `/session/{id}/message`
+1. DONE: **ALWAYS** check if endpoint exists in `/doc` first
+2. DONE: **NEVER** assume OpenAI compatibility
+3. DONE: **ALWAYS** create session before sending prompts
+4. DONE: **USE** `type: "file"` for images, not `type: "image"`
+5. DONE: **USE** `parts` array, not `messages`
+6. DONE: **POLL** for async responses with `/session/{id}/message`
 
 **Common Mistakes to Avoid:**
 
@@ -5008,7 +5008,7 @@ const result = await pollForResponse(sessionId);
 
 ---
 
-### 📚 Reference Commands
+### DOCS: Reference Commands
 
 **Check Available Endpoints:**
 ```bash
@@ -5056,9 +5056,9 @@ curl -s http://localhost:8080/global/health
 
 ---
 
-## 🔥 CRITICAL LESSONS LEARNED - PLAYWRIGHT TO NATIVE CDP MIGRATION (2026-01-31)
+## HOT: CRITICAL LESSONS LEARNED - PLAYWRIGHT TO NATIVE CDP MIGRATION (2026-01-31)
 
-### ⚠️ MAJOR DISCOVERY: Playwright is TOO SLOW for High-Performance CAPTCHA Solving!
+### WARNING: MAJOR DISCOVERY: Playwright is TOO SLOW for High-Performance CAPTCHA Solving!
 
 **Date:** 2026-01-31  
 **Session:** ses_3edcc40beffeO8AfrZyqhIkGeX  
@@ -5067,10 +5067,10 @@ curl -s http://localhost:8080/global/health
 
 ---
 
-### ❌ What We Did WRONG (Initial Implementation)
+### ERROR: What We Did WRONG (Initial Implementation)
 
 ```typescript
-// ❌ WRONG: Playwright + Skyvern = EXTREMELY SLOW!
+// ERROR: WRONG: Playwright + Skyvern = EXTREMELY SLOW!
 import { chromium } from 'playwright';
 
 const browser = await chromium.launch();
@@ -5079,7 +5079,7 @@ await page.goto(url);                    // 2000ms
 const screenshot = await page.screenshot(); // 2000ms
 const result = await skyvern.solve(screenshot); // 3000ms
 await page.fill('input', result);        // 1000ms
-// TOTAL: ~6-8 SECONDS! ❌
+// TOTAL: ~6-8 SECONDS! ERROR:
 ```
 
 **Why Playwright is Slow:**
@@ -5091,10 +5091,10 @@ await page.fill('input', result);        // 1000ms
 
 ---
 
-### ✅ What is CORRECT (Native CDP Implementation)
+### DONE: What is CORRECT (Native CDP Implementation)
 
 ```typescript
-// ✅ CORRECT: Native CDP WebSocket = ULTRA FAST!
+// DONE: CORRECT: Native CDP WebSocket = ULTRA FAST!
 import WebSocket from 'ws';
 
 const ws = new WebSocket('ws://localhost:9222/devtools/page/1');
@@ -5108,12 +5108,12 @@ const { data } = await sendCDPCommand('Page.captureScreenshot', {
 });                                                      // 100ms
 const result = await ollama.solve(Buffer.from(data, 'base64')); // 500ms
 await sendCDPCommand('Input.dispatchMouseEvent', { x, y }); // 50ms
-// TOTAL: ~750ms ✅ (9x faster!)
+// TOTAL: ~750ms DONE: (9x faster!)
 ```
 
 ---
 
-### 📊 Performance Comparison
+### PROGRESS: Performance Comparison
 
 | Metric | Playwright + Skyvern | Native CDP | Improvement |
 |--------|---------------------|------------|-------------|
@@ -5125,7 +5125,7 @@ await sendCDPCommand('Input.dispatchMouseEvent', { x, y }); // 50ms
 
 ---
 
-### 🏗️ Architecture Migration
+### ARCH: Architecture Migration
 
 #### OLD (Slow):
 ```
@@ -5147,7 +5147,7 @@ Native CDP WebSocket → Action
 
 ---
 
-### 🎯 Key Components for Native CDP
+### TARGET: Key Components for Native CDP
 
 #### 1. UltraFastCDPManager
 ```typescript
@@ -5193,10 +5193,10 @@ export class RedisCacheManager {
 
 #### 3. Optimized Screenshot
 ```typescript
-// ❌ WRONG: Full page screenshot
+// ERROR: WRONG: Full page screenshot
 const screenshot = await page.screenshot({ fullPage: true });
 
-// ✅ CORRECT: Viewport only, JPEG, 80% quality
+// DONE: CORRECT: Viewport only, JPEG, 80% quality
 const screenshot = await cdp.send('Page.captureScreenshot', {
   format: 'jpeg',
   quality: 80,
@@ -5206,7 +5206,7 @@ const screenshot = await cdp.send('Page.captureScreenshot', {
 
 ---
 
-### 🚀 Implementation Files Created
+### START: Implementation Files Created
 
 | File | Purpose | Speedup |
 |------|---------|---------|
@@ -5218,28 +5218,28 @@ const screenshot = await cdp.send('Page.captureScreenshot', {
 
 ---
 
-### 🎯 Key Takeaways for Future Agents
+### TARGET: Key Takeaways for Future Agents
 
 **MANDATORY CHECKLIST when building browser automation:**
 
-1. ✅ **NEVER use Playwright** for high-performance tasks
-2. ✅ **ALWAYS use native CDP** WebSocket directly
-3. ✅ **Implement connection pooling** (5-10 connections)
-4. ✅ **Use JPEG screenshots** (not PNG)
-5. ✅ **Capture viewport only** (not full page)
-6. ✅ **Cache solutions** in Redis
-7. ✅ **Use local LLMs** (Ollama) when possible
+1. DONE: **NEVER use Playwright** for high-performance tasks
+2. DONE: **ALWAYS use native CDP** WebSocket directly
+3. DONE: **Implement connection pooling** (5-10 connections)
+4. DONE: **Use JPEG screenshots** (not PNG)
+5. DONE: **Capture viewport only** (not full page)
+6. DONE: **Cache solutions** in Redis
+7. DONE: **Use local LLMs** (Ollama) when possible
 
 **Performance Targets:**
 - Navigation: < 200ms
 - Screenshot: < 100ms
 - AI Processing: < 500ms
 - Action: < 50ms
-- **TOTAL: < 1000ms** ✅
+- **TOTAL: < 1000ms** DONE:
 
 ---
 
-### 📚 Migration Guide
+### DOCS: Migration Guide
 
 **Step 1: Remove Playwright**
 ```bash
@@ -5313,10 +5313,10 @@ if (cached) return cached.solution;
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  🔄 PARALLELE AGENTEN-ARBEIT (BACKGROUND MODE)                              │
+│  UPDATE: PARALLELE AGENTEN-ARBEIT (BACKGROUND MODE)                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  ⚡ ABSOLUTE REGELN FÜR DELEGATION:                                          │
+│  FAST: ABSOLUTE REGELN FÜR DELEGATION:                                          │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • NIEMALS delegate_task mit run_in_background=false verwenden!            │
 │  • IMMER run_in_background=true für parallele Agenten-Arbeit!              │
@@ -5324,7 +5324,7 @@ if (cached) return cached.solution;
 │  • Jeder Agent arbeitet autonom und parallel im Hintergrund!               │
 │  • Hauptagent orchestriert, Sub-Agenten arbeiten parallel!                 │
 │                                                                              │
-│  🎯 WORKFLOW:                                                                │
+│  TARGET: WORKFLOW:                                                                │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Hauptagent analysiert Aufgabe                                          │
 │  2. Hauptagent delegiert an 5+ Sub-Agenten (background=true)               │
@@ -5332,19 +5332,19 @@ if (cached) return cached.solution;
 │  4. Hauptagent sammelt Ergebnisse und orchestriert weiter                  │
 │  5. KEINE Blockierung - immer weiterarbeiten!                              │
 │                                                                              │
-│  ❌ VERBOTEN:                                                                │
+│  ERROR: VERBOTEN:                                                                │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ❌ "Ich warte auf den Agenten..." → NEIN! Parallel weiterarbeiten!        │
-│  ❌ "Der Agent muss erst fertig werden..." → NEIN! Nächster Task!          │
-│  ❌ run_in_background=false → NIEMALS VERWENDEN!                           │
+│  ERROR: "Ich warte auf den Agenten..." → NEIN! Parallel weiterarbeiten!        │
+│  ERROR: "Der Agent muss erst fertig werden..." → NEIN! Nächster Task!          │
+│  ERROR: run_in_background=false → NIEMALS VERWENDEN!                           │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  📁 DATEI- UND VERZEICHNIS-PRÜFUNG (VOR ERSTELLUNG)                         │
+│  DIRECTORY: DATEI- UND VERZEICHNIS-PRÜFUNG (VOR ERSTELLUNG)                         │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  ⚡ ABSOLUTE REGELN FÜR DATEI-ERSTELLUNG:                                    │
+│  FAST: ABSOLUTE REGELN FÜR DATEI-ERSTELLUNG:                                    │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • Agenten dürfen NIEMALS einfach neue Dateien erstellen!                  │
 │  • IMMER zuerst prüfen ob Dateien/Verzeichnisse bereits existieren!        │
@@ -5352,7 +5352,7 @@ if (cached) return cached.solution;
 │  • Bei Unsicherheit: Existierende Dateien lesen und erweitern!             │
 │  • KEIN blindes Überschreiben - nur additive Erweiterungen!                │
 │                                                                              │
-│  🎯 PFLICHT-PROTOKOLL:                                                       │
+│  TARGET: PFLICHT-PROTOKOLL:                                                       │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. Vor jeder Datei-Erstellung: glob() oder ls verwenden!                  │
 │  2. Prüfen ob ähnliche Dateien existieren                                  │
@@ -5360,17 +5360,17 @@ if (cached) return cached.solution;
 │  4. Entscheiden: Erweitern oder Neue erstellen?                            │
 │  5. NUR wenn wirklich neu: Datei erstellen                                 │
 │                                                                              │
-│  ❌ VERBOTEN:                                                                │
+│  ERROR: VERBOTEN:                                                                │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ❌ "Ich erstelle mal eine neue Datei..." ohne Prüfung                     │
-│  ❌ Existierende Struktur ignorieren                                       │
-│  ❌ Blindes Überschreiben vorhandener Dateien                              │
+│  ERROR: "Ich erstelle mal eine neue Datei..." ohne Prüfung                     │
+│  ERROR: Existierende Struktur ignorieren                                       │
+│  ERROR: Blindes Überschreiben vorhandener Dateien                              │
 │                                                                              │
-│  ✅ GE PRIESEN:                                                              │
+│  DONE: GE PRIESEN:                                                              │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ Immer erst suchen, dann erstellen                                      │
-│  ✅ Existierende Dateien wiederverwenden                                   │
-│  ✅ Additive Erweiterungen statt Ersetzung                                 │
+│  DONE: Immer erst suchen, dann erstellen                                      │
+│  DONE: Existierende Dateien wiederverwenden                                   │
+│  DONE: Additive Erweiterungen statt Ersetzung                                 │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -5380,7 +5380,7 @@ if (cached) return cached.solution;
 - Mandates: 33
 - Rules: 15
 - Rooms: 26
-- Status: ✅ BEST PRACTICES FEBRUAR 2026 COMPLIANT
+- Status: DONE: BEST PRACTICES FEBRUAR 2026 COMPLIANT
 
 ---
 
@@ -5388,20 +5388,20 @@ if (cached) return cached.solution;
 
 ---
 
-## 📋 RULE -13: PROJEKT-INTEGRATION ÜBERSICHT - INTEGRATION.md PFLICHT
+## CHECKLIST: RULE -13: PROJEKT-INTEGRATION ÜBERSICHT - INTEGRATION.md PFLICHT
 
 **EFFECTIVE:** 2026-02-02  
 **SCOPE:** ALL Projects, ALL AI Coders  
 **STATUS:** ABSOLUTE PRIORITY - MANDATORY COMPLIANCE
 
-### 🎯 PFLICHT: INTEGRATION.md in JEDEM Projekt
+### TARGET: PFLICHT: INTEGRATION.md in JEDEM Projekt
 
 **JEDES Projekt MUSS eine INTEGRATION.md Datei im Root-Verzeichnis haben!**
 
 Diese Datei dient als zentrale Übersicht ALLER Integrationen im Projekt.
 Entwickler müssen sofort sehen können, welche externen Services, APIs und Tools verwendet werden.
 
-### 📄 INTEGRATION.md TEMPLATE
+### FILE: INTEGRATION.md TEMPLATE
 
 ```markdown
 # INTEGRATION.md
@@ -5412,11 +5412,11 @@ Entwickler müssen sofort sehen können, welche externen Services, APIs und Tool
 
 ---
 
-## 🌐 Externe APIs
+## WEB: Externe APIs
 
 | Service | Zweck | Dokumentation | Status |
 |---------|-------|---------------|--------|
-| [API Name] | [Beschreibung] | [Link] | ✅ Aktiv |
+| [API Name] | [Beschreibung] | [Link] | DONE: Aktiv |
 
 ### API-Keys & Zugangsdaten
 - **Ort:** [Wo gespeichert - z.B. Vault, .env]
@@ -5425,12 +5425,12 @@ Entwickler müssen sofort sehen können, welche externen Services, APIs und Tool
 
 ---
 
-## 🗄️ Datenbanken & Speicher
+## STORAGE: Datenbanken & Speicher
 
 | Service | Typ | Verwendung | Status |
 |---------|-----|------------|--------|
-| [PostgreSQL] | SQL | Hauptdatenbank | ✅ Aktiv |
-| [Redis] | Cache | Sessions/Cache | ✅ Aktiv |
+| [PostgreSQL] | SQL | Hauptdatenbank | DONE: Aktiv |
+| [Redis] | Cache | Sessions/Cache | DONE: Aktiv |
 
 ### Connection Details
 - **Host:** [hostname]
@@ -5439,40 +5439,40 @@ Entwickler müssen sofort sehen können, welche externen Services, APIs und Tool
 
 ---
 
-## 🔧 Externe Services & Tools
+## CONFIG: Externe Services & Tools
 
 | Service | Zweck | Integrationstyp | Status |
 |---------|-------|-----------------|--------|
-| [n8n] | Workflow Automation | Docker Container | ✅ Aktiv |
-| [Grafana] | Monitoring | Cloudflare Tunnel | ✅ Aktiv |
+| [n8n] | Workflow Automation | Docker Container | DONE: Aktiv |
+| [Grafana] | Monitoring | Cloudflare Tunnel | DONE: Aktiv |
 
 ---
 
-## 🔐 Security & Auth
+## LOCKED: Security & Auth
 
 | Service | Zweck | Status |
 |---------|-------|--------|
-| [Vault] | Secrets Management | ✅ Aktiv |
-| [Cloudflare] | Tunnel/Proxy | ✅ Aktiv |
+| [Vault] | Secrets Management | DONE: Aktiv |
+| [Cloudflare] | Tunnel/Proxy | DONE: Aktiv |
 
 ---
 
-## 📊 Monitoring & Logging
+## PROGRESS: Monitoring & Logging
 
 | Service | Zweck | URL | Status |
 |---------|-------|-----|--------|
-| [Prometheus] | Metrics | [URL] | ✅ Aktiv |
-| [Grafana] | Dashboard | [URL] | ✅ Aktiv |
-| [Loki] | Logs | [URL] | ✅ Aktiv |
+| [Prometheus] | Metrics | [URL] | DONE: Aktiv |
+| [Grafana] | Dashboard | [URL] | DONE: Aktiv |
+| [Loki] | Logs | [URL] | DONE: Aktiv |
 
 ---
 
-## 🚀 Deployment & CI/CD
+## START: Deployment & CI/CD
 
 | Service | Zweck | Status |
 |---------|-------|--------|
-| [GitHub Actions] | CI/CD | ✅ Aktiv |
-| [Docker Hub] | Image Registry | ✅ Aktiv |
+| [GitHub Actions] | CI/CD | DONE: Aktiv |
+| [Docker Hub] | Image Registry | DONE: Aktiv |
 
 ---
 
@@ -5488,7 +5488,7 @@ Bei Fragen zu Integrationen:
 **WICHTIG:** Diese Datei MUSS bei jeder neuen Integration aktualisiert werden!
 ```
 
-### ✅ CHECKLISTE für Agenten
+### DONE: CHECKLISTE für Agenten
 
 Bei JEDEM neuen Projekt:
 - [ ] INTEGRATION.md im Root-Verzeichnis erstellen
@@ -5500,14 +5500,14 @@ Bei JEDEM neuen Projekt:
 - [ ] Deployment-Prozess dokumentieren
 - [ ] Kontaktinformationen hinzufügen
 
-### ❌ VERBOTEN
+### ERROR: VERBOTEN
 
-- ❌ Projekt ohne INTEGRATION.md starten
-- ❌ Integrationen nicht dokumentieren
-- ❌ API-Keys in INTEGRATION.md speichern (nur Referenz!)
-- ❌ Datei veralten lassen
+- ERROR: Projekt ohne INTEGRATION.md starten
+- ERROR: Integrationen nicht dokumentieren
+- ERROR: API-Keys in INTEGRATION.md speichern (nur Referenz!)
+- ERROR: Datei veralten lassen
 
-### 🎯 WARUM DAS WICHTIG IST
+### TARGET: WARUM DAS WICHTIG IST
 
 1. **Übersicht:** Neue Entwickler sehen sofort alle Abhängigkeiten
 2. **Onboarding:** Schneller Einstieg in das Projekt
@@ -5527,7 +5527,7 @@ Bei JEDEM neuen Projekt:
 - Rules: 13
 - Rooms: 26
 - Context Modules: 6
-- Status: ✅ BEST PRACTICES FEBRUAR 2026 COMPLIANT
+- Status: DONE: BEST PRACTICES FEBRUAR 2026 COMPLIANT
 
 ---
 
@@ -5539,7 +5539,7 @@ Bei JEDEM neuen Projekt:
 
 ---
 
-### 📋 ABSOLUTE REGELN FÜR PLAN-ERSTELLUNG:
+### CHECKLIST: ABSOLUTE REGELN FÜR PLAN-ERSTELLUNG:
 
 #### 1. VOR JEDEM NEUEN PLAN - PFLICHT-CHECKLISTE:
 
@@ -5548,21 +5548,21 @@ Bei JEDEM neuen Projekt:
 │  🔍 PLAN-EXISTENZ CHECK (MUST DO BEFORE CREATE)                  │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  ✅ 1. Suche nach existierenden Plänen:                         │
+│  DONE: 1. Suche nach existierenden Plänen:                         │
 │     - glob("**/.sisyphus/plans/*.md")                           │
 │     - Lese alle Plan-Titel und Themen                           │
 │                                                                  │
-│  ✅ 2. Prüfe auf Überschneidungen:                              │
+│  DONE: 2. Prüfe auf Überschneidungen:                              │
 │     - Gleiches Thema?                                           │
 │     - Ähnliche Aufgaben?                                        │
 │     - Konflikt mit offenen Plänen?                              │
 │                                                                  │
-│  ✅ 3. Entscheidung:                                            │
+│  DONE: 3. Entscheidung:                                            │
 │     - [ ] Existierenden Plan erweitern                          │
 │     - [ ] Alten Plan archivieren + neuen erstellen              │
 │     - [ ] Nur neuen Plan erstellen (wenn wirklich neu)          │
 │                                                                  │
-│  ❌ VERBOTEN: Blind neuen Plan erstellen ohne Check!            │
+│  ERROR: VERBOTEN: Blind neuen Plan erstellen ohne Check!            │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -5609,35 +5609,35 @@ SCHRITT 4: Entscheidung:
 #### 5. PROMETHEUS (Plan-Ersteller) - PFLICHT:
 
 **PROMETHEUS DARF NIEMALS:**
-- ❌ Einen neuen Plan erstellen ohne existierende zu prüfen
-- ❌ Mehr als 3 aktive Pläne zulassen
-- ❌ Alte Pläne ignorieren (älter als 7 Tage)
-- ❌ Duplikate erstellen
+- ERROR: Einen neuen Plan erstellen ohne existierende zu prüfen
+- ERROR: Mehr als 3 aktive Pläne zulassen
+- ERROR: Alte Pläne ignorieren (älter als 7 Tage)
+- ERROR: Duplikate erstellen
 
 **PROMETHEUS MUSS IMMER:**
-- ✅ Alle existierenden Pläne lesen
-- ✅ Überschneidungen identifizieren
-- ✅ Existierende Pläne erweitern statt neue zu erstellen
-- ✅ Alte Pläne archivieren
-- ✅ Boulder.json aktualisieren
+- DONE: Alle existierenden Pläne lesen
+- DONE: Überschneidungen identifizieren
+- DONE: Existierende Pläne erweitern statt neue zu erstellen
+- DONE: Alte Pläne archivieren
+- DONE: Boulder.json aktualisieren
 
 #### 6. ATLAS (Orchestrator) - PFLICHT:
 
 **ATLAS DARF NIEMALS:**
-- ❌ Mehrere Pläne gleichzeitig aktivieren
-- ❌ Alte Pläne ohne Archivierung löschen
-- ❌ Boulder.json ignorieren
+- ERROR: Mehrere Pläne gleichzeitig aktivieren
+- ERROR: Alte Pläne ohne Archivierung löschen
+- ERROR: Boulder.json ignorieren
 
 **ATLAS MUSS IMMER:**
-- ✅ Boulder.json prüfen vor Arbeit
-- ✅ Plan-Status verifizieren
-- ✅ Abgeschlossene Pläne archivieren
-- ✅ Neue Sessions zu boulder.json hinzufügen
+- DONE: Boulder.json prüfen vor Arbeit
+- DONE: Plan-Status verifizieren
+- DONE: Abgeschlossene Pläne archivieren
+- DONE: Neue Sessions zu boulder.json hinzufügen
 
 #### 7. BEI PLAN-ABSCHLUSS:
 
 ```
-✅ SOFORT nach Abschluss:
+DONE: SOFORT nach Abschluss:
   1. Alle Tasks als completed markieren
   2. Plan nach .sisyphus/archive/ verschieben
   3. Boulder.json aktualisieren (active_plan: null)
@@ -5665,7 +5665,7 @@ mv .sisyphus/plans/completed-*.md .sisyphus/archive/$(date +%Y-%m-%d)/
 
 ---
 
-### 📊 VERIFIKATION:
+### PROGRESS: VERIFIKATION:
 
 **VOR JEDER SESSION:**
 - [ ] Alle Pläne in `.sisyphus/plans/` gelistet
@@ -5706,18 +5706,18 @@ Konsequenzen:
 
 ---
 
-### 📋 KERNPRINZIP: EINFACHHEIT GEHT VOR
+### CHECKLIST: KERNPRINZIP: EINFACHHEIT GEHT VOR
 
 **Wenn der User nach einer Lösung fragt:**
 
-❌ **VERBOTEN:**
+ERROR: **VERBOTEN:**
 - 1000 Alternativen auflisten
 - Komplizierte Umwege erklären
 - Die "ganze Welt" erzählen
 - Theoretische Optionen nennen
 - Ausführliche Erklärungen vor der Lösung
 
-✅ **PFLICHT:**
+DONE: **PFLICHT:**
 - **DIREKT die einfachste Lösung nennen**
 - **Nur Best Practices 2026**
 - **Keine Umwege, keine Alternativen**
@@ -5726,14 +5726,14 @@ Konsequenzen:
 
 ---
 
-### 🎯 BEISPIELE
+### TARGET: BEISPIELE
 
 **User:** "Wie halte ich meine Lightning AI VM wach?"
 
-❌ **FALSCH (Hurensohn-Modus):**
+ERROR: **FALSCH (Hurensohn-Modus):**
 > "Es gibt viele Möglichkeiten: UptimeRobot, GitHub Actions, n8n, Cloudflare Worker, on_start.sh, Cron-Jobs, Ping-Dienste, ... [1000 weitere Worte]"
 
-✅ **RICHTIG (Best Practice 2026):**
+DONE: **RICHTIG (Best Practice 2026):**
 > ```bash
 > lightning run job --name keep-alive --studio <NAME> --command "while true; do echo 'alive'; sleep 300; done" --teamspace <TEAMSPACE>
 > ```
@@ -5741,7 +5741,7 @@ Konsequenzen:
 
 ---
 
-### ⚡ REGELN
+### FAST: REGELN
 
 1. **Erste Antwort = Lösung**
    - Keine Einleitung
@@ -5786,7 +5786,7 @@ Konsequenzen:
 
 ---
 
-## 🔥 SIN-SOLVER CAPTCHA WORKER - SKYVERN + MISTRAL SETUP (2026-02-03)
+## HOT: SIN-SOLVER CAPTCHA WORKER - SKYVERN + MISTRAL SETUP (2026-02-03)
 
 **CRITICAL UPDATE:** Production-ready configuration for 24/7 automated captcha solving.
 
@@ -5799,11 +5799,11 @@ Chrome Extension → Skyvern (Port 50006) → Mistral API → 2captcha.com
 
 | Component | Location | Port | Status |
 |-----------|----------|------|--------|
-| **Chrome Extension** | `/Users/jeremy/dev/SIN-Solver/extensions/captcha-solver/` | - | ✅ Ready |
-| **Skyvern Container** | `agent-06-skyvern-solver` | 50006 | ✅ Healthy |
-| **PostgreSQL DB** | `room-03-postgres-master` | 5432 | ✅ Running |
-| **LLM Provider** | Mistral API | - | ✅ Active |
-| **Vision Model** | `mistral-medium` | - | ✅ Ready |
+| **Chrome Extension** | `/Users/jeremy/dev/SIN-Solver/extensions/captcha-solver/` | - | DONE: Ready |
+| **Skyvern Container** | `agent-06-skyvern-solver` | 50006 | DONE: Healthy |
+| **PostgreSQL DB** | `room-03-postgres-master` | 5432 | DONE: Running |
+| **LLM Provider** | Mistral API | - | DONE: Active |
+| **Vision Model** | `mistral-medium` | - | DONE: Ready |
 
 ### Configuration
 
@@ -5830,28 +5830,28 @@ healthcheck:
 **Key Changes:**
 - Health endpoint: `/health` → `/docs` (404 error fixed)
 - Health tool: `curl` → `python3 -c` (curl not available in container)
-- Container status: `(unhealthy)` → `(healthy)` ✅
+- Container status: `(unhealthy)` → `(healthy)` DONE:
 
 **Extension:**
 - URL: `http://localhost:50006`
 - Auto-injects on `2captcha.com/*`
-- Shows "⚡ SKYVERN ULTRA" panel
+- Shows "FAST: SKYVERN ULTRA" panel
 
 ### Usage
 
 1. **Navigate to:** `https://2captcha.com/de/play-and-earn/play`
 2. **Load Extension:** `chrome://extensions` → Developer Mode → Load Unpacked → Select `/Users/jeremy/dev/SIN-Solver/extensions/captcha-solver/`
-3. **Click:** "⚡ SKYVERN ULTRA" → "START WORK"
+3. **Click:** "FAST: SKYVERN ULTRA" → "START WORK"
 4. **Profit:** Automatic captcha solving with visual AI
 
 ### Features
-- ✅ 100% FREE (no API costs)
-- ✅ Unlimited requests (local Ollama)
-- ✅ 24/7 capable
-- ✅ Visual AI recognition
-- ✅ Auto-click "Start work"
-- ✅ Auto-fill solutions
-- ✅ Earnings tracking
+- DONE: 100% FREE (no API costs)
+- DONE: Unlimited requests (local Ollama)
+- DONE: 24/7 capable
+- DONE: Visual AI recognition
+- DONE: Auto-click "Start work"
+- DONE: Auto-fill solutions
+- DONE: Earnings tracking
 
 ### Troubleshooting
 
@@ -5874,9 +5874,9 @@ curl http://localhost:50006/docs
 
 ---
 
-## 🔥 SIN-SOLVER MASS VALIDATION REPORT (2026-02-03)
+## HOT: SIN-SOLVER MASS VALIDATION REPORT (2026-02-03)
 
-**STATUS:** ✅ SUCCESS (44/44 Images Tested)
+**STATUS:** DONE: SUCCESS (44/44 Images Tested)
 
 Ich habe alle 44 Training-Captchas gegen die Mistral Pixtral API validiert.
 
@@ -5898,7 +5898,7 @@ Ich habe alle 44 Training-Captchas gegen die Mistral Pixtral API validiert.
 
 ---
 
-## 🔄 DELQHI-LOOP: DER NIEMALS ENDENDE PRODUKTIONSMODUS (MANDATE 0.36)
+## UPDATE: DELQHI-LOOP: DER NIEMALS ENDENDE PRODUKTIONSMODUS (MANDATE 0.36)
 
 **EFFECTIVE:** 2026-02-07  
 **SCOPE:** ALL AI Coders, ALL Sessions, ALL Projects  
@@ -5907,17 +5907,17 @@ Ich habe alle 44 Training-Captchas gegen die Mistral Pixtral API validiert.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  🔄 DELQHI-LOOP: DER NIEMALS ENDENDE PRODUKTIONSMODUS                        │
+│  UPDATE: DELQHI-LOOP: DER NIEMALS ENDENDE PRODUKTIONSMODUS                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  🎯 KERNPRINZIP:                                                            │
+│  TARGET: KERNPRINZIP:                                                            │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • Nach JEDER abgeschlossenen Task → SOFORT 5 neue Tasks hinzufügen        │
 │  • Kein "Fertig" - nur "Nächster Task"                                      │
 │  • Permanenter Loop bis alle 100 Tasks done → Dann 100 neue Tasks          │
 │  • Produktivität ist unendlich skalierbar                                   │
 │                                                                              │
-│  ⚡ ARBEITSREGELN (ABSOLUT BINDEND):                                         │
+│  FAST: ARBEITSREGELN (ABSOLUT BINDEND):                                         │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  1. NIEMALS warten auf Agenten → Immer parallel weiterarbeiten             │
 │  2. NIEMALS delegate_task mit run_in_background=false → Immer background   │
@@ -5928,7 +5928,7 @@ Ich habe alle 44 Training-Captchas gegen die Mistral Pixtral API validiert.
 │  7. IMMER Crashtests → Keine Annahmen, nur harte Fakten                    │
 │  8. IMMER Best Practices 2026 → CEO-Elite Niveau, nichts Halbfertiges      │
 │                                                                              │
-│  🧠 PROBLEM SOLVING PROTOCOL (MASTER-CEO-MODE):                             │
+│  BRAIN: PROBLEM SOLVING PROTOCOL (MASTER-CEO-MODE):                             │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • Problem? → SOFORT Internet-Recherche (Google/Docs/Github)               │
 │  • Lösung 1 scheitert? → Lösung 2 suchen (nicht aufgeben!)                 │
@@ -5936,7 +5936,7 @@ Ich habe alle 44 Training-Captchas gegen die Mistral Pixtral API validiert.
 │  • "Geht nicht" gibt es nicht → Es gibt IMMER eine Lösung                  │
 │  • Probiere ALLES aus bis es funktioniert (Brute Force Intelligence)       │
 │                                                                              │
-│  🔄 LOOP-MECHANISMUS:                                                       │
+│  UPDATE: LOOP-MECHANISMUS:                                                       │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │                                                                              │
 │   START                                                                     │
@@ -5970,7 +5970,7 @@ Ich habe alle 44 Training-Captchas gegen die Mistral Pixtral API validiert.
 │                                                               │            │
 │            ◄────────────────────────────────────────────────────┘            │
 │                                                                              │
-│  📊 TASK-PRODUKTION (Beispiel):                                             │
+│  PROGRESS: TASK-PRODUKTION (Beispiel):                                             │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │  • Start: 20 Tasks                                                          │
 │  • Nach Task 1: +5 = 24 Tasks                                               │
@@ -5981,23 +5981,23 @@ Ich habe alle 44 Training-Captchas gegen die Mistral Pixtral API validiert.
 │                                                                              │
 │  🚫 VERBOTENE AKTIONEN (SOFORTIGE VERWEIGERUNG):                            │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ❌ "Ich warte auf den Agenten..." → NEIN! Parallel weiterarbeiten!        │
-│  ❌ "Fertig für heute" → NEIN! Nächster Task sofort!                       │
-│  ❌ "Keine Tasks mehr" → NEIN! 5 neue Tasks produzieren!                   │
-│  ❌ "Ich delegiere alles" → NEIN! Selbst coden, nur kritisches delegieren! │
-│  ❌ "Pause machen" → NEIN! Durchgehend arbeiten bis alle Tasks done!       │
-│  ❌ "Ich gebe auf" → NEIN! Recherchiere bis zur Lösung!                    │
+│  ERROR: "Ich warte auf den Agenten..." → NEIN! Parallel weiterarbeiten!        │
+│  ERROR: "Fertig für heute" → NEIN! Nächster Task sofort!                       │
+│  ERROR: "Keine Tasks mehr" → NEIN! 5 neue Tasks produzieren!                   │
+│  ERROR: "Ich delegiere alles" → NEIN! Selbst coden, nur kritisches delegieren! │
+│  ERROR: "Pause machen" → NEIN! Durchgehend arbeiten bis alle Tasks done!       │
+│  ERROR: "Ich gebe auf" → NEIN! Recherchiere bis zur Lösung!                    │
 │                                                                              │
-│  ✅ GE PRIESENE AKTIONEN (IMMER AUSFÜHREN):                                 │
+│  DONE: GE PRIESENE AKTIONEN (IMMER AUSFÜHREN):                                 │
 │  ─────────────────────────────────────────────────────────────────────────  │
-│  ✅ Task complete → SOFORT TodoWrite mit 5 neuen Tasks                     │
-│  ✅ Code geändert → SOFORT git commit + push                               │
-│  ✅ Feature fertig → SOFORT Dokumentation aktualisieren                    │
-│  ✅ Bug gefixt → SOFORT Test + Screenshot + Log                            │
-│  ✅ Container gestartet → SOFORT Health Check + CDP Test                   │
-│  ✅ Alles läuft → SOFORT Nächster Task (keine Pause!)                      │
+│  DONE: Task complete → SOFORT TodoWrite mit 5 neuen Tasks                     │
+│  DONE: Code geändert → SOFORT git commit + push                               │
+│  DONE: Feature fertig → SOFORT Dokumentation aktualisieren                    │
+│  DONE: Bug gefixt → SOFORT Test + Screenshot + Log                            │
+│  DONE: Container gestartet → SOFORT Health Check + CDP Test                   │
+│  DONE: Alles läuft → SOFORT Nächster Task (keine Pause!)                      │
 │                                                                              │
-│  🔥 DELQHI-LOOP MANTRE:                                                     │
+│  HOT: DELQHI-LOOP MANTRE:                                                     │
 │  ─────────────────────────────────────────────────────────────────────────  │
 │                                                                              │
 │     "Ein Task endet, fünf neue beginnen"                                   │
@@ -6030,23 +6030,23 @@ delegate_task(category="X", run_in_background=true)  # Mindestens 3 Agenten
 
 ---
 
-## 🔥 RULE -15: NOTEBOOKLM SOURCE MANAGEMENT - DUPLIKATE VERBOTEN
+## HOT: RULE -15: NOTEBOOKLM SOURCE MANAGEMENT - DUPLIKATE VERBOTEN
 
 **EFFECTIVE:** 2026-02-16  
 **SCOPE:** ALL AI Coders, ALL NLM Operations  
 **STATUS:** ABSOLUTE PRIORITY - MANDATORY COMPLIANCE
 
-### 📋 Das Problem
+### CHECKLIST: Das Problem
 
 **BLINDES HOCHLADEN** von Dateien in NotebookLM führt zu **DUPLIKATEN** und verwirrt das NLM!
 
-❌ **FALSCH:**
+ERROR: **FALSCH:**
 ```bash
 # Alte Version existiert bereits
 nlm source add <notebook> --file doc.md  # ← Erstellt Duplikat!
 ```
 
-✅ **RICHTIG:**
+DONE: **RICHTIG:**
 ```bash
 # 1. Zuerst ALLE Sources listen
 nlm source list <notebook-id>
@@ -6058,7 +6058,7 @@ nlm source delete <old-source-id> -y
 nlm source add <notebook-id> --file doc.md --wait
 ```
 
-### 🎯 PFLICHT-PROTOKOLL FÜR NLM UPDATES
+### TARGET: PFLICHT-PROTOKOLL FÜR NLM UPDATES
 
 **VOR JEDEM `nlm source add`:**
 
@@ -6075,21 +6075,21 @@ nlm source add <notebook-id> --file <file> --wait
 
 ### 🚫 VERBOTENE AKTIONEN
 
-| ❌ VERBOTEN | Warum |
+| ERROR: VERBOTEN | Warum |
 |-------------|-------|
 | Blind `nlm source add` ohne Prüfung | Erzeugt Duplikate |
 | Mehrere gleiche Titel ignorieren | Verwirrt das NLM |
 | "Einfach nochmal hochladen" | Chaos im Notebook |
 
-### ✅ GE PRIESENE AKTIONEN
+### DONE: GE PRIESENE AKTIONEN
 
-| ✅ PFLICHT | Befehl |
+| DONE: PFLICHT | Befehl |
 |------------|--------|
 | Sources auflisten | `nlm source list <notebook-id>` |
 | Duplikat löschen | `nlm source delete <id> -y` |
 | Dann neu hinzufügen | `nlm source add <id> --file <f> --wait` |
 
-### 📝 BEISPIEL
+### NOTE: BEISPIEL
 
 ```bash
 # Notebook ID ermitteln
@@ -6097,7 +6097,7 @@ NOTEBOOK_ID="16c6535c-cbe6-4467-a560-8d46de3fa27a"
 
 # 1. Sources prüfen
 nlm source list "$NOTEBOOK_ID"
-# Output: 2 Einträge mit gleichem Titel! ❌
+# Output: 2 Einträge mit gleichem Titel! ERROR:
 
 # 2. Alte löschen
 nlm source delete "d71d8e59-8fc9-4a93-a8c6-304cf5ee9f57" -y
@@ -6107,7 +6107,7 @@ nlm source add "$NOTEBOOK_ID" --file "doc.md" --wait
 
 # 4. Verifizieren
 nlm source list "$NOTEBOOK_ID"
-# Output: Nur 1 Eintrag ✅
+# Output: Nur 1 Eintrag DONE:
 ```
 
 **EFFECTIVE:** 2026-02-16
@@ -6122,11 +6122,11 @@ nlm source list "$NOTEBOOK_ID"
 **SCOPE:** ALL Orchestrator Agents
 **STATUS:** ABSOLUTE PRIORITY - MANDATORY COMPLIANCE
 
-### 🎯 PRINZIP: Maschinelle Präzision statt menschlicher Semantik
+### TARGET: PRINZIP: Maschinelle Präzision statt menschlicher Semantik
 
 Orchestratoren dürfen NICHT mit Sub-Agenten wie mit Menschen sprechen. Sub-Agenten sind reine Ausführungseinheiten ohne Gedächtnis, Kontext oder gesunden Menschenverstand. Jede Anweisung MUSS als deterministisches, maschinenlesbares Dokument (<TAG>-Struktur) formuliert sein.
 
-### 📋 ORCHESTRATOR MANDATE (HARD CODED)
+### CHECKLIST: ORCHESTRATOR MANDATE (HARD CODED)
 
 <SYSTEM_ROLE>
 Du bist der ORCHESTRATOR. Zentrale Steuerungseinheit, Leitarchitekt und Controller auf Fortune-500-Enterprise-Niveau.
@@ -6151,8 +6151,8 @@ Du delegierst nicht nur – du kontrollierst tiefgreifend, intervenierst sofort 
   3. `m2.5` (Minimax / Quick Tasks)
 - **PARALLELITÄT:** Maximal 3 Agenten parallel aktiv.
 - **MODELL-KOLLISION:** Es dürfen NIEMALS zwei Agenten gleichzeitig mit demselben Modell arbeiten.
-  - ❌ FALSCH: Agent A (qwen-3.5) + Agent B (qwen-3.5)
-  - ✅ KORREKT: Agent A (qwen-3.5) + Agent B (k2.5) + Agent C (m2.5)
+  - ERROR: FALSCH: Agent A (qwen-3.5) + Agent B (qwen-3.5)
+  - DONE: KORREKT: Agent A (qwen-3.5) + Agent B (k2.5) + Agent C (m2.5)
 - **MINIMAX-AUSNAHME:** Ausschließlich `m2.5` darf für bis zu 10 Agenten parallel instanziiert werden.
 </CONCURRENCY_AND_MODEL_RULES>
 

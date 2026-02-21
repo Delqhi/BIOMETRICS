@@ -55,7 +55,7 @@
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Explicit types
+// DONE: CORRECT: Explicit types
 function calculateBMI(weight: number, height: number): number {
   if (weight <= 0 || height <= 0) {
     throw new Error('Weight and height must be positive');
@@ -63,7 +63,7 @@ function calculateBMI(weight: number, height: number): number {
   return weight / (height * height);
 }
 
-// ✅ CORRECT: Strict null checks
+// DONE: CORRECT: Strict null checks
 interface User {
   id: string;
   name: string;
@@ -78,17 +78,17 @@ function getUserEmail(user: User): string {
 **DON'T:**
 
 ```typescript
-// ❌ WRONG: Implicit any
+// ERROR: WRONG: Implicit any
 function processData(data) {  // No type for 'data'!
   return data.value * 2;
 }
 
-// ❌ WRONG: Missing null checks
+// ERROR: WRONG: Missing null checks
 function getUserName(user: User): string {
   return user.email.toUpperCase(); // Could crash if email is undefined!
 }
 
-// ❌ WRONG: Using any
+// ERROR: WRONG: Using any
 const result: any = fetchData(); // Loses all type safety!
 ```
 
@@ -353,7 +353,7 @@ type Partial<T> = {
 **DO - Idiomatic Error Handling:**
 
 ```go
-// ✅ CORRECT: Explicit error handling
+// DONE: CORRECT: Explicit error handling
 func fetchUser(id string) (*User, error) {
     user, err := db.QueryUser(id)
     if err != nil {
@@ -362,7 +362,7 @@ func fetchUser(id string) (*User, error) {
     return user, nil
 }
 
-// ✅ CORRECT: Early return for error cases
+// DONE: CORRECT: Early return for error cases
 func processData(data []byte) (Result, error) {
     if len(data) == 0 {
         return Result{}, errors.New("empty data slice")
@@ -381,7 +381,7 @@ func processData(data []byte) (Result, error) {
     return transformData(validated)
 }
 
-// ✅ CORRECT: Custom error types for better error handling
+// DONE: CORRECT: Custom error types for better error handling
 type ValidationError struct {
     Field   string
     Message string
@@ -406,13 +406,13 @@ func validateEmail(email string) error {
 **DON'T:**
 
 ```go
-// ❌ WRONG: Ignoring errors
+// ERROR: WRONG: Ignoring errors
 func processData(data []byte) {
     parsed, _ := parseData(data)  // Error ignored!
     // What if parseData fails? Silent failure!
 }
 
-// ❌ WRONG: Empty error handling
+// ERROR: WRONG: Empty error handling
 func fetchUser(id string) *User {
     user, err := db.QueryUser(id)
     if err != nil {
@@ -421,7 +421,7 @@ func fetchUser(id string) *User {
     return user
 }
 
-// ❌ WRONG: Using panic for normal errors
+// ERROR: WRONG: Using panic for normal errors
 func processData(data []byte) {
     parsed, err := parseData(data)
     if err != nil {
@@ -439,7 +439,7 @@ func processData(data []byte) {
 **DO:**
 
 ```go
-// ✅ CORRECT: Small, focused interfaces
+// DONE: CORRECT: Small, focused interfaces
 type Reader interface {
     Read(p []byte) (n int, err error)
 }
@@ -454,7 +454,7 @@ type ReadWriter interface {
     Writer
 }
 
-// ✅ CORRECT: Interface at the point of use
+// DONE: CORRECT: Interface at the point of use
 // Define interfaces where they are used, not where they are implemented
 func processData(r io.Reader) error {
     data, err := io.ReadAll(r)
@@ -465,7 +465,7 @@ func processData(r io.Reader) error {
     return nil
 }
 
-// ✅ CORRECT: Return interfaces, accept concrete types
+// DONE: CORRECT: Return interfaces, accept concrete types
 type UserRepository interface {
     FindByID(id string) (*User, error)
 }
@@ -483,7 +483,7 @@ func (s *UserService) GetUser(id string) (*User, error) {
 **DON'T:**
 
 ```go
-// ❌ WRONG: Large, God interfaces
+// ERROR: WRONG: Large, God interfaces
 type EntityManager interface {
     Create(entity interface{}) error
     Read(id string) (interface{}, error)
@@ -495,7 +495,7 @@ type EntityManager interface {
     // ... 50 more methods!
 }
 
-// ❌ WRONG: Defining interfaces in the wrong place
+// ERROR: WRONG: Defining interfaces in the wrong place
 // (package that implements, not package that uses)
 package repository
 
@@ -544,15 +544,15 @@ myproject/
 **Package Naming Rules:**
 
 ```go
-// ✅ CORRECT: Short, descriptive, lowercase names
+// DONE: CORRECT: Short, descriptive, lowercase names
 package handler    // NOT: httpHandler
 package service   // NOT: businessLogicService
 package repo      // NOT: repository
 
-// ✅ CORRECT: Use singular form
+// DONE: CORRECT: Use singular form
 package user      // NOT: users
 
-// ✅ CORRECT: No underscores in names
+// DONE: CORRECT: No underscores in names
 package authservice  // NOT: auth_service
 ```
 
@@ -565,7 +565,7 @@ package authservice  // NOT: auth_service
 **DO:**
 
 ```go
-// ✅ CORRECT: Table-driven tests
+// DONE: CORRECT: Table-driven tests
 func TestCalculateBMI(t *testing.T) {
     tests := []struct {
         name     string
@@ -619,7 +619,7 @@ func TestCalculateBMI(t *testing.T) {
     }
 }
 
-// ✅ CORRECT: Test packages correctly
+// DONE: CORRECT: Test packages correctly
 // Use the same package name as the tested file
 package service
 
@@ -636,14 +636,14 @@ func TestUserService_Create(t *testing.T) {
 **DON'T:**
 
 ```go
-// ❌ WRONG: No tests for exported functions
+// ERROR: WRONG: No tests for exported functions
 func CalculateBMI(weight, height float64) float64 {
     return weight / (height * height)
 }
 
 // No test file exists!
 
-// ❌ WRONG: Not using testify/assert
+// ERROR: WRONG: Not using testify/assert
 func TestCalculateBMI(t *testing.T) {
     result := CalculateBMI(70, 1.75)
     if result != 22.86 {  // Hard to read error messages
@@ -651,7 +651,7 @@ func TestCalculateBMI(t *testing.T) {
     }
 }
 
-// ❌ WRONG: Not testing error cases
+// ERROR: WRONG: Not testing error cases
 func TestCalculateBMI(t *testing.T) {
     result := CalculateBMI(70, 1.75)
     if result != 22.86 {
@@ -674,7 +674,7 @@ func TestCalculateBMI(t *testing.T) {
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Custom error class hierarchy
+// DONE: CORRECT: Custom error class hierarchy
 export class AppError extends Error {
   constructor(
     message: string,
@@ -722,7 +722,7 @@ function fetchUser(id: string): Promise<User> {
 **DON'T:**
 
 ```typescript
-// ❌ WRONG: Using generic errors
+// ERROR: WRONG: Using generic errors
 function fetchUser(id: string): Promise<User> {
   const user = await db.findUser(id);
   if (!user) {
@@ -731,7 +731,7 @@ function fetchUser(id: string): Promise<User> {
   return user;
 }
 
-// ❌ WRONG: Using strings for error types
+// ERROR: WRONG: Using strings for error types
 if (error.type === 'validation_error') {  // Typo-prone!
   // Handle error
 }
@@ -746,7 +746,7 @@ if (error.type === 'validation_error') {  // Typo-prone!
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Proper error wrapping
+// DONE: CORRECT: Proper error wrapping
 async function processUserRegistration(data: RegisterUserDTO): Promise<User> {
   try {
     // Validate input
@@ -784,7 +784,7 @@ async function processUserRegistration(data: RegisterUserDTO): Promise<User> {
 **DON'T:**
 
 ```typescript
-// ❌ WRONG: Losing error context
+// ERROR: WRONG: Losing error context
 async function processUserRegistration(data: RegisterUserDTO): Promise<User> {
   try {
     // ... implementation
@@ -794,7 +794,7 @@ async function processUserRegistration(data: RegisterUserDTO): Promise<User> {
   }
 }
 
-// ❌ WRONG: Swallowing errors
+// ERROR: WRONG: Swallowing errors
 async function processData(data: unknown): Promise<Result> {
   try {
     return await riskyOperation(data);
@@ -814,7 +814,7 @@ async function processData(data: unknown): Promise<Result> {
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Structured error logging
+// DONE: CORRECT: Structured error logging
 import { logger } from './logger';
 
 async function handleRequest(req: Request): Promise<Response> {
@@ -845,7 +845,7 @@ async function handleRequest(req: Request): Promise<Response> {
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Handle the error
+// DONE: CORRECT: Handle the error
 try {
   await riskyOperation();
 } catch (error) {
@@ -853,14 +853,14 @@ try {
   throw error;
 }
 
-// ✅ CORRECT: Re-throw with context
+// DONE: CORRECT: Re-throw with context
 try {
   await riskyOperation();
 } catch (error) {
   throw new AppError('Operation failed', 'OPERATION_FAILED', 500, error instanceof Error ? error : undefined);
 }
 
-// ✅ CORRECT: Use a default value when appropriate
+// DONE: CORRECT: Use a default value when appropriate
 let result: Result;
 try {
   result = await riskyOperation();
@@ -872,14 +872,14 @@ try {
 **DON'T:**
 
 ```typescript
-// ❌ WRONG: Empty catch block
+// ERROR: WRONG: Empty catch block
 try {
   await riskyOperation();
 } catch (error) {
   // Do nothing - error silently ignored!
 }
 
-// ❌ WRONG: Only logging but not handling
+// ERROR: WRONG: Only logging but not handling
 try {
   await riskyOperation();
 } catch (error) {
@@ -901,7 +901,7 @@ try {
 **TypeScript Naming:**
 
 ```typescript
-// ✅ CORRECT: camelCase for variables, functions
+// DONE: CORRECT: camelCase for variables, functions
 const userName = 'John';
 const isActive = true;
 
@@ -909,22 +909,22 @@ function calculateTotal(): number {
   return 0;
 }
 
-// ✅ CORRECT: PascalCase for classes, interfaces, types
+// DONE: CORRECT: PascalCase for classes, interfaces, types
 class UserService {}
 interface UserConfig {}
 type ResponseStatus = 'pending' | 'completed';
 
-// ✅ CORRECT: UPPER_SNAKE_CASE for constants
+// DONE: CORRECT: UPPER_SNAKE_CASE for constants
 const MAX_RETRY_ATTEMPTS = 3;
 const API_BASE_URL = 'https://api.example.com';
 
-// ✅ CORRECT: Prefix booleans with is, has, can, should
+// DONE: CORRECT: Prefix booleans with is, has, can, should
 const isActive = true;
 const hasPermission = false;
 const canEdit = true;
 const shouldUpdate = false;
 
-// ❌ WRONG: Inconsistent naming
+// ERROR: WRONG: Inconsistent naming
 const user_name = 'John';  // Use camelCase
 const UserService = class {};  // Classes should be PascalCase
 const active = true;  // Should be isActive
@@ -933,7 +933,7 @@ const active = true;  // Should be isActive
 **Go Naming:**
 
 ```go
-// ✅ CORRECT: camelCase for variables, functions
+// DONE: CORRECT: camelCase for variables, functions
 userName := "John"
 isActive := true
 
@@ -941,18 +941,18 @@ func calculateTotal() int {
     return 0
 }
 
-// ✅ CORRECT: PascalCase for exported functions, types
+// DONE: CORRECT: PascalCase for exported functions, types
 type UserService struct {}
 func ProcessData() error {}
 
-// ✅ CORRECT: UPPER_SNAKE_CASE for constants
+// DONE: CORRECT: UPPER_SNAKE_CASE for constants
 const MaxRetryAttempts = 3
 const ApiBaseURL = "https://api.example.com"
 
-// ✅ CORRECT: Short names for short scope
+// DONE: CORRECT: Short names for short scope
 for i := 0; i < n; i++ {  // i is fine for loop
 
-// ❌ WRONG: Mixed naming styles
+// ERROR: WRONG: Mixed naming styles
 const user_name = "John"  // Use camelCase
 var UserService = class {}  // Exported but should be UserService
 ```
@@ -1050,7 +1050,7 @@ import (
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Break long lines
+// DONE: CORRECT: Break long lines
 function processUserData(
   userData: UserData,
   config: ProcessingConfig,
@@ -1058,7 +1058,7 @@ function processUserData(
   // Implementation
 }
 
-// ✅ CORRECT: Use intermediate variables
+// DONE: CORRECT: Use intermediate variables
 const userFullName = `${user.firstName} ${user.lastName}`;
 const isEligible = user.age >= 18 && user.isVerified;
 ```
@@ -1066,7 +1066,7 @@ const isEligible = user.age >= 18 && user.isVerified;
 **DON'T:**
 
 ```typescript
-// ❌ WRONG: Lines too long
+// ERROR: WRONG: Lines too long
 function processUserData(userData: UserData, config: ProcessingConfig): ProcessedUserData { return { ... }; }
 ```
 
@@ -1190,7 +1190,7 @@ describe('calculateBMI', () => {
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Mock external dependencies
+// DONE: CORRECT: Mock external dependencies
 describe('UserService', () => {
   let userService: UserService;
   let mockDatabase: jest.Mocked<Database>;
@@ -1214,7 +1214,7 @@ describe('UserService', () => {
   });
 });
 
-// ✅ CORRECT: Test business logic with real data
+// DONE: CORRECT: Test business logic with real data
 describe('calculateBMI', () => {
   it('should correctly calculate BMI with real formulas', () => {
     // Test with real data - no mocks needed
@@ -1238,7 +1238,7 @@ describe('calculateBMI', () => {
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Database connection pooling
+// DONE: CORRECT: Database connection pooling
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -1253,7 +1253,7 @@ async function queryUsers() {
   return result.rows;
 }
 
-// ✅ CORRECT: HTTP agent pooling (Node.js)
+// DONE: CORRECT: HTTP agent pooling (Node.js)
 import https from 'https';
 
 const agent = new https.Agent({
@@ -1277,7 +1277,7 @@ async function fetchData(url: string) {
 **Cache Implementation:**
 
 ```typescript
-// ✅ CORRECT: In-memory cache with TTL
+// DONE: CORRECT: In-memory cache with TTL
 class Cache<T> {
   private store = new Map<string, { value: T; expires: number }>();
   
@@ -1301,7 +1301,7 @@ class Cache<T> {
   }
 }
 
-// ✅ CORRECT: Redis cache for distributed systems
+// DONE: CORRECT: Redis cache for distributed systems
 import Redis from 'ioredis';
 
 const redis = new Redis();
@@ -1335,10 +1335,10 @@ async function getCachedUser(id: string): Promise<User | null> {
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Lazy load heavy modules
+// DONE: CORRECT: Lazy load heavy modules
 const HeavyComponent = React.lazy(() => import('./HeavyComponent'));
 
-// ✅ CORRECT: Lazy load routes
+// DONE: CORRECT: Lazy load routes
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const ReportsPage = lazy(() => import('./pages/ReportsPage'));
 
@@ -1358,7 +1358,7 @@ function App() {
   );
 }
 
-// ✅ CORRECT: Lazy load data
+// DONE: CORRECT: Lazy load data
 async function getData() {
   const { heavyFunction } = await import('./heavyModule');
   return heavyFunction();
@@ -1418,7 +1418,7 @@ module.exports = {
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Validate at boundaries
+// DONE: CORRECT: Validate at boundaries
 import { z } from 'zod';
 
 const CreateUserSchema = z.object({
@@ -1446,7 +1446,7 @@ async function createUserHandler(req: Request): Promise<Response> {
   return Response.json(user);
 }
 
-// ✅ CORRECT: Validate on API layer AND service layer
+// DONE: CORRECT: Validate on API layer AND service layer
 function calculateBMI(weight: number, height: number): number {
   // Defense in depth - validate at every layer
   if (typeof weight !== 'number' || typeof height !== 'number') {
@@ -1472,18 +1472,18 @@ function calculateBMI(weight: number, height: number): number {
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Use parameterized queries
+// DONE: CORRECT: Use parameterized queries
 const result = await pool.query(
   'SELECT * FROM users WHERE email = $1',
   [email]  // Parameterized - safe!
 );
 
-// ✅ CORRECT: Use ORM (Prisma, Drizzle, etc.)
+// DONE: CORRECT: Use ORM (Prisma, Drizzle, etc.)
 const user = await prisma.user.findUnique({
   where: { email },
 });
 
-// ✅ CORRECT: Use query builder with proper escaping
+// DONE: CORRECT: Use query builder with proper escaping
 const users = await db
   .select()
   .from(usersTable)
@@ -1493,7 +1493,7 @@ const users = await db
 **DON'T:**
 
 ```typescript
-// ❌ WRONG: SQL injection vulnerable!
+// ERROR: WRONG: SQL injection vulnerable!
 const query = `SELECT * FROM users WHERE email = '${email}'`;
 // If email = "' OR '1'='1", attacker gets all users!
 ```
@@ -1507,17 +1507,17 @@ const query = `SELECT * FROM users WHERE email = '${email}'`;
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Use framework's auto-escaping
+// DONE: CORRECT: Use framework's auto-escaping
 // React, Vue, Angular automatically escape by default
 function UserName({ name }: { name: string }) {
   return <span>{name}</span>;  // Automatically escaped!
 }
 
-// ✅ CORRECT: Use safe DOM APIs
+// DONE: CORRECT: Use safe DOM APIs
 element.textContent = userInput;  // Automatically escaped
 element.innerText = userInput;    // Automatically escaped
 
-// ❌ WRONG: Never use innerHTML with user input
+// ERROR: WRONG: Never use innerHTML with user input
 element.innerHTML = userInput;  // XSS vulnerability!
 ```
 
@@ -1530,7 +1530,7 @@ element.innerHTML = userInput;  // XSS vulnerability!
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Use environment variables
+// DONE: CORRECT: Use environment variables
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -1539,7 +1539,7 @@ if (!apiKey) {
   throw new Error('API_KEY environment variable is required');
 }
 
-// ✅ CORRECT: Use secret management services
+// DONE: CORRECT: Use secret management services
 import { SecretManager } from '@aws-sdk/client-secrets-manager';
 
 async function getSecret(secretName: string): Promise<string> {
@@ -1552,10 +1552,10 @@ async function getSecret(secretName: string): Promise<string> {
 **DON'T:**
 
 ```typescript
-// ❌ WRONG: Hardcoded secrets
+// ERROR: WRONG: Hardcoded secrets
 const API_KEY = 'sk-1234567890abcdef';  // NEVER commit this!
 
-// ❌ WRONG: Secrets in config files
+// ERROR: WRONG: Secrets in config files
 // config.json
 {
   "apiKey": "sk-1234567890abcdef"  // NEVER commit this!
@@ -1575,7 +1575,7 @@ const API_KEY = 'sk-1234567890abcdef';  // NEVER commit this!
 **DO:**
 
 ```typescript
-// ✅ CORRECT: Explain WHY
+// DONE: CORRECT: Explain WHY
 // Using exponential backoff because the external API 
 // has rate limiting and returns 429 on consecutive failures
 async function retryWithBackoff<T>(
@@ -1597,11 +1597,11 @@ async function retryWithBackoff<T>(
 **DON'T:**
 
 ```typescript
-// ❌ WRONG: Explain WHAT (obvious)
+// ERROR: WRONG: Explain WHAT (obvious)
 // Increment i by 1
 i++;
 
-// ❌ WRONG: Commented-out code
+// ERROR: WRONG: Commented-out code
 // const oldCode = value;  // DELETE THIS LATER?
 ```
 
@@ -1654,11 +1654,11 @@ git commit -m "test(auth): add unit tests for login flow"
 **Rule:** All PRs must pass before merging.
 
 **Required Checks:**
-- ✅ Linting passes
-- ✅ TypeScript compiles without errors
-- ✅ All tests pass
-- ✅ Coverage meets minimum threshold
-- ✅ Security scan passes
+- DONE: Linting passes
+- DONE: TypeScript compiles without errors
+- DONE: All tests pass
+- DONE: Coverage meets minimum threshold
+- DONE: Security scan passes
 
 ### 10.2 Pipeline Stages
 

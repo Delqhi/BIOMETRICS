@@ -40,7 +40,7 @@ Pflicht:
 
 ---
 
-## 🧠 NLM CLI COMMANDS
+## NLM: NLM CLI COMMANDS
 
 ```bash
 # Create notebook
@@ -56,11 +56,11 @@ nlm source delete <source-id> -y
 nlm source add <notebook-id> --file "file.md" --wait
 ```
 
-**⚠️ DUPLICATE PREVENTION:** ALWAYS run `nlm source list` before `nlm source add`!
+**WARNING: DUPLICATE PREVENTION:** ALWAYS run `nlm source list` before `nlm source add`!
 
 ---
 
-## 🔄 DEQLHI-LOOP (INFINITE WORK MODE)
+## LOOP: DEQLHI-LOOP (INFINITE WORK MODE)
 
 - After each completed task → Add 5 new tasks immediately
 - Never "done" - only "next task"

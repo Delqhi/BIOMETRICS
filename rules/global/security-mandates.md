@@ -659,25 +659,25 @@ jobs:
 #### 4.2.1 Never Use String Concatenation
 
 ```typescript
-// ❌ INSECURE: Never do this!
+// ERROR: INSECURE: Never do this!
 const query = `SELECT * FROM users WHERE id = ${userId}`;
 db.query(query);
 
-// ❌ INSECURE: Don't use template literals with user input
+// ERROR: INSECURE: Don't use template literals with user input
 const sql = `SELECT * FROM users WHERE email = '${email}'`;
 
-// ❌ INSECURE: Don't use string replacement
+// ERROR: INSECURE: Don't use string replacement
 const query = "SELECT * FROM users WHERE id = " + userId;
 ```
 
 #### 4.2.2 Always Use Parameterized Queries
 
 ```typescript
-// ✅ SECURE: Parameterized queries
+// DONE: SECURE: Parameterized queries
 const query = 'SELECT * FROM users WHERE id = $1';
 const result = await db.query(query, [userId]);
 
-// ✅ SECURE: Multiple parameters
+// DONE: SECURE: Multiple parameters
 const sql = `
   SELECT u.*, r.name as role_name 
   FROM users u 
@@ -686,7 +686,7 @@ const sql = `
 `;
 const result = await db.query(sql, [email, true]);
 
-// ✅ SECURE: Named parameters
+// DONE: SECURE: Named parameters
 const query = `
   INSERT INTO audit_log (user_id, action, timestamp)
   VALUES (@userId, @action, @timestamp)
@@ -701,7 +701,7 @@ const result = await db.query(query, {
 #### 4.2.3 ORM Best Practices
 
 ```typescript
-// ✅ SECURE: Using ORM with proper escaping
+// DONE: SECURE: Using ORM with proper escaping
 const user = await db.user.findFirst({
   where: {
     email: email, // ORM handles escaping
@@ -709,14 +709,14 @@ const user = await db.user.findFirst({
   },
 });
 
-// ✅ SECURE: Parameterized raw queries
+// DONE: SECURE: Parameterized raw queries
 const result = await db.$queryRaw`
   SELECT * FROM biometric_templates 
   WHERE user_id = ${userId} 
   AND created_at > NOW() - INTERVAL '30 days'
 `;
 
-// ❌ INSECURE: Never pass raw SQL with user input
+// ERROR: INSECURE: Never pass raw SQL with user input
 const result = await db.$queryRaw(
   `SELECT * FROM users WHERE name = '${name}'`
 );
@@ -727,7 +727,7 @@ const result = await db.$queryRaw(
 #### 4.3.1 Output Encoding
 
 ```typescript
-// ✅ SECURE: Using a library for HTML encoding
+// DONE: SECURE: Using a library for HTML encoding
 import { encode } from 'html-entities';
 
 function safeDisplay(userInput: string): string {
@@ -774,14 +774,14 @@ app.use(helmet.contentSecurityPolicy({
 #### 4.3.3 React XSS Prevention
 
 ```typescript
-// ✅ SECURE: Using textContent instead of innerHTML
+// DONE: SECURE: Using textContent instead of innerHTML
 function SafeDisplay({ content }: { content: string }) {
   const element = document.createElement('div');
   element.textContent = content; // Safe - automatically escaped
   return element;
 }
 
-// ✅ SECURE: Using libraries that auto-escape
+// DONE: SECURE: Using libraries that auto-escape
 import DOMPurify from 'dompurify';
 
 function SanitizedDisplay({ html }: { html: string }) {
@@ -792,7 +792,7 @@ function SanitizedDisplay({ html }: { html: string }) {
   return <div dangerouslySetInnerHTML={{ __html: sanitized }} />;
 }
 
-// ❌ INSECURE: Never use dangerouslySetInnerHTML with user input
+// ERROR: INSECURE: Never use dangerouslySetInnerHTML with user input
 function UnsafeDisplay({ html }: { html: string }) {
   return <div dangerouslySetInnerHTML={{ __html: html }} />;
 }
@@ -2167,7 +2167,7 @@ groups:
 ### 9.1 A01:2021 - Broken Access Control
 
 ```typescript
-// ❌ INSECURE: Missing authorization checks
+// ERROR: INSECURE: Missing authorization checks
 app.get('/api/users/:id', async (req, res) => {
   const user = await db.user.findUnique({
     where: { id: req.params.id },
@@ -2175,7 +2175,7 @@ app.get('/api/users/:id', async (req, res) => {
   res.json(user); // Anyone can access any user!
 });
 
-// ✅ SECURE: Proper authorization
+// DONE: SECURE: Proper authorization
 app.get(
   '/api/users/:id',
   requireAuth,
@@ -2214,11 +2214,11 @@ app.get(
 ### 9.2 A02:2021 - Cryptographic Failures
 
 ```typescript
-// ❌ INSECURE: Weak encryption algorithm
+// ERROR: INSECURE: Weak encryption algorithm
 const cipher = crypto.createCipher('aes-256', key); // Deprecated!
 const encrypted = cipher.update(data, 'utf8', 'hex');
 
-// ✅ SECURE: Strong encryption
+// DONE: SECURE: Strong encryption
 const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
 const encrypted = Buffer.concat([
   cipher.update(data, 'utf8'),
@@ -2236,14 +2236,14 @@ const authTag = cipher.getAuthTag();
 ### 9.3 A03:2021 - Injection
 
 ```typescript
-// ❌ INSECURE: SQL Injection
+// ERROR: INSECURE: SQL Injection
 const query = `SELECT * FROM users WHERE id = ${req.params.id}`;
 
-// ✅ SECURE: Parameterized query
+// DONE: SECURE: Parameterized query
 const query = 'SELECT * FROM users WHERE id = $1';
 const result = await db.query(query, [req.params.id]);
 
-// ✅ SECURE: ORM
+// DONE: SECURE: ORM
 const user = await db.user.findUnique({
   where: { id: req.params.id },
 });
@@ -2258,13 +2258,13 @@ const user = await db.user.findUnique({
 ### 9.4 A04:2021 - Insecure Design
 
 ```typescript
-// ❌ INSECURE: No rate limiting on password reset
+// ERROR: INSECURE: No rate limiting on password reset
 app.post('/api/auth/reset-password', async (req, res) => {
   await sendPasswordResetEmail(req.body.email); // Unlimited requests!
   res.json({ success: true });
 });
 
-// ✅ SECURE: Rate limiting and design
+// DONE: SECURE: Rate limiting and design
 const passwordResetLimiter = rateLimit({
   windowMs: 3600000, // 1 hour
   max: 5, // 5 requests per hour
@@ -2295,12 +2295,12 @@ app.post(
 ### 9.5 A05:2021 - Security Misconfiguration
 
 ```yaml
-# ❌ INSECURE: Default configuration
+# ERROR: INSECURE: Default configuration
 server:
   port: 3000
   debug: true  # Exposes sensitive info!
 
-# ✅ SECURE: Production configuration
+# DONE: SECURE: Production configuration
 server:
   port: ${SERVER_PORT}
   debug: ${DEBUG}  # Should be false in production!
@@ -2347,10 +2347,10 @@ server:
 ### 9.7 A07:2021 - Authentication Failures
 
 ```typescript
-// ❌ INSECURE: Weak password policy
+// ERROR: INSECURE: Weak password policy
 const isValid = password.length >= 6;
 
-// ✅ SECURE: Strong password policy
+// DONE: SECURE: Strong password policy
 const passwordSchema = z.string()
   .min(12, 'Password must be at least 12 characters')
   .regex(/[A-Z]/, 'Password must contain uppercase letter')
@@ -2358,7 +2358,7 @@ const passwordSchema = z.string()
   .regex(/[0-9]/, 'Password must contain number')
   .regex(/[^A-Za-z0-9]/, 'Password must contain special character');
 
-// ✅ SECURE: Secure authentication
+// DONE: SECURE: Secure authentication
 async function authenticate(email: string, password: string) {
   // Rate limiting
   await checkRateLimit(email);
@@ -2421,13 +2421,13 @@ jobs:
 ### 9.9 A09:2021 - Security Logging Failures
 
 ```typescript
-// ❌ INSECURE: No logging
+// ERROR: INSECURE: No logging
 app.post('/api/login', async (req, res) => {
   const user = await authenticate(req.body);
   res.json({ token: user.token });
 });
 
-// ✅ SECURE: Comprehensive logging
+// DONE: SECURE: Comprehensive logging
 app.post('/api/login', async (req, res) => {
   const startTime = Date.now();
   
@@ -2468,14 +2468,14 @@ app.post('/api/login', async (req, res) => {
 ### 9.10 A10:2021 - Server-Side Request Forgery (SSRF)
 
 ```typescript
-// ❌ INSECURE: No URL validation
+// ERROR: INSECURE: No URL validation
 app.get('/api/fetch', async (req, res) => {
   const response = await fetch(req.query.url as string);
   const data = await response.json();
   res.json(data);
 });
 
-// ✅ SECURE: Strict URL validation
+// DONE: SECURE: Strict URL validation
 import { URL } from 'url';
 
 const ALLOWED_DOMAINS = ['api.biometrics.local', 'internal.biometrics.local'];

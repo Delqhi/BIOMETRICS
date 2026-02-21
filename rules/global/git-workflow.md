@@ -437,9 +437,9 @@ git hb 789 security-patch
 - [ ] 🐛 Bug fix (non-breaking change)
 - [ ] ✨ New feature (non-breaking change)
 - [ ] 💥 Breaking change (migration required)
-- [ ] 📝 Documentation update
-- [ ] 🔧 Configuration change
-- [ ] ♻️ Refactoring (no functional changes)
+- [ ] NOTE: Documentation update
+- [ ] CONFIG: Configuration change
+- [ ] REFACTOR: Refactoring (no functional changes)
 
 ## Testing Performed
 <!-- Describe testing done -->
@@ -1340,19 +1340,19 @@ Co-authored-by: Partner Name <partner@email>"
 
 #### Do's
 
-- ✅ Commit often with clear messages
-- ✅ Keep branches up-to-date
-- ✅ Review PRs promptly
-- ✅ Test before pushing
-- ✅ Communicate about blockers
+- DONE: Commit often with clear messages
+- DONE: Keep branches up-to-date
+- DONE: Review PRs promptly
+- DONE: Test before pushing
+- DONE: Communicate about blockers
 
 #### Don'ts
 
-- ❌ Push broken code
-- ❌ Merge without review
-- ❌ Force push to main/develop
-- ❌ Leave commented-out code
-- ❌ Commit secrets or sensitive data
+- ERROR: Push broken code
+- ERROR: Merge without review
+- ERROR: Force push to main/develop
+- ERROR: Leave commented-out code
+- ERROR: Commit secrets or sensitive data
 
 ---
 

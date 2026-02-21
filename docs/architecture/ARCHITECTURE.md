@@ -1,4 +1,4 @@
-# 🏗️ ARCHITECTURE.md - BIOMETRICS Enterprise System
+# ARCHITECTURE: ARCHITECTURE.md - BIOMETRICS Enterprise System
 
 **Document ID:** ARCH-001  
 **Version:** 2.0.0 (Enterprise Go-Style)  

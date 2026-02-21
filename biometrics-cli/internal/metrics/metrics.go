@@ -35,4 +35,8 @@ var (
 		Name: "biometrics_selfhealing_successes_total",
 		Help: "Total number of self-healing successes by component",
 	}, []string{"component"})
+	ActiveSessions = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "biometrics_active_sessions",
+		Help: "Number of currently active OpenCode sessions",
+	})
 )

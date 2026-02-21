@@ -49,6 +49,23 @@ var (
 		Help:    "Duration of webhook requests in seconds",
 		Buckets: prometheus.DefBuckets,
 	})
+	WebhookQueueDepth = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "biometrics_webhook_queue_depth",
+		Help: "Current depth of webhook event queue",
+	})
+
+	WorkStealingTasksStolen = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "biometrics_work_stealing_tasks_stolen_total",
+		Help: "Total number of tasks stolen by work stealer",
+	})
+	WorkStealingTasksEnqueued = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_work_stealing_tasks_enqueued_total",
+		Help: "Total number of tasks enqueued by agent",
+	}, []string{"agent"})
+	WorkStealingRebalances = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "biometrics_work_stealing_rebalances_total",
+		Help: "Total number of work stealing rebalances",
+	})
 
 	TasksCompletedTotal = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "biometrics_tasks_completed_total",

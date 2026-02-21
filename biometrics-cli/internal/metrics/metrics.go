@@ -191,4 +191,48 @@ var (
 		Name: "biometrics_tasks_created_total",
 		Help: "Total number of created tasks",
 	})
+
+	AgentDuration = promauto.NewHistogramVec(prometheus.HistogramOpts{
+		Name:    "biometrics_agent_duration_seconds",
+		Help:    "Duration of agent executions in seconds",
+		Buckets: prometheus.DefBuckets,
+	}, []string{"agent", "status"})
+
+	TaskQueueSize = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "biometrics_task_queue_size",
+		Help: "Current size of task queue",
+	})
+
+	CacheHitsTotal = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "biometrics_cache_hits_total",
+		Help: "Total number of cache hits",
+	})
+	CacheMissesTotal = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "biometrics_cache_misses_total",
+		Help: "Total number of cache misses",
+	})
+	CacheSizeBytes = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "biometrics_cache_size_bytes",
+		Help: "Current size of cache in bytes",
+	})
+
+	SessionActiveCount = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "biometrics_sessions_active",
+		Help: "Number of currently active sessions",
+	})
+	SessionAverageDuration = promauto.NewHistogram(prometheus.HistogramOpts{
+		Name:    "biometrics_session_duration_seconds",
+		Help:    "Average session duration in seconds",
+		Buckets: prometheus.DefBuckets,
+	})
+
+	WebhookEventsTotal = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_webhook_events_total",
+		Help: "Total number of webhook events by type",
+	}, []string{"event_type", "status"})
+
+	SchedulerJobDuration = promauto.NewHistogramVec(prometheus.HistogramOpts{
+		Name: "biometrics_scheduler_job_duration_seconds",
+		Help: "Duration of scheduler jobs in seconds",
+	}, []string{"job"})
 )

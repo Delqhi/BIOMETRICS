@@ -1,6 +1,7 @@
 package main
 
 import (
+	"biometrics-cli/internal/cache"
 	"biometrics-cli/internal/chaos"
 	"biometrics-cli/internal/metrics"
 	"biometrics-cli/internal/models"
@@ -74,6 +75,14 @@ func main() {
 		runDoctor()
 		return
 	}
+
+	cache.New(&cache.CacheConfig{
+		DiskPath:        "./cache",
+		TTL:             5 * time.Minute,
+		CleanupInterval: 1 * time.Minute,
+	})
+	modelCache := cache.NewModelCache(2 * time.Minute)
+
 	state.GlobalState.InitDB()
 	go orchestrator.DisplayDashboard()
 	go chaos.RunChaosMonkey()
@@ -85,7 +94,7 @@ func main() {
 	}()
 
 	modelTracker := tracker.NewModelTracker()
-	state.GlobalState.Log("INFO", "Started modular orchestrator")
+	state.GlobalState.Log("INFO", "Started modular orchestrator with cache")
 
 	for {
 		start := time.Now()
@@ -116,6 +125,14 @@ func main() {
 		}
 
 		model := getModelForAgent(b.Agent)
+
+		cacheKey := fmt.Sprintf("cycle:%d:agent:%s", time.Now().Unix(), b.Agent)
+		if _, found := cache.Get().Get(cacheKey); found {
+			state.GlobalState.Log("INFO", "Skipping cached cycle for "+b.Agent)
+			time.Sleep(30 * time.Second)
+			continue
+		}
+
 		if err := modelTracker.Acquire(model); err != nil {
 			time.Sleep(5 * time.Second)
 			continue
@@ -126,6 +143,8 @@ func main() {
 		state.GlobalState.Log("SUCCESS", "Acquired "+model)
 
 		runSicherCheck(b.Agent)
+
+		modelCache.StoreModelResult(model, b.PlanName, "completed")
 		modelTracker.Release(model)
 		state.GlobalState.ActiveModel = "NONE"
 

@@ -175,16 +175,16 @@ func (g *CodeGenerator) workerPool() {
 
 func (g *CodeGenerator) worker(id int) {
 	for task := range g.queue {
-		g.runTask(task)
+		g.runTask(task, id)
 	}
 }
 
-func (g *CodeGenerator) runTask(task *Task) {
+func (g *CodeGenerator) runTask(task *Task, workerID int) {
 	progressChan := make(chan string, 10)
 	go g.RunCodeGeneration(task.ID, progressChan)
 
 	for msg := range progressChan {
-		state.GlobalState.Log("INFO", fmt.Sprintf("[Worker %d] %s: %s", id, task.ID, msg))
+		state.GlobalState.Log("INFO", fmt.Sprintf("[Worker %d] %s: %s", workerID, task.ID, msg))
 	}
 }
 

@@ -58,6 +58,10 @@ var (
 		Name: "biometrics_tasks_failed_total",
 		Help: "Total number of failed tasks",
 	})
+	TasksStartedTotal = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "biometrics_tasks_started_total",
+		Help: "Total number of started tasks",
+	})
 
 	AgentsStartedTotal = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "biometrics_agents_started_total",

@@ -273,34 +273,6 @@ func handleMetrics(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func handleTaskByID(w http.ResponseWriter, r *http.Request) {
-	taskID := r.URL.Path[len("/api/tasks/"):]
-
-	w.Header().Set("Content-Type", "application/json")
-
-	switch r.Method {
-	case http.MethodGet:
-		json.NewEncoder(w).Encode(map[string]string{"task_id": taskID, "status": "found"})
-	case http.MethodDelete:
-		json.NewEncoder(w).Encode(map[string]string{"task_id": taskID, "status": "deleted"})
-	default:
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-	}
-}
-
-func handleMetrics(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"cycles_total":       0,
-		"model_acquisitions": map[string]int{},
-		"tasks_completed":    0,
-		"tasks_failed":       0,
-		"notifications_sent": 0,
-		"scheduler_jobs_run": 0,
-		"git_commits":        0,
-	})
-}
-
 func handleDockerContainers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode([]map[string]string{

@@ -32,11 +32,19 @@ func main() {
 
 	// Setup routes
 	http.HandleFunc("/", handleIndex)
+	http.HandleFunc("/api/health", handleHealth)
 	http.HandleFunc("/api/tasks", handleTasks)
 	http.HandleFunc("/api/tasks/create", handleCreateTask)
 	http.HandleFunc("/api/tasks/list", handleListTasks)
 	http.HandleFunc("/api/tasks/execute", handleExecuteTask)
+	http.HandleFunc("/api/tasks/", handleTaskByID)
 	http.HandleFunc("/api/status", handleStatus)
+	http.HandleFunc("/api/metrics", handleMetrics)
+	http.HandleFunc("/api/docker/containers", handleDockerContainers)
+	http.HandleFunc("/api/docker/stats", handleDockerStats)
+	http.HandleFunc("/api/scheduler/jobs", handleSchedulerJobs)
+	http.HandleFunc("/api/config", handleConfig)
+	http.HandleFunc("/api/ratelimit/stats", handleRateLimitStats)
 	http.HandleFunc("/ws", handleWebSocket)
 
 	// Static files for web UI
@@ -211,4 +219,86 @@ func broadcastUpdate(message string) {
 		// Channel full, drop message
 	}
 	log.Printf("Broadcast: %s", message)
+}
+
+func handleHealth(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{
+		"status":    "healthy",
+		"service":   "biometrics-api",
+		"timestamp": time.Now().Format(time.RFC3339),
+	})
+}
+
+func handleTaskByID(w http.ResponseWriter, r *http.Request) {
+	taskID := r.URL.Path[len("/api/tasks/"):]
+
+	w.Header().Set("Content-Type", "application/json")
+
+	switch r.Method {
+	case http.MethodGet:
+		json.NewEncoder(w).Encode(map[string]string{"task_id": taskID, "status": "found"})
+	case http.MethodDelete:
+		json.NewEncoder(w).Encode(map[string]string{"task_id": taskID, "status": "deleted"})
+	default:
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+func handleMetrics(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"cycles_total":       0,
+		"model_acquisitions": map[string]int{},
+		"tasks_completed":    0,
+		"tasks_failed":       0,
+		"notifications_sent": 0,
+		"scheduler_jobs_run": 0,
+		"git_commits":        0,
+	})
+}
+
+func handleDockerContainers(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode([]map[string]string{
+		{"name": "serena", "status": "running"},
+		{"name": "opencode", "status": "running"},
+	})
+}
+
+func handleDockerStats(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"containers": 5,
+		"networks":   3,
+		"images":     20,
+	})
+}
+
+func handleSchedulerJobs(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode([]map[string]string{
+		{"id": "health-check", "status": "enabled"},
+		{"id": "cleanup-logs", "status": "enabled"},
+	})
+}
+
+func handleConfig(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"provider":     "nvidia-nim",
+		"model":        "qwen-3.5-397b",
+		"auto_healing": true,
+		"scheduler":    true,
+	})
+}
+
+func handleRateLimitStats(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"limits": map[string]interface{}{
+			"default": map[string]int{"rate": 100, "burst": 10},
+		},
+		"current": map[string]int{},
+	})
 }

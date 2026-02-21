@@ -5,6 +5,7 @@ import (
 	"biometrics-cli/internal/metrics"
 	"biometrics-cli/internal/models"
 	"biometrics-cli/internal/orchestrator"
+	"biometrics-cli/internal/selfhealing"
 	"biometrics-cli/internal/state"
 	"biometrics-cli/internal/tracker"
 	"encoding/json"
@@ -76,7 +77,8 @@ func main() {
 	state.GlobalState.InitDB()
 	go orchestrator.DisplayDashboard()
 	go chaos.RunChaosMonkey()
-	
+	go selfhealing.StartHealthMonitor()
+
 	go func() {
 		http.Handle("/metrics", promhttp.Handler())
 		_ = http.ListenAndServe(":59002", nil)
@@ -89,22 +91,25 @@ func main() {
 		start := time.Now()
 		metrics.CyclesTotal.Inc()
 
+		healer := selfhealing.NewSelfHealer()
+		healer.RunDiagnostics()
+
 		if err := verifySerenaProcess(); err != nil {
 			state.GlobalState.Log("ERROR", "Serena MCP check failed: "+err.Error())
 			time.Sleep(10 * time.Second)
 			continue
 		}
-		
+
 		b, err := readBoulder("/Users/jeremy/.sisyphus/boulder.json")
 		if err != nil {
 			state.GlobalState.Log("ERROR", "Failed to read boulder: "+err.Error())
 			time.Sleep(10 * time.Second)
 			continue
 		}
-		
+
 		state.GlobalState.PlanName = b.PlanName
 		state.GlobalState.CurrentAgent = b.Agent
-		
+
 		if b.ActivePlan == "" {
 			time.Sleep(10 * time.Second)
 			continue
@@ -115,11 +120,11 @@ func main() {
 			time.Sleep(5 * time.Second)
 			continue
 		}
-		
+
 		state.GlobalState.ActiveModel = model
 		metrics.ModelAcquisitions.WithLabelValues(model).Inc()
 		state.GlobalState.Log("SUCCESS", "Acquired "+model)
-		
+
 		runSicherCheck(b.Agent)
 		modelTracker.Release(model)
 		state.GlobalState.ActiveModel = "NONE"

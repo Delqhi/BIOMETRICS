@@ -267,6 +267,9 @@
   "provider": {
     "google": {
       "npm": "@ai-sdk/google",
+      "options": {
+        "baseURL": "https://generativelanguage.googleapis.com/v1beta"
+      },
       "models": {
         "gemini-3-flash": {
           "id": "gemini-3-flash-preview",
@@ -522,32 +525,6 @@
           }
         }
       }
-    }
-  },
-  "custom_agents": {
-    "Delqhi": {
-      "name": "Delqhi (CEO)",
-      "description": "Enterprise Orchestrator & CEO",
-      "model": "google/gemini-3.1-pro-preview-customtools",
-      "instruction": "/Users/jeremy/.config/opencode/instructions/orchestrator.md"
-    },
-    "td-agent": {
-      "name": "TD Agent (Media)",
-      "description": "Technical Director for Media Pipeline",
-      "model": "google/gemini-3.1-pro-preview",
-      "instruction": "/Users/jeremy/.config/opencode/instructions/td-media.md"
-    },
-    "frontend-ui-ux-engineer": {
-      "name": "UI/UX Engineer",
-      "description": "Frontend & Design Specialist",
-      "model": "google/gemini-3.1-pro-preview",
-      "instruction": "/Users/jeremy/.config/opencode/instructions/worker-code.md"
-    },
-    "document-writer": {
-      "name": "Document Writer",
-      "description": "Technical Documentation Specialist",
-      "model": "google/gemini-3.1-pro-preview",
-      "instruction": "/Users/jeremy/.config/opencode/instructions/worker-code.md"
     }
   }
 }

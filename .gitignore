@@ -1,2 +1,9 @@
 biometrics-cli/node_modules/
 biometrics-cli/.env
+
+# OpenCode Configuration (template only)
+.opencode/opencode.json
+.opencode/opencode.json.local
+
+# Keep only the template
+!.opencode/opencode.json.template

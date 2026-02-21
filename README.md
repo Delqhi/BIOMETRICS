@@ -61,6 +61,28 @@ opencode "Build a REST API" --agent sisyphus
 
 > 📖 **New?** → [Complete Setup Guide](docs/setup/COMPLETE-SETUP.md) (15 min)
 
+### 📝 OpenCode Configuration Template
+
+The `.opencode/opencode.json.template` file contains the recommended OpenCode configuration for BIOMETRICS.
+
+**Setup Instructions:**
+```bash
+# After cloning the repository, copy the template:
+cp .opencode/opencode.json.template .opencode/opencode.json
+
+# Edit with your API keys:
+nano .opencode/opencode.json
+
+# Or use environment variables (recommended):
+export GOOGLE_API_KEY="your_key_here"
+export NVIDIA_API_KEY="your_key_here"
+```
+
+**Important:**
+- ✅ `.opencode/opencode.json.template` is version-controlled
+- ❌ `.opencode/opencode.json` is gitignored (contains secrets)
+- 📖 [Complete Setup Guide](docs/setup/COMPLETE-SETUP.md) for detailed instructions
+
 ---
 
 ## 🚨 START HERE - ULTIMATE ORCHESTRATOR MANDATE

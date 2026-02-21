@@ -1,13 +1,39 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"os"
 	"os/exec"
-	"strings"
 	"sync"
 	"time"
+
+	_ "github.com/mattn/go-sqlite3"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+)
+
+var (
+	cyclesTotal = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "biometrics_orchestrator_cycles_total",
+		Help: "The total number of processed cycles",
+	})
+	cycleDuration = promauto.NewHistogram(prometheus.HistogramOpts{
+		Name:    "biometrics_orchestrator_cycle_duration_seconds",
+		Help:    "Duration of cycles in seconds",
+		Buckets: prometheus.DefBuckets,
+	})
+	modelAcquisitions = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_orchestrator_model_acquisitions_total",
+		Help: "The total number of model acquisitions by model name",
+	}, []string{"model"})
+	serenaSessionsCleaned = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "biometrics_orchestrator_serena_sessions_cleaned_total",
+		Help: "Total number of Serena sessions cleaned up",
+	})
 )
 
 type Boulder struct {
@@ -18,25 +44,90 @@ type Boulder struct {
 	Agent      string   `json:"agent"`
 }
 
+type AppState struct {
+	mu           sync.Mutex
+	ActivePlan   string
+	PlanName     string
+	CurrentAgent string
+	ActiveModel  string
+	ModelStatus  map[string]string
+	Logs         []string
+	db           *sql.DB
+}
+
+var state = &AppState{
+	ModelStatus: make(map[string]string),
+	Logs:        make([]string, 0),
+}
+
+func (s *AppState) InitDB() {
+	dbPath := "/Users/jeremy/.sisyphus/logs.db"
+	db, err := sql.Open("sqlite3", dbPath)
+	if err != nil {
+		return
+	}
+	query := "CREATE TABLE IF NOT EXISTS logs (id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp TEXT, level TEXT, agent TEXT, plan TEXT, message TEXT)"
+	_, _ = db.Exec(query)
+	s.db = db
+}
+
+func (s *AppState) Log(level, msg string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	ts := time.Now().Format("15:04:05")
+	s.Logs = append(s.Logs, fmt.Sprintf("[%s] %s: %s", ts, level, msg))
+	if len(s.Logs) > 10 {
+		s.Logs = s.Logs[1:]
+	}
+	if s.db != nil {
+		_, _ = s.db.Exec("INSERT INTO logs (timestamp, level, agent, plan, message) VALUES (?, ?, ?, ?, ?)",
+			time.Now().Format(time.RFC3339), level, s.CurrentAgent, s.PlanName, msg)
+	}
+}
+
+func displayDashboard() {
+	for {
+		state.mu.Lock()
+		fmt.Print("\033[H\033[2J")
+		fmt.Println("==============================================================")
+		fmt.Println("         BIOMETRICS ENTERPRISE ORCHESTRATOR DASHBOARD         ")
+		fmt.Println("==============================================================")
+		fmt.Printf("STATUS:     RUNNING (24/7 MODE)\n")
+		fmt.Printf("METRICS:    :59002/metrics\n")
+		fmt.Printf("PLAN:       %s\n", state.PlanName)
+		fmt.Printf("AGENT:      %s\n", state.CurrentAgent)
+		fmt.Printf("MODEL:      %s\n", state.ActiveModel)
+		fmt.Println("--------------------------------------------------------------")
+		fmt.Println("MODEL STATUS:")
+		for m, s := range state.ModelStatus {
+			fmt.Printf("  %-15s : %s\n", m, s)
+		}
+		fmt.Println("--------------------------------------------------------------")
+		fmt.Println("RECENT LOGS:")
+		for _, l := range state.Logs {
+			fmt.Println("  " + l)
+		}
+		fmt.Println("==============================================================")
+		state.mu.Unlock()
+		time.Sleep(2 * time.Second)
+	}
+}
+
 type ModelTracker struct {
 	mu     sync.Mutex
 	models map[string]bool
 }
 
 func NewModelTracker() *ModelTracker {
-	return &ModelTracker{
-		models: make(map[string]bool),
-	}
+	return &ModelTracker{models: make(map[string]bool)}
 }
 
 func (mt *ModelTracker) Acquire(model string) error {
 	mt.mu.Lock()
 	defer mt.mu.Unlock()
-
 	if mt.models[model] {
-		return fmt.Errorf("model %s is already in use", model)
+		return fmt.Errorf("in use")
 	}
-
 	mt.models[model] = true
 	return nil
 }
@@ -47,69 +138,21 @@ func (mt *ModelTracker) Release(model string) {
 	delete(mt.models, model)
 }
 
-func main() {
-	fmt.Println("Starting BIOMETRICS Agent Loop Orchestrator with Strict Model Assignment...")
-	fmt.Println("Machine-readable mode: ENABLED (zero emojis)")
-	fmt.Println("Model collision prevention: ACTIVE")
-	fmt.Println("Sicher verification: ENABLED")
-	fmt.Println("Serena session cleanup: ENABLED")
-
-	boulderPath := "/Users/jeremy/.sisyphus/boulder.json"
-	tracker := NewModelTracker()
-
-	fmt.Println("Orchestrator initialized. Monitoring boulder.json...")
-
-	for {
-		fmt.Printf("[%s] Checking for agent status...\n", time.Now().Format(time.RFC3339))
-
-		if err := verifySerenaProcess(); err != nil {
-			fmt.Printf("ERROR: Serena MCP not running. Please start with: uvx --from git+https://github.com/oraios/serena serena start-mcp-server\n")
-			time.Sleep(30 * time.Second)
-			continue
+func runDoctor() {
+	fmt.Println("=== BIOMETRICS DOCTOR ===")
+	paths := []string{"/Users/jeremy/.sisyphus", "/Users/jeremy/.config/opencode/opencode.json"}
+	for _, p := range paths {
+		if _, err := os.Stat(p); err == nil {
+			fmt.Printf("OK: %s\n", p)
+		} else {
+			fmt.Printf("ERROR: %s\n", p)
 		}
-
-		cleanupInactiveSerenaSessions()
-
-		boulder, err := readBoulder(boulderPath)
-		if err != nil {
-			fmt.Printf("ERROR: Reading boulder.json: %v\n", err)
-			time.Sleep(10 * time.Second)
-			continue
-		}
-
-		if boulder.ActivePlan == "" {
-			fmt.Println("STATUS: No active plan found. Waiting...")
-			time.Sleep(30 * time.Second)
-			continue
-		}
-
-		fmt.Printf("STATUS: Active plan detected: %s (Agent: %s)\n", boulder.PlanName, boulder.Agent)
-
-		model := getModelForAgent(boulder.Agent)
-		if err := tracker.Acquire(model); err != nil {
-			fmt.Printf("WARNING: Model Collision: %v. Waiting for model to be free...\n", err)
-			time.Sleep(5 * time.Second)
-			continue
-		}
-
-		fmt.Printf("SUCCESS: Model %s acquired for agent %s\n", model, boulder.Agent)
-
-		runSicherCheck(boulder.Agent)
-
-		fmt.Printf("INFO: Releasing model %s for next task...\n", model)
-		tracker.Release(model)
-
-		fmt.Printf("[%s] Cycle complete. Next check in 60s...\n", time.Now().Format(time.RFC3339))
-		time.Sleep(60 * time.Second)
 	}
 }
 
 func runSicherCheck(agent string) {
-	fmt.Printf("ACTION: Triggering Sicher verification for agent: %s\n", agent)
-
-	prompt := "Sicher? Führe eine vollständige Selbstreflexion durch. Prüfe jede deiner Aussagen, verifiziere, ob ALLE Restriktionen des Initial-Prompts exakt eingehalten wurden. Stelle alles Fehlende fertig."
-
-	fmt.Printf("EXEC: opencode prompt '%s' --agent %s\n", prompt, agent)
+	prompt := "Sicher? Führe eine vollständige Selbstreflexion durch."
+	_ = exec.Command("opencode", "prompt", prompt, "--agent", agent).Run()
 }
 
 func getModelForAgent(agent string) string {
@@ -128,102 +171,99 @@ func readBoulder(path string) (*Boulder, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	var boulder Boulder
-	if err := json.Unmarshal(data, &boulder); err != nil {
-		return nil, err
-	}
-
-	return &boulder, nil
+	var b Boulder
+	err = json.Unmarshal(data, &b)
+	return &b, err
 }
 
 type SerenaSession struct {
-	ID        string
-	Project   string
-	CreatedAt time.Time
-	LastUsed  time.Time
-	Status    string
+	ID       string `json:"id"`
+	Project  string `json:"project"`
+	LastUsed string `json:"last_used"`
+	Status   string `json:"status"`
 }
 
 func cleanupInactiveSerenaSessions() {
-	fmt.Println("ACTION: Starting Serena session cleanup...")
-
-	sessions, err := getSerenaSessions()
-	if err != nil {
-		fmt.Printf("ERROR: Failed to get Serena sessions: %v\n", err)
-		return
-	}
-
-	fmt.Printf("INFO: Found %d Serena sessions\n", len(sessions))
-
-	cleanupCount := 0
-	for _, session := range sessions {
-		shouldCleanup := false
-		reason := ""
-
-		if session.Status == "inactive" {
-			shouldCleanup = true
-			reason = "status=inactive"
-		}
-
-		if time.Since(session.LastUsed) > 7*24*time.Hour {
-			shouldCleanup = true
-			reason = "last_used>7days"
-		}
-
-		if session.Project == "" || session.Project == "default" {
-			shouldCleanup = true
-			reason = "project=empty/default"
-		}
-
-		if shouldCleanup {
-			fmt.Printf("CLEANUP: Session %s (%s) - Reason: %s\n", session.ID, session.Project, reason)
-			if err := archiveSerenaSession(session.ID); err != nil {
-				fmt.Printf("WARNING: Failed to archive session %s: %v\n", session.ID, err)
-			} else {
-				cleanupCount++
-				fmt.Printf("SUCCESS: Session %s archived\n", session.ID)
-			}
-		} else {
-			fmt.Printf("KEEP: Session %s (%s) - Last used: %s\n", session.ID, session.Project, session.LastUsed.Format(time.RFC3339))
-		}
-	}
-
-	fmt.Printf("SUMMARY: Cleaned up %d inactive sessions\n", cleanupCount)
-}
-
-func getSerenaSessions() ([]SerenaSession, error) {
 	cmd := exec.Command("uvx", "--from", "git+https://github.com/oraios/serena", "serena", "session", "list", "--json")
 	output, err := cmd.Output()
 	if err != nil {
-		return nil, fmt.Errorf("serena session list failed: %w", err)
+		return
 	}
-
 	var sessions []SerenaSession
-	if err := json.Unmarshal(output, &sessions); err != nil {
-		return nil, fmt.Errorf("failed to parse sessions: %w", err)
+	_ = json.Unmarshal(output, &sessions)
+	for _, s := range sessions {
+		lastUsed, _ := time.Parse(time.RFC3339, s.LastUsed)
+		if s.Status == "inactive" || time.Since(lastUsed) > 7*24*time.Hour || s.Project == "" || s.Project == "default" {
+			_ = exec.Command("uvx", "--from", "git+https://github.com/oraios/serena", "serena", "session", "archive", s.ID).Run()
+			serenaSessionsCleaned.Inc()
+		}
 	}
-
-	return sessions, nil
-}
-
-func archiveSerenaSession(sessionID string) error {
-	cmd := exec.Command("uvx", "--from", "git+https://github.com/oraios/serena", "serena", "session", "archive", sessionID)
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("archive failed: %w, output: %s", err, string(output))
-	}
-	return nil
 }
 
 func verifySerenaProcess() error {
-	cmd := exec.Command("pgrep", "-f", "serena.*start-mcp-server")
-	output, err := cmd.Output()
-	if err != nil {
-		return fmt.Errorf("Serena process not found")
-	}
+	return exec.Command("pgrep", "-f", "serena.*start-mcp-server").Run()
+}
 
-	pids := strings.TrimSpace(string(output))
-	fmt.Printf("INFO: Serena MCP server running (PIDs: %s)\n", pids)
-	return nil
+func main() {
+	if len(os.Args) > 1 && os.Args[1] == "doctor" {
+		runDoctor()
+		return
+	}
+	state.InitDB()
+	go displayDashboard()
+	
+	go func() {
+		http.Handle("/metrics", promhttp.Handler())
+		_ = http.ListenAndServe(":59002", nil)
+	}()
+
+	tracker := NewModelTracker()
+	state.Log("INFO", "Started")
+	for {
+		start := time.Now()
+		cyclesTotal.Inc()
+
+		if err := verifySerenaProcess(); err != nil {
+			state.Log("ERROR", "No Serena")
+			time.Sleep(10 * time.Second)
+			continue
+		}
+		cleanupInactiveSerenaSessions()
+		b, err := readBoulder("/Users/jeremy/.sisyphus/boulder.json")
+		if err != nil {
+			time.Sleep(10 * time.Second)
+			continue
+		}
+		state.mu.Lock()
+		state.PlanName = b.PlanName
+		state.CurrentAgent = b.Agent
+		state.mu.Unlock()
+		if b.ActivePlan == "" {
+			time.Sleep(10 * time.Second)
+			continue
+		}
+		model := getModelForAgent(b.Agent)
+		if err := tracker.Acquire(model); err != nil {
+			time.Sleep(5 * time.Second)
+			continue
+		}
+		state.mu.Lock()
+		state.ActiveModel = model
+		state.mu.Unlock()
+		
+		modelAcquisitions.WithLabelValues(model).Inc()
+		state.Log("SUCCESS", "Acquired "+model)
+		
+		runSicherCheck(b.Agent)
+		tracker.Release(model)
+		
+		state.mu.Lock()
+		state.ActiveModel = "NONE"
+		state.mu.Unlock()
+
+		duration := time.Since(start).Seconds()
+		cycleDuration.Observe(duration)
+
+		time.Sleep(60 * time.Second)
+	}
 }

@@ -290,4 +290,30 @@ var (
 		Name: "biometrics_scheduler_job_duration_seconds",
 		Help: "Duration of scheduler jobs in seconds",
 	}, []string{"job"})
+
+	ProjectsRegistered = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_projects_registered_total",
+		Help: "Total number of registered projects",
+	}, []string{"project"})
+	ProjectsUnregistered = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_projects_unregistered_total",
+		Help: "Total number of unregistered projects",
+	}, []string{"project"})
+	ProjectRebalanced = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "biometrics_project_rebalanced_total",
+		Help: "Total number of project rebalances",
+	})
+
+	ScheduledTasksTotal = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_scheduled_tasks_total",
+		Help: "Total number of scheduled tasks",
+	}, []string{"project", "task_type"})
+	ScheduledTasksCompleted = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_scheduled_tasks_completed_total",
+		Help: "Total number of completed scheduled tasks",
+	}, []string{"project", "task_type"})
+	ScheduledTasksFailed = promauto.NewCounterVec(prometheus.CounterOpts{
+		Name: "biometrics_scheduled_tasks_failed_total",
+		Help: "Total number of failed scheduled tasks",
+	}, []string{"project", "task_type"})
 )

@@ -97,18 +97,47 @@ This document describes the OpenCode configuration for BIOMETRICS project, inclu
 
 ## Environment Variables
 
-**Location:** `.env`
+**⚠️ CRITICAL:** API keys MUST be set as environment variables, NOT in opencode.json!
+
+### Setup (Required)
+
+**Location:** `~/.zshrc` (permanent) or `.env` (project-specific)
 
 ```bash
-# Google API Key (for Gemini models)
-GOOGLE_API_KEY=AIzaSyAVWKxhWCT64Z0VxxmskWzPNTwfWVecC_U
+# Google API Key (for Gemini models) - REQUIRED!
+export GOOGLE_API_KEY="AIzaSyAVWKxhWCT64Z0VxxmskWzPNTwfWVecC_U"
 
 # NVIDIA API Key (for Qwen models)
-NVIDIA_API_KEY=nvapi-xxx
-
-# Tavily API Key (for web search)
-TAVILY_API_KEY=tvly-dev-xxx
+export NVIDIA_API_KEY="nvapi-YOUR_KEY_HERE"
 ```
+
+### After Setting API Keys
+
+```bash
+# Reload shell configuration
+source ~/.zshrc
+
+# Verify API key is set
+echo $GOOGLE_API_KEY
+
+# Test Gemini model
+opencode --model google/gemini-3.1-pro-preview "Test"
+```
+
+### Common Errors
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `API key not valid` | Missing or wrong API key | `export GOOGLE_API_KEY="..."` |
+| `Unrecognized key: "env"` | API key in opencode.json | Remove from config, use env var |
+| `Configuration is invalid` | JSON syntax error | Validate JSON, remove trailing commas |
+
+### ⚠️ Important Notes
+
+- **NEVER** put API keys in `opencode.json` (will cause validation errors)
+- **ALWAYS** use environment variables (`export KEY="value"`)
+- **REMEMBER** to `source ~/.zshrc` after adding keys
+- Google Gemini requires `v1beta` endpoint (already configured)
 
 ---
 

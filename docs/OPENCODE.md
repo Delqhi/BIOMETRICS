@@ -1,90 +1,329 @@
-# OPENCODE Configuration Guide
+# OPENCODE Configuration Guide - Google Gemini Setup
 
 **Project:** BIOMETRICS  
-**Last Updated:** 2026-02-21  
-**Status:** Active
+**Last Updated:** 2026-02-22  
+**Status:** Active - All Gemini Models Working
 
 ---
 
-## Overview
+## Das Problem (February 2026)
 
-This document describes the OpenCode configuration for BIOMETRICS project, including agent configurations, model assignments, and provider setup.
+Google Gemini funktionierte NICHT in OpenCode. Alle Versuche schlugen mit `API key not valid` fehl.
 
-## Configuration File
+### Root Causes:
 
-**Location:** `.opencode/opencode.json`
+1. **Leaked API Key**: Der alte Key `AIzaSyAVWKxhWCT64Z0VxxmskWzPNTwfWVecC_U` wurde von Google wegen "leaked" permanent gesperrt
+2. **Corrupted auth.json**: Der "google" Eintrag in `~/.local/share/opencode/auth.json` enthielt stattdessen deutschen Text: "ie custom_agents.json mit den neuen Modellen aktualisieren?"
+3. **Duplicate JSON Keys**: In `opencode.json` gab es doppelte `gemini-3.1-pro-preview` und `gemini-3-flash-preview` Einträge
+4. **Falscher Speicherort**: Der API Key wurde NUR in ~/.zshrc exportiert, aber NICHT in auth.json
 
-### Model Configuration
+---
 
-| Setting | Value |
-|---------|-------|
-| Default Model | `google/gemini-3.1-pro-preview-customtools` |
-| Small Model | `google/gemini-3.1-pro-preview-customtools` |
-| Default Agent | `sisyphus` |
+## Die Lösung - Schritt für Schritt
 
-### Plugins
+### Schritt 1: Neuen API Key generieren
 
+1. Gehe zu: https://aistudio.google.com/app/apikey
+2. Login mit Google Account
+3. "Create API Key" klicken
+4. Neuen Key kopieren
+
+**Aktueller funktionierender Key:**
+```
+AIzaSyBAHJEO0kych78Sqgi9W_bj3Xv0fH91CKk
+```
+
+### Schritt 2: auth.json reparieren
+
+**WO?** `~/.local/share/opencode/auth.json`
+
+Der Google-Eintrag MUSS so aussehen:
 ```json
-"plugin": [
-  "opencode-antigravity-auth@latest",
-  "oh-my-opencode",
-  "opencode-qwencode-auth"
-]
+{
+  "google": {
+    "type": "api",
+    "key": "AIzaSyBAHJEO0kych78Sqgi9W_bj3Xv0fH91CKk"
+  }
+}
+```
+
+**Kommando zum Prüfen:**
+```bash
+cat ~/.local/share/opencode/auth.json | grep -A3 google
+```
+
+### Schritt 3: opencode.json reparieren
+
+**WO?** `~/.config/opencode/opencode.json`
+
+**Problem:** Doppelte JSON-Keys entfernen
+- Doppelte `gemini-3.1-pro-preview` Einträge
+- Doppelte `gemini-3-flash-preview` Einträge
+
+**Kommando zum Validieren:**
+```bash
+cat ~/.config/opencode/opencode.json | python3 -m json.tool > /dev/null && echo "✅ JSON valid"
+```
+
+### Schritt 4: Testen
+
+```bash
+# Test Gemini 2.5 Flash
+opencode run "Say OK" --model google/gemini-2.5-flash
+
+# Test Gemini 2.5 Pro
+opencode run "Say OK" --model google/gemini-2.5-pro
+
+# Test Gemini 3.1 Pro Preview
+opencode run "Say OK" --model google/gemini-3.1-pro-preview
+
+# Test Gemini 3 Pro Preview
+opencode run "Say OK" --model google/gemini-3-pro-preview
 ```
 
 ---
 
-## Agent Configurations
+## Verifizierte Modelle (Februar 2026)
 
-### Core Agents
+| Model | Test Status | Kommando |
+|-------|------------|----------|
+| `google/gemini-2.5-flash` | ✅ OK | `opencode run "test" --model google/gemini-2.5-flash` |
+| `google/gemini-2.5-pro` | ✅ OK | `opencode run "test" --model google/gemini-2.5-pro` |
+| `google/gemini-3.1-pro-preview` | ✅ OK | `opencode run "test" --model google/gemini-3.1-pro-preview` |
+| `google/gemini-3.1-pro-preview-customtools` | ✅ OK | `opencode run "test" --model google/gemini-3.1-pro-preview-customtools` |
+| `google/gemini-3-pro-preview` | ✅ OK | `opencode run "test" --model google/gemini-3-pro-preview` |
+| `google/gemini-3-flash-preview` | ✅ OK | `opencode run "test" --model google/gemini-3-flash-preview` |
+
+---
+
+## Konfiguration Files
+
+### 1. auth.json (API Keys) - KRITISCH!
+
+**Location:** `~/.local/share/opencode/auth.json`
+
+Dies ist WO der Google API Key gespeichert werden muss!
+
+```json
+{
+  "google": {
+    "type": "api",
+    "key": "AIzaSyBAHJEO0kych78Sqgi9W_bj3Xv0fH91CKk"
+  }
+}
+```
+
+**WICHTIG:** 
+- Der Key MUSS in dieser Datei sein, NICHT nur in ~/.zshrc
+- Die Datei muss valides JSON sein
+- KEINE deutschen Texte oder Kommentare
+
+### 2. opencode.json (Modell Konfiguration)
+
+**Location:** `~/.config/opencode/opencode.json`
+
+Enthält die Provider Konfiguration:
+
+```json
+{
+  "provider": {
+    "google": {
+      "npm": "@ai-sdk/google",
+      "models": {
+        "gemini-2.5-flash": {
+          "id": "gemini-2.5-flash",
+          "name": "Gemini 2.5 Flash",
+          "limit": { "context": 1048576, "output": 65536 }
+        },
+        "gemini-2.5-pro": {
+          "id": "gemini-2.5-pro",
+          "name": "Gemini 2.5 Pro",
+          "limit": { "context": 1048576, "output": 65536 }
+        },
+        "gemini-3.1-pro-preview": {
+          "id": "gemini-3.1-pro-preview",
+          "name": "Gemini 3.1 Pro Preview",
+          "limit": { "context": 2097152, "output": 65536 }
+        },
+        "gemini-3.1-pro-preview-customtools": {
+          "id": "gemini-3.1-pro-preview",
+          "name": "Gemini 3.1 Pro Preview (Custom Tools)",
+          "limit": { "context": 2097152, "output": 65536 }
+        },
+        "gemini-3-pro-preview": {
+          "id": "gemini-3-pro-preview",
+          "name": "Gemini 3 Pro Preview",
+          "limit": { "context": 2097152, "output": 65536 }
+        },
+        "gemini-3-flash-preview": {
+          "id": "gemini-3-flash-preview",
+          "name": "Gemini 3 Flash Preview",
+          "limit": { "context": 1048576, "output": 65536 }
+        }
+      }
+    }
+  }
+}
+```
+
+---
+
+## API Endpoint Information
+
+**WICHTIG:** Alle Gemini Modelle nutzen den gleichen v1beta Endpoint:
+
+```
+https://generativelanguage.googleapis.com/v1beta
+```
+
+Dies ist bereits in der opencode.json konfiguriert (durch das @ai-sdk/google Package).
+
+### Modell-ID Unterschiede:
+
+| Modellfamilie | API Modell ID |
+|--------------|---------------|
+| Gemini 2.5 | `gemini-2.5-flash`, `gemini-2.5-pro` |
+| Gemini 3.0 | `gemini-3-flash-preview`, `gemini-3-pro-preview` |
+| Gemini 3.1 | `gemini-3.1-pro-preview` |
+
+**Wichtig:** Es gibt KEINE unterschiedlichen API-Aufrufe für verschiedene Modellfamilien. Alle nutzen den gleichen Endpoint!
+
+---
+
+## Model Configuration
+
+### Default Modelle
+
+| Setting | Value |
+|---------|-------|
+| Default Model | `google/gemini-3.1-pro-preview-customtools` |
+| Small Model | `google/gemini-3-flash-preview` |
+| Default Agent | `sisyphus` |
+
+### Agent Configurations
 
 | Agent | Model | Purpose |
 |-------|-------|---------|
 | **sisyphus** | `google/gemini-3.1-pro-preview-customtools` | Main Coder |
-| **sisyphus-junior** | `google/gemini-3.1-pro-preview-customtools` | Junior Coder |
 | **atlas** | `google/gemini-3.1-pro-preview` | Heavy Lifting |
-| **Delqhi** | `google/gemini-3.1-pro-preview-customtools` | Main Orchestrator |
-
-### Specialized Agents
-
-| Agent | Model | Purpose |
-|-------|-------|---------|
-| **general** | `google/gemini-3.1-pro-preview-customtools` | General tasks |
-| **plan** | `google/gemini-3.1-pro-preview` | Strategic Planning |
-| **build** | `google/gemini-3.1-pro-preview-customtools` | Code Building |
-| **explore** | `google/gemini-3-flash-preview` | Code Discovery |
-| **librarian** | `google/gemini-3-flash-preview` | Documentation |
+| **prometheus** | `google/gemini-3.1-pro-preview` | Strategic Planning |
 | **oracle** | `google/gemini-3.1-pro-preview-customtools` | Architecture Review |
-| **metis** | `google/gemini-3-flash-preview` | Planning Support |
-| **momus** | `google/gemini-3-flash-preview` | Review/Quality |
-| **artistry** | `google/gemini-3.1-pro-preview` | Creative Tasks |
-| **deep** | `google/gemini-3.1-pro-preview-customtools` | Deep Analysis |
-| **ultrabrain** | `google/gemini-3.1-pro-preview` | Complex Reasoning |
-| **visual-engineering** | `google/gemini-3.1-pro-preview` | UI/UX Design |
-| **quick** | `google/gemini-3-flash-preview` | Quick Tasks |
-| **unspecified-low** | `google/gemini-3.1-pro-preview-customtools` | Low Complexity |
-| **unspecified-high** | `google/gemini-3.1-pro-preview-customtools` | High Complexity |
-| **writing** | `google/gemini-3.1-pro-preview` | Documentation |
-| **td-agent** | `google/gemini-3.1-pro-preview` | Media Tasks |
-| **document-writer** | `google/gemini-3.1-pro-preview` | Doc Generation |
-| **frontend-ui-ux-engineer** | `google/gemini-3.1-pro-preview` | Frontend Development |
+| **quick** | `google/gemini-2.5-flash` | Quick Tasks |
+| **explore** | `google/gemini-2.5-flash` | Code Discovery |
+| **librarian** | `google/gemini-2.5-flash` | Documentation |
 
 ---
 
-## Provider Configuration
-
-### Google Gemini Models
+## Google Gemini Modelle
 
 | Model ID | Name | Context | Output | Use Case |
 |----------|------|---------|--------|----------|
-| `gemini-3.1-pro-preview` | Gemini 3.1 Pro (Standard) | 2M | 64K | Thinker, Planning |
-| `gemini-3.1-pro-preview-customtools` | Gemini 3.1 Pro (Worker) | 2M | 64K | Code, Tools |
+| `gemini-2.5-flash` | **Gemini 2.5 Flash** | 1M | 64K | Fast, Cost-effective |
+| `gemini-2.5-pro` | **Gemini 2.5 Pro** | 1M | 64K | Best Value Brain |
+| `gemini-3.1-pro-preview` | Gemini 3.1 Pro | 2M | 64K | Advanced Reasoning |
+| `gemini-3.1-pro-preview-customtools` | Gemini 3.1 Pro (Tools) | 2M | 64K | Code, Tools, Agentic |
+| `gemini-3-pro-preview` | Gemini 3 Pro | 2M | 64K | Complex Multi-step |
 | `gemini-3-flash-preview` | Gemini 3 Flash | 1M | 64K | Fast, Quick Tasks |
-| `gemini-3-pro-preview` | Gemini 3 Pro | 2M | 64K | Advanced Reasoning |
-| `antigravity-gemini-3-flash` | Gemini 3 Flash (Antigravity) | 1M | 64K | With OAuth |
-| `antigravity-gemini-3-pro` | Gemini 3 Pro (Antigravity) | 1M | 64K | With OAuth |
+| `antigravity-gemini-3-flash` | Gemini 3 Flash (OAuth) | 1M | 64K | With OAuth |
+| `antigravity-gemini-3-pro` | Gemini 3 Pro (OAuth) | 1M | 64K | With OAuth |
 
-### Alternative Providers
+---
+
+## Test Commands
+
+### Schnelltest (alle Modelle):
+
+```bash
+# Test Gemini 2.5 Flash
+opencode run "Say OK" --model google/gemini-2.5-flash
+
+# Test Gemini 2.5 Pro
+opencode run "Say OK" --model google/gemini-2.5-pro
+
+# Test Gemini 3.1 Pro Preview
+opencode run "Say OK" --model google/gemini-3.1-pro-preview
+
+# Test Gemini 3 Pro Preview
+opencode run "Say OK" --model google/gemini-3-pro-preview
+```
+
+### Modelle auflisten:
+
+```bash
+opencode models | grep google/
+```
+
+---
+
+## Troubleshooting
+
+### Fehler: "API key not valid"
+
+**Ursache:** Der Key ist nicht in auth.json oder der Key ist gesperrt.
+
+**Lösung:**
+1. Neuen Key generieren: https://aistudio.google.com/app/apikey
+2. In auth.json eintragen (siehe Schritt 2 oben)
+3. Testen: `opencode run "test" --model google/gemini-2.5-flash`
+
+### Fehler: "Failed to change directory"
+
+**Ursache:** Falsches Kommando Format
+
+**Lösung:**
+```bash
+opencode run "Nachricht" --model google/gemini-2.5-flash
+```
+
+### Fehler: "Unrecognized key: env"
+
+**Ursache:** API key in opencode.json
+
+**Lösung:** Key entfernen, nur in auth.json speichern
+
+### Fehler: "Configuration is invalid"
+
+**Ursache:** JSON Fehler in opencode.json
+
+**Lösung:**
+```bash
+cat ~/.config/opencode/opencode.json | python3 -m json.tool
+```
+
+### Schritt-für-Schritt Fehlerbehebung:
+
+**Schritt 1: Prüfe ob Google in auth.json vorhanden**
+```bash
+cat ~/.local/share/opencode/auth.json | grep -A2 google
+```
+
+Sollte anzeigen:
+```json
+"google": {
+  "type": "api",
+  "key": "AIzaSyBAHJEO0kych78Sqgi9W_bj3Xv0fH91CKk"
+}
+```
+
+**Schritt 2: JSON validieren**
+```bash
+# opencode.json
+cat ~/.config/opencode/opencode.json | python3 -m json.tool > /dev/null && echo "✅ JSON valid"
+
+# auth.json
+cat ~/.local/share/opencode/auth.json | python3 -m json.tool > /dev/null && echo "✅ auth.json valid"
+```
+
+**Schritt 3: Modell testen**
+```bash
+opencode run "Say OK" --model google/gemini-2.5-flash
+```
+
+Wenn "OK" zurückkommt -> Alles funktioniert!
+
+---
+
+## Alternative Providers
 
 | Provider | Model | Context | Output |
 |----------|-------|---------|--------|
@@ -95,174 +334,51 @@ This document describes the OpenCode configuration for BIOMETRICS project, inclu
 
 ---
 
-## Environment Variables
+## Wichtige Hinweise
 
-**⚠️ CRITICAL:** API keys MUST be set as environment variables, NOT in opencode.json!
-
-### Setup (Required)
-
-**Location:** `~/.zshrc` (permanent) or `.env` (project-specific)
-
-```bash
-# Google API Key (for Gemini models) - REQUIRED!
-export GOOGLE_API_KEY="AIzaSyAVWKxhWCT64Z0VxxmskWzPNTwfWVecC_U"
-
-# NVIDIA API Key (for Qwen models)
-export NVIDIA_API_KEY="nvapi-YOUR_KEY_HERE"
-```
-
-### After Setting API Keys
-
-```bash
-# Reload shell configuration
-source ~/.zshrc
-
-# Verify API key is set
-echo $GOOGLE_API_KEY
-
-# Test Gemini model
-opencode --model google/gemini-3.1-pro-preview "Test"
-```
-
-### Common Errors
-
-| Error | Cause | Solution |
-|-------|-------|----------|
-| `API key not valid` | Missing or wrong API key | `export GOOGLE_API_KEY="..."` |
-| `Unrecognized key: "env"` | API key in opencode.json | Remove from config, use env var |
-| `Configuration is invalid` | JSON syntax error | Validate JSON, remove trailing commas |
-
-### ⚠️ Important Notes
-
-- **NEVER** put API keys in `opencode.json` (will cause validation errors)
-- **ALWAYS** use environment variables (`export KEY="value"`)
-- **REMEMBER** to `source ~/.zshrc` after adding keys
-- Google Gemini requires `v1beta` endpoint (already configured)
+- **NEVER** API Keys in opencode.json speichern
+- **ALWAYS** Keys in auth.json eintragen
+- **REMEMBER** Beide Dateien müssen valides JSON sein
+- Google Gemini nutzt v1beta Endpoint (bereits konfiguriert)
+- Alle Gemini Modelle nutzen die gleiche API - keine unterschiedlichen Aufrufe nötig
 
 ---
 
 ## MCP Servers
 
-### Local MCP Servers
+### Local
 
-| Server | Command | Status |
-|--------|---------|--------|
-| **serena** | `uvx serena start-mcp-server` | ✅ Enabled |
-| **tavily** | `npx @tavily/claude-mcp` | ✅ Enabled |
-| **canva** | `npx @canva/claude-mcp` | ✅ Enabled |
-| **context7** | `npx @anthropics/context7-mcp` | ✅ Enabled |
-| **skyvern** | `python -m skyvern.mcp.server` | ✅ Enabled |
-| **chrome-devtools** | `npx @anthropics/chrome-devtools-mcp` | ✅ Enabled |
-| **singularity** | `node singularity.js mcp` | ✅ Enabled |
+| Server | Status |
+|--------|--------|
+| serena | ✅ Enabled |
+| tavily | ✅ Enabled |
+| canva | ✅ Enabled |
+| context7 | ✅ Enabled |
+| skyvern | ✅ Enabled |
+| chrome-devtools | ✅ Enabled |
+| singularity | ✅ Enabled |
 
-### Remote MCP Servers
+### Remote
 
-| Server | URL | Status |
-|--------|-----|--------|
-| **linear** | `https://mcp.linear.app/sse` | ✅ Enabled |
-| **gh_grep** | `https://mcp.grep.app` | ✅ Enabled |
-| **sin_social** | `https://sin-social.delqhi.com` | ✅ Enabled |
-| **sin_deep_research** | `https://sin-research.delqhi.com` | ✅ Enabled |
-| **sin_video_gen** | `https://sin-video.delqhi.com` | ✅ Enabled |
-| **sin_plugins** | `https://sin-plugins.delqhi.com` | ✅ Enabled |
-| **sin_api_coordinator** | `https://api-coordinator.delqhi.com` | ✅ Enabled |
-| **sin_clawdbot** | `https://clawdbot-ceo.delqhi.com` | ✅ Enabled |
-| **sin_survey_worker** | `https://survey.delqhi.com` | ✅ Enabled |
-| **sin_captcha_worker** | `https://captcha.delqhi.com` | ✅ Enabled |
-| **sin_website_worker** | `https://website-worker.delqhi.com` | ✅ Enabled |
-| **sin_browser_agent_zero** | `https://agent-zero.delqhi.com` | ✅ Enabled |
-| **sin_browser_steel** | `https://steel.delqhi.com` | ✅ Enabled |
-| **sin_browser_skyvern** | `https://skyvern.delqhi.com` | ✅ Enabled |
-| **sin_browser_stagehand** | `https://stagehand.delqhi.com` | ✅ Enabled |
+| Server | URL |
+|--------|-----|
+| linear | https://mcp.linear.app/sse |
+| sin_social | https://sin-social.delqhi.com |
+| sin_deep_research | https://sin-research.delqhi.com |
+| sin_video_gen | https://sin-video.delqhi.com |
 
 ---
 
-## Model Selection Guidelines
+## Zusammenfassung - Checkliste
 
-### When to Use Gemini 3.1 Pro (Standard)
+Falls du das nochmal machen musst:
 
-- Strategic planning and architecture
-- Complex reasoning tasks
-- Document writing
-- UI/UX design
-- Creative tasks
-
-**Model:** `google/gemini-3.1-pro-preview`
-
-### When to Use Gemini 3.1 Pro (Custom Tools)
-
-- Code implementation
-- Tool-heavy tasks
-- Agent orchestration
-- Heavy lifting
-- Complex debugging
-
-**Model:** `google/gemini-3.1-pro-preview-customtools`
-
-### When to Use Gemini 3 Flash
-
-- Quick tasks
-- Simple code fixes
-- Fast exploration
-- Documentation lookup
-
-**Model:** `google/gemini-3-flash-preview`
+- [ ] Neuen API Key bei Google AI Studio generieren
+- [ ] ~/.local/share/opencode/auth.json prüfen (google Eintrag mit type: "api" und key: "API_KEY")
+- [ ] Doppelte Keys in ~/.config/opencode/opencode.json entfernen
+- [ ] JSON Validieren: `python3 -m json.tool`
+- [ ] Testen: `opencode run "OK" --model google/gemini-2.5-flash`
 
 ---
 
-## Important Notes
-
-### API Key Security
-
-- **NEVER** commit API keys to git
-- Store in `.env` file (already in .gitignore)
-- Use environment variables in opencode.json
-
-### Model Selection
-
-- **Worker agents** use `customtools` variant for tool access
-- **Thinker agents** use standard variant for reasoning
-- **Quick agents** use Flash for speed
-
-### Rate Limits
-
-- Gemini API: 60 requests/minute (varies by tier)
-- NVIDIA NIM: 40 requests/minute (free tier)
-- Tavily: 1000 requests/month (free tier)
-
----
-
-## Troubleshooting
-
-### JSON Validation Errors
-
-If you encounter JSON errors in opencode.json:
-1. Run: `cat .opencode/opencode.json | python3 -m json.tool > /dev/null`
-2. Fix any syntax errors reported
-3. Ensure no trailing commas
-
-### API Key Issues
-
-If models are not working:
-1. Verify API key in `.env` file
-2. Test with: `opencode auth status`
-3. Re-authenticate if needed: `opencode auth add google`
-
-### MCP Server Connection
-
-If MCP servers fail to connect:
-1. Check if server is running: `ps aux | grep [server-name]`
-2. Restart server if needed
-3. Check logs for error messages
-
----
-
-## Related Documentation
-
-- [OH-MY-OPENCODE.md](OH-MY-OPENCODE.md) - Custom OpenCode enhancements
-- [AGENTS-PLAN.md](../AGENTS-PLAN.md) - Agent task planning
-- [ARCHITECTURE.md](../ARCHITECTURE.md) - System architecture
-
----
-
-**End of Document**
+**Letzte Prüfung:** 2026-02-22 - Alle Modelle funktionieren!

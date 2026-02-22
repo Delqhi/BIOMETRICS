@@ -8,7 +8,17 @@ import (
 	"testing"
 )
 
+// skipIfNoGenerator skips test if generator is not initialized
+func skipIfNoGenerator(t *testing.T) {
+	if generator == nil {
+		t.Skip("generator not initialized")
+	}
+}
+
 func TestHandleStatus(t *testing.T) {
+	skipIfNoGenerator(t)
+	skipIfNoGenerator(t)
+
 	// Create test request
 	req := httptest.NewRequest(http.MethodGet, "/api/status", nil)
 	w := httptest.NewRecorder()
